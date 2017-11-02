@@ -159,7 +159,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 
     }
 
-    //TODO : 문자인증 로직 필요할때 주석제거
+    //TODO : 문자인증번호 파싱 리시버 로직임. 필요할때 주석제거
 //    private fun registerSMSReceiver() {
 //        val action = "android.provider.Telephony.SMS_RECEIVED"
 //        val logTag = "SmsReceiver"
