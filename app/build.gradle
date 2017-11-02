@@ -37,3 +37,4 @@ dependencies {
     kapt "com.android.databinding:compiler:3.0.0"
     compile 'gun0912.ted:tedpermission:2.0.0'
 }
+apply plugin: 'kotlin-kapt'
