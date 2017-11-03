@@ -10,6 +10,7 @@ import io.plan8.business.BR
 import io.plan8.business.R
 import io.plan8.business.databinding.ActivityTaskBinding
 import io.plan8.business.vm.TaskActivityVM
+import java.text.SimpleDateFormat
 
 
 class TaskActivity : BaseActivity() {
@@ -26,19 +27,17 @@ class TaskActivity : BaseActivity() {
 
         binding!!.taskCalendarView.setOnDateChangedListener(object : DatePicker.OnDateChangedListener, OnDateSelectedListener {
             override fun onDateChanged(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+//                SimpleDateFormat.getDateInstance();
+                val date = widget.selectedDate
 
+                if (null == date) {
+                    vm!!.selectedDate = "오늘날짜넣기"
+                }
+                vm!!.selectedDate = SimpleDateFormat.getDateInstance().format(date.date)
+            }
         })
-//        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                MyUtils().hideKeyboard(applicationContext, recyclerView!!.windowToken)
-//            }
-//        })
     }
 }

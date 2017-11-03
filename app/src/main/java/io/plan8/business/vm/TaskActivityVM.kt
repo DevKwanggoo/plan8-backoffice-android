@@ -44,6 +44,7 @@ class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : Acti
 
     fun changeDate(view: View) {
         isOpenedCalendar = !isOpenedCalendar
+
         if (isOpenedCalendar) {
             toolbarTitle = "날짜변경"
         } else {
