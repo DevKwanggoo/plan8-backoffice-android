@@ -8,7 +8,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "co.starshell.plan8"
+        applicationId "io.plan8.business"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
@@ -49,5 +49,4 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
 }
-
 apply plugin: 'kotlin-kapt'

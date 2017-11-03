@@ -13,7 +13,7 @@ import android.widget.Toast
 abstract class BaseActivity : AppCompatActivity() {
     var backPressedTime: Long = 0
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+    override fun onCreate(savedInstanceState: Bundle, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         Log.d("lifeCycle", "onCreate :: " + javaClass.simpleName + "  ::  " + hashCode())
     }

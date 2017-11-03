@@ -3,7 +3,7 @@
     package="io.plan8.business">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="io.plan8.business.BaseApplication"
@@ -14,12 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="io.plan8.business.activity.TaskActivity">
+
+            <!--<intent-filter> -->
+            <!--<action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!--<category android:name="android.intent.category.LAUNCHER" /> -->
+            <!--</intent-filter> -->
+        </activity>
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.LoginAuthorizationActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
     </application>
 
 </manifest>

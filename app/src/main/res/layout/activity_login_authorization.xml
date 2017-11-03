@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="io.plan8.business.vm.LoginAuthorizationActivityVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:src="@android:drawable/arrow_down_float" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:text="로그인"
+                        android:textColor="#3f89de"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/authorizationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:textColor="#8492a6"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:id="@+id/authoInputField"
+                android:layout_width="wrap_content"
+                android:layout_height="64dp"
+                android:clickable="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="82dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
+
+                    <TextView
+                        android:id="@+id/firstInput"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/item_rounded_border"
+                        android:gravity="center"
+                        android:textSize="36dp" />
+
+                    <View
+                        android:id="@+id/firstLine"
+                        android:layout_width="32dp"
+                        android:layout_height="2dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="54dp"
+                        android:background="#61a2e7" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
+
+                    <TextView
+                        android:id="@+id/secondInput"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/item_rounded_border"
+                        android:gravity="center"
+                        android:textSize="36dp" />
+
+                    <View
+                        android:id="@+id/secondLine"
+                        android:layout_width="32dp"
+                        android:layout_height="2dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="54dp"
+                        android:background="#61a2e7"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
+
+                    <TextView
+                        android:id="@+id/thirdInput"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/item_rounded_border"
+                        android:gravity="center"
+                        android:textSize="36dp" />
+
+                    <View
+                        android:id="@+id/thirdLine"
+                        android:layout_width="32dp"
+                        android:layout_height="2dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="54dp"
+                        android:background="#61a2e7"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
+
+                    <TextView
+                        android:id="@+id/fourthInput"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@drawable/item_rounded_border"
+                        android:gravity="center"
+                        android:textSize="36dp" />
+
+                    <View
+                        android:id="@+id/fourthLine"
+                        android:layout_width="32dp"
+                        android:layout_height="2dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="54dp"
+                        android:background="#61a2e7"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <EditText
+                    android:id="@+id/authorizationCodeInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/transparent"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:textColor="@color/transparent"
+                    android:textColorHint="@color/transparent"
+                    android:textSize="20dp">
+                </EditText>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:onClick="deleteText"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/loginAuthProgressBarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#97ffffff"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_in" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
