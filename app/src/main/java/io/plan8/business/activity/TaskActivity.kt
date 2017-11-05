@@ -9,8 +9,8 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import io.plan8.business.BR
 import io.plan8.business.R
 import io.plan8.business.databinding.ActivityTaskBinding
+import io.plan8.business.util.DateUtil
 import io.plan8.business.vm.TaskActivityVM
-import java.text.SimpleDateFormat
 
 
 class TaskActivity : BaseActivity() {
@@ -30,13 +30,12 @@ class TaskActivity : BaseActivity() {
             }
 
             override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
-//                SimpleDateFormat.getDateInstance();
                 val date = widget.selectedDate
-
                 if (null == date) {
-                    vm!!.selectedDate = "오늘날짜넣기"
+                    vm!!.selectedDate = DateUtil.getCurrentDate()
                 }
-                vm!!.selectedDate = SimpleDateFormat.getDateInstance().format(date.date)
+                vm!!.selectedDate = DateUtil.dateToYYYYMd(date.date)
+                vm!!.isOpenedCalendar = false
             }
         })
     }

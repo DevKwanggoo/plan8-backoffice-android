@@ -1,11 +1,11 @@
 package io.plan8.business
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-class BaseApplication : Application() {
+class BaseApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 

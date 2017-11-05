@@ -10,7 +10,7 @@ import android.view.inputmethod.InputMethodManager
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-class ViewUtil {
+object ViewUtil {
     fun dpToPx(dp: Double): Int {
         return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }

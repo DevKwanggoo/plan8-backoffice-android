@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import io.plan8.business.BR
 import io.plan8.business.activity.TaskActivity
+import io.plan8.business.util.DateUtil
 
 /**
  * Created by SSozi on 2017. 11. 2..
@@ -12,9 +13,6 @@ import io.plan8.business.activity.TaskActivity
 class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : ActivityVM(activity, savedInstanceState) {
     var selectedDate: String = ""
         get() {
-            if (field.equals("")) {
-                return "날짜변경"
-            }
             return field
         }
         set(selectedDate) {
@@ -30,13 +28,18 @@ class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : Acti
         set (isOpenedCalendar) {
             field = isOpenedCalendar
             notifyPropertyChanged(BR.openedCalendar)
+            notifyPropertyChanged(BR.toolbarTitle)
         }
 
     var toolbarTitle: String = ""
-            @Bindable
-            get() {
-                return field
+        @Bindable
+        get() {
+            if (isOpenedCalendar) {
+                return "날짜변경"
+            } else {
+                return selectedDate
             }
+        }
         set (toolbarTitle) {
             field = toolbarTitle
             notifyPropertyChanged(BR.toolbarTitle)
@@ -44,15 +47,9 @@ class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : Acti
 
     fun changeDate(view: View) {
         isOpenedCalendar = !isOpenedCalendar
-
-        if (isOpenedCalendar) {
-            toolbarTitle = "날짜변경"
-        } else {
-            toolbarTitle = selectedDate;
-        }
     }
 
     init {
-        selectedDate = "오늘 날짜 들어가기"
+        selectedDate = DateUtil.getCurrentDate()
     }
 }
