@@ -33,6 +33,8 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
     private var secondInput: TextView? = null
     private var thirdInput: TextView? = null
     private var fourthInput: TextView? = null
+    private var fifthInput: TextView? = null
+    private var sixthInput: TextView? = null
     private var inputField: LinearLayout? = null
     private var authoEditText: EditText? = null
 
@@ -57,14 +59,20 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
         secondInput = binding.secondInput
         thirdInput = binding.thirdInput
         fourthInput = binding.fourthInput
+        fifthInput = binding.fifthInput
+        sixthInput = binding.sixthInput
         inputField = binding.authoInputField
         inputField!!.setOnClickListener(this)
+        binding.authNextStep.setOnClickListener{ if (authoEditText!!.text.length >= 6) nextActivity() }
+        binding.authPrevStep.setOnClickListener { onBackPressed() }
 
         val focusLineList = ArrayList<View>()
         focusLineList.add(binding.firstLine)
         focusLineList.add(binding.secondLine)
         focusLineList.add(binding.thirdLine)
         focusLineList.add(binding.fourthLine)
+        focusLineList.add(binding.fifthLine)
+        focusLineList.add(binding.sixthLine)
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(edit: Editable) {}
@@ -126,9 +134,29 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
                     } else if (position == 3) {
                         fourthInput!!.text = s[position] + ""
                         for (i in focusLineList.indices) {
+                            if (i == position + 1) {
+                                focusLineList[position + 1].visibility = View.VISIBLE
+                            } else {
+                                focusLineList[i].visibility = View.GONE
+                            }
+                        }
+                        fifthInput!!.text = ""
+                    } else if (position == 4) {
+                        fifthInput!!.text = s[position] + ""
+                        for (i in focusLineList.indices) {
+                            if (i == position + 1) {
+                                focusLineList[position + 1].visibility = View.VISIBLE
+                            } else {
+                                focusLineList[i].visibility = View.GONE
+                            }
+                        }
+                        sixthInput!!.text = ""
+                    } else if (position == 5) {
+                        sixthInput!!.text = s[position] + ""
+                        for (i in focusLineList.indices) {
                             focusLineList[i].visibility = View.GONE
                         }
-                        if (s.length == 4) {
+                        if (s.length == 6) {
 //                            requestOAuth(s.toString())
                             nextStep(authoEditText!!)
                         }
@@ -145,6 +173,8 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
                     secondInput!!.text = ""
                     thirdInput!!.text = ""
                     fourthInput!!.text = ""
+                    fifthInput!!.text = ""
+                    sixthInput!!.text = ""
                 }
             }
         }

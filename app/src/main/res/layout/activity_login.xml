@@ -31,7 +31,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="다음"
-                    android:textColor="#3f89de"
+                    android:textColor="@color/blueColor"
                     android:textSize="16dp" />
             </RelativeLayout>
         </RelativeLayout>
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="68dp"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/im_plan8_logo_main"
             android:layout_marginLeft="20dp"/>
 
         <TextView
@@ -49,13 +49,13 @@
             android:layout_marginLeft="30dp"
             android:text="새 계정 만들기 또는 로그인"
             android:textSize="16dp"
-            android:textColor="#3c4858"
+            android:textColor="@color/defaultDarkColor"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#8492a6"
+            android:textColor="@color/grayColor"
             android:text="휴대전화 번호"
             android:layout_marginTop="72dp"
             android:layout_marginLeft="20dp"
@@ -73,22 +73,25 @@
                 android:hint="전화번호를 입력해주세요. (-제외)"
                 android:id="@+id/loginPhoneNumber"
                 android:inputType="number"
-                android:textColor="#3c4858"
+                android:textColor="@color/defaultDarkColor"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:textSize="20dp" />
 
             <RelativeLayout
+                android:id="@+id/deleteNumberBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginRight="20dp"
-                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    android:layout_marginLeft="20dp"
+                    android:tint="@color/grayColor"
+                    android:src="@drawable/ic_line_close"
                     android:layout_centerVertical="true" />
 
             </RelativeLayout>

@@ -3,6 +3,7 @@ package io.plan8.business.activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -27,6 +28,7 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
 
         binding.loginNextStep.setOnClickListener({ nextStep() })
         binding.loginPhoneNumber.setOnEditorActionListener(this)
+        binding.deleteNumberBtn.setOnClickListener { binding.loginPhoneNumber.setText("") }
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {

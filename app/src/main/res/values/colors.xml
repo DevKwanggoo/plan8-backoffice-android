@@ -6,4 +6,8 @@
 
     <color name="white">#ffffffff</color>
     <color name="transparent">#00000000</color>
+
+    <color name="defaultDarkColor">#FF3C4858</color>
+    <color name="grayColor">#FF8492A6</color>
+    <color name="blueColor">#FF3F89DE</color>
 </resources>
