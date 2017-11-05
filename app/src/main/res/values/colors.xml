@@ -6,4 +6,8 @@
 
     <color name="white">#ffffffff</color>
     <color name="transparent">#00000000</color>
+
+    <color name="taskStatusBlue">#2979ff</color>
+    <color name="taskStatusOrange">#FFB229</color>
+    <color name="taskStatusRed">#FF2936</color>
 </resources>

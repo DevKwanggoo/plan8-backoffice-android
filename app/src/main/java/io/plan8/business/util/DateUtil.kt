@@ -7,12 +7,13 @@ import java.util.*
  * Created by chokwanghwan on 2017. 11. 5..
  */
 object DateUtil {
+    val YYYYMD_FORMAT: String = "yyyy년 M월 d일"
     fun getCurrentDate(): String {
-        return dateFilter(Calendar.getInstance().timeInMillis, "yyyy년 M월 d일", null)
+        return dateFilter(Calendar.getInstance().timeInMillis, YYYYMD_FORMAT, null)
     }
 
     fun dateToYYYYMd(date: Date): String {
-        return SimpleDateFormat("yyyy년 M월 d일").format(date)
+        return SimpleDateFormat(YYYYMD_FORMAT).format(date)
     }
 
     private fun dateFilter(milliSeconds: Long?, format: String, locale: Locale?): String {

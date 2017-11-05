@@ -1,20 +1,24 @@
 package io.plan8.business.vm
 
 import android.databinding.Bindable
+import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.plan8.business.BR
+import io.plan8.business.R
 import io.plan8.business.activity.TaskActivity
+import io.plan8.business.adapter.BindingRecyclerViewAdapter
+import io.plan8.business.model.item.TaskItem
 import io.plan8.business.util.DateUtil
+import io.plan8.business.vm.item.TaskItemVM
 
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : ActivityVM(activity, savedInstanceState) {
+open class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?, taskItemList: List<TaskItem>) : ActivityVM(activity, savedInstanceState) {
     var selectedDate: String = ""
-        get() {
-            return field
-        }
         set(selectedDate) {
             field = selectedDate
             toolbarTitle = selectedDate
@@ -45,11 +49,36 @@ class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?) : Acti
             notifyPropertyChanged(BR.toolbarTitle)
         }
 
+    var adapter: BindingRecyclerViewAdapter<*>? = null
+
     fun changeDate(view: View) {
         isOpenedCalendar = !isOpenedCalendar
     }
 
     init {
         selectedDate = DateUtil.getCurrentDate()
+        adapter = object : BindingRecyclerViewAdapter<TaskItem>() {
+            override fun selectViewLayoutType(taskItem: TaskItem?): Int {
+                return R.layout.item_task
+            }
+
+            override fun bindVariables(binding: ViewDataBinding?, taskItem: TaskItem?) {
+                val taskItemVM = TaskItemVM(activity, savedInstanceState, taskItem!!)
+                binding!!.setVariable(BR.vm, taskItemVM)
+            }
+        }
+
+        setDatas(taskItemList)
+    }
+
+    fun getLayoutManager(): RecyclerView.LayoutManager {
+        return LinearLayoutManager(context)
+    }
+
+    var data: List<TaskItem>? = null
+
+    fun setDatas(data: List<TaskItem>?) {
+        this.data = data
+        adapter!!.data = this.data
     }
 }
