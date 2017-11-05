@@ -1,5 +1,7 @@
 package io.plan8.business.activity
 
+import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.widget.DatePicker
@@ -18,6 +20,10 @@ import io.plan8.business.vm.TaskActivityVM
 class TaskActivity : BaseActivity() {
     var binding: ActivityTaskBinding? = null
     var vm: TaskActivityVM? = null
+
+    fun buildIntent(context: Context): Intent {
+        return Intent(context, TaskActivity::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,5 +54,10 @@ class TaskActivity : BaseActivity() {
                 vm!!.isOpenedCalendar = false
             }
         })
+    }
+
+    override fun onDestroy() {
+        binding!!.unbind()
+        super.onDestroy()
     }
 }

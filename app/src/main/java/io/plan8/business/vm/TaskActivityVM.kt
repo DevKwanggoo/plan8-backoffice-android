@@ -17,7 +17,9 @@ import io.plan8.business.vm.item.TaskItemVM
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-open class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?, taskItemList: List<TaskItem>) : ActivityVM(activity, savedInstanceState) {
+open class TaskActivityVM(activity: TaskActivity
+                          , savedInstanceState: Bundle?, taskItemList: List<TaskItem>) : ActivityVM(activity, savedInstanceState) {
+    var data: List<TaskItem>? = null
     var selectedDate: String = ""
         set(selectedDate) {
             field = selectedDate
@@ -74,8 +76,6 @@ open class TaskActivityVM(activity: TaskActivity, savedInstanceState: Bundle?, t
     fun getLayoutManager(): RecyclerView.LayoutManager {
         return LinearLayoutManager(context)
     }
-
-    var data: List<TaskItem>? = null
 
     fun setDatas(data: List<TaskItem>?) {
         this.data = data

@@ -54,7 +54,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/taskToolbar"
             android:adapter="@{vm.adapter}"
-            android:background="#99ffffff"
             android:layoutManager="@{vm.layoutManager}" />
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView

@@ -1,17 +1,17 @@
 package io.plan8.business.vm.item
 
-import android.content.Context
 import android.databinding.Bindable
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import io.plan8.business.activity.DetailTaskActivity
+import io.plan8.business.activity.TaskActivity
 import io.plan8.business.model.item.TaskItem
-import io.plan8.business.vm.BaseVM
+import io.plan8.business.vm.ActivityVM
 
 /**
  * Created by chokwanghwan on 2017. 11. 5..
  */
-class TaskItemVM(context: Context, savedInstanceState: Bundle?, var taskItem: TaskItem) : BaseVM(context, savedInstanceState) {
+class TaskItemVM(activity: TaskActivity, savedInstanceState: Bundle?, var taskItem: TaskItem) : ActivityVM(activity, savedInstanceState) {
 
     @Bindable
     fun getReservationtime(): String {
@@ -44,6 +44,6 @@ class TaskItemVM(context: Context, savedInstanceState: Bundle?, var taskItem: Ta
     }
 
     fun showDetailTask(view: View) {
-        Toast.makeText(context,"상세가기", Toast.LENGTH_SHORT).show()
+        activity.startActivity(DetailTaskActivity.buildIntent(context, taskItem))
     }
 }
