@@ -10,4 +10,8 @@
     <color name="defaultDarkColor">#FF3C4858</color>
     <color name="grayColor">#FF8492A6</color>
     <color name="blueColor">#FF3F89DE</color>
+
+    <color name="taskStatusBlue">#2979ff</color>
+    <color name="taskStatusOrange">#FFB229</color>
+    <color name="taskStatusRed">#FF2936</color>
 </resources>

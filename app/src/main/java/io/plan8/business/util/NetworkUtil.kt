@@ -6,7 +6,7 @@ import android.net.ConnectivityManager
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-class NetworkUtil {
+object NetworkUtil {
     fun checkInternetConnection(context: Context): Boolean {
 
         val conManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

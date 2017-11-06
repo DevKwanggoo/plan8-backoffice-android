@@ -1,4 +1,4 @@
-package io.plan8.business.singleton
+package io.plan8.business
 
 import android.util.Log
 
