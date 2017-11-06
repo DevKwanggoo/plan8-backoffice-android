@@ -47,7 +47,7 @@ open class TaskActivityVM(activity: TaskActivity
             notifyPropertyChanged(BR.toolbarTitle)
         }
 
-    var adapter: BindingRecyclerViewAdapter<*>? = null
+    var adapter: BindingRecyclerViewAdapter<TaskItem>
 
     fun changeDate(view: View) {
         isOpenedCalendar = !isOpenedCalendar
@@ -56,13 +56,14 @@ open class TaskActivityVM(activity: TaskActivity
     init {
         selectedDate = DateUtil.getCurrentDate()
         adapter = object : BindingRecyclerViewAdapter<TaskItem>() {
-            override fun selectViewLayoutType(taskItem: TaskItem?): Int {
+
+            override fun selectViewLayoutType(data: TaskItem): Int {
                 return R.layout.item_task
             }
 
-            override fun bindVariables(binding: ViewDataBinding?, taskItem: TaskItem?) {
-                val taskItemVM = TaskItemVM(activity, savedInstanceState, taskItem!!)
-                binding!!.setVariable(BR.vm, taskItemVM)
+            override fun bindVariables(binding: ViewDataBinding, data: TaskItem) {
+                val taskItemVM = TaskItemVM(activity, savedInstanceState, data)
+                binding.setVariable(BR.vm, taskItemVM)
             }
         }
 
@@ -75,6 +76,6 @@ open class TaskActivityVM(activity: TaskActivity
 
     fun setDatas(data: List<TaskItem>?) {
         this.data = data
-        adapter!!.data = this.data
+        adapter.data = this.data
     }
 }
