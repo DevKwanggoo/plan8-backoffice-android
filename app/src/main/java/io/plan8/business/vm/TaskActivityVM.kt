@@ -40,11 +40,7 @@ open class TaskActivityVM(activity: TaskActivity
     var toolbarTitle: String = ""
         @Bindable
         get() {
-            if (isOpenedCalendar) {
-                return "날짜변경"
-            } else {
-                return selectedDate
-            }
+            return selectedDate
         }
         set (toolbarTitle) {
             field = toolbarTitle

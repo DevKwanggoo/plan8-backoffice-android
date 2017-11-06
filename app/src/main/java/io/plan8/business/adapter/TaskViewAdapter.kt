@@ -4,6 +4,8 @@ import android.databinding.BindingAdapter
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
@@ -25,11 +27,11 @@ class TaskViewAdapter {
         fun setDisplayCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
             if (!view.isAlreadyInflated) {
                 view.isAlreadyInflated = true
-                view.visibility = View.GONE
+                view.visibility = View.INVISIBLE
                 return
             }
             if (isOpenedCalendar) {
-                val slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
+                var slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
                 slideDownAnimation.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation) {}
 
@@ -41,6 +43,7 @@ class TaskViewAdapter {
                 })
                 view.startAnimation(slideDownAnimation)
             } else {
+//                view.visibility = View.GONE
                 val slideUpAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
                 slideUpAnimation.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation) {}
@@ -48,7 +51,7 @@ class TaskViewAdapter {
                     override fun onAnimationRepeat(animation: Animation) {}
 
                     override fun onAnimationEnd(animation: Animation) {
-                        view.visibility = View.GONE
+                        view.visibility = View.INVISIBLE
                     }
                 })
                 view.startAnimation(slideUpAnimation)
@@ -72,6 +75,32 @@ class TaskViewAdapter {
                 bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusOrange))
             } else {
                 bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusRed))
+            }
+        }
+
+        @BindingAdapter("taskViewAdapter:fadeout")
+        @JvmStatic
+        fun fadeout(view: View, display: Boolean) {
+            if (display) {
+                view.visibility = View.VISIBLE
+            } else {
+                val animation = AlphaAnimation(1.0f, 0.0f)
+                animation.duration = 200
+                animation.interpolator = AccelerateDecelerateInterpolator()
+                animation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {
+
+                    }
+
+                    override fun onAnimationEnd(animation: Animation) {
+                        view.visibility = View.GONE
+                    }
+
+                    override fun onAnimationRepeat(animation: Animation) {
+
+                    }
+                })
+                view.startAnimation(animation)
             }
         }
     }

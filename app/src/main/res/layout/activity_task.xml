@@ -30,10 +30,11 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/taskToolbar"
             android:background="#80000000"
-            android:orientation="vertical"
             android:clickable="true"
             android:onClick="@{vm::changeDate}"
-            android:visibility="@{vm.openedCalendar ? View.VISIBLE : View.GONE}" />
+            android:orientation="vertical"
+            taskViewAdapter:fadeout="@{vm.openedCalendar}" />
+        <!--android:visibility="@{vm.openedCalendar ? View.VISIBLE : View.GONE}"-->
 
         <io.plan8.business.view.Plan8TaskCalendarView
             android:id="@+id/taskCalendarView"
@@ -72,9 +73,10 @@
                     android:textSize="16dp" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="18dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
                     android:src="@{vm.openedCalendar? @drawable/ic_line_chevron_up : @drawable/ic_line_chevron_down}"
                     android:tint="#ffffff" />
             </LinearLayout>
