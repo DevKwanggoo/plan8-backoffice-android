@@ -5,6 +5,7 @@ package io.plan8.business
  */
 class Constants {
     companion object {
+        //task status
         val TASK_STATUS_BLUE:String = "taskStatusBlue"
         val TASK_STATUS_ORANGE:String = "taskStatusOrange"
         val TASK_STATUS_RED:String = "taskStatusRed"

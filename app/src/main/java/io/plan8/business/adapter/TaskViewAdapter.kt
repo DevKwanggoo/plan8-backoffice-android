@@ -4,12 +4,15 @@ import android.databinding.BindingAdapter
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import io.plan8.business.Constants
 import io.plan8.business.R
+import io.plan8.business.view.Plan8TaskCalendarView
 
 
 /**
@@ -19,30 +22,38 @@ class TaskViewAdapter {
     companion object {
         @BindingAdapter("taskViewAdapter:displayCalendar")
         @JvmStatic
-        fun setDisplayCalendar(view: MaterialCalendarView, isOpenedCalendar: Boolean) {
-
-            if (isOpenedCalendar) {
-                view.visibility = View.VISIBLE
-//                var slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
-//                slideDownAnimation.setAnimationListener(Animation.AnimationListener{
-//
-//                })
-
-            } else {
-//                var slideUpAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
+        fun setDisplayCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
+            if (!view.isAlreadyInflated) {
+                view.isAlreadyInflated = true
                 view.visibility = View.GONE
-                //TODO : init일때 animation말고 걍 키기
-//                view.layoutAnimationListener
+                return
             }
+            if (isOpenedCalendar) {
+                val slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
+                slideDownAnimation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {}
 
-//            mAni1 = AnimationUtils.loadAnimation(this, R.anim.rotate);
-//            mAni1.setAnimationListener(new AnimationListener(){
-//                public void onAnimationEnd(Animation animation){
-//                    // To Do .. View.startAnimation(mAni2);
-//                }
+                    override fun onAnimationRepeat(animation: Animation) {}
 
-//                public void onAnimationStart(Animation animation){;}
+                    override fun onAnimationEnd(animation: Animation) {
+                        view.visibility = View.VISIBLE
+                    }
+                })
+                view.startAnimation(slideDownAnimation)
+            } else {
+                val slideUpAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
+                slideUpAnimation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationStart(animation: Animation) {}
 
+                    override fun onAnimationRepeat(animation: Animation) {}
+
+                    override fun onAnimationEnd(animation: Animation) {
+                        view.visibility = View.GONE
+                    }
+                })
+                view.startAnimation(slideUpAnimation)
+                //TODO : init일때 animation말고 걍 키기
+            }
         }
 
         @BindingAdapter("taskViewAdapter:initCalendar")

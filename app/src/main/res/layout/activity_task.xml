@@ -25,10 +25,20 @@
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}" />
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/taskCalendarView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/taskToolbar"
+            android:background="#80000000"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:onClick="@{vm::changeDate}"
+            android:visibility="@{vm.openedCalendar ? View.VISIBLE : View.GONE}" />
+
+        <io.plan8.business.view.Plan8TaskCalendarView
+            android:id="@+id/taskCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/taskToolbar"
             android:background="#ffffff"
             app:mcv_arrowColor="#6D848F"
