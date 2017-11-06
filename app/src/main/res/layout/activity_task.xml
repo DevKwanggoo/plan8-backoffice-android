@@ -17,6 +17,28 @@
         android:layout_height="match_parent"
         android:background="#ffffff">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/taskRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/taskToolbar"
+            android:adapter="@{vm.adapter}"
+            android:layoutManager="@{vm.layoutManager}" />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/taskCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/taskToolbar"
+            android:background="#ffffff"
+            app:mcv_arrowColor="#6D848F"
+            app:mcv_leftArrowMask="@drawable/ic_line_chevron_left"
+            app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
+            app:mcv_selectionColor="@color/colorPrimary"
+            app:mcv_showOtherDates="all"
+            taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
+            taskViewAdapter:initCalendar="@{vm.openedCalendar}" />
+
         <RelativeLayout
             android:id="@+id/taskToolbar"
             android:layout_width="match_parent"
@@ -48,26 +70,5 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/taskRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/taskToolbar"
-            android:adapter="@{vm.adapter}"
-            android:layoutManager="@{vm.layoutManager}" />
-
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/taskCalendarView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/taskToolbar"
-            android:background="#ffffff"
-            app:mcv_arrowColor="#6D848F"
-            app:mcv_leftArrowMask="@drawable/ic_line_chevron_left"
-            app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
-            app:mcv_selectionColor="@color/colorPrimary"
-            app:mcv_showOtherDates="all"
-            taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
-            taskViewAdapter:initCalendar="@{vm.openedCalendar}" />
     </RelativeLayout>
 </layout>

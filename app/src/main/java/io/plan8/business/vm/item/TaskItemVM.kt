@@ -3,7 +3,6 @@ package io.plan8.business.vm.item
 import android.databinding.Bindable
 import android.os.Bundle
 import android.view.View
-import io.plan8.business.activity.DetailTaskActivity
 import io.plan8.business.activity.TaskActivity
 import io.plan8.business.model.item.TaskItem
 import io.plan8.business.vm.ActivityVM
@@ -44,6 +43,6 @@ class TaskItemVM(activity: TaskActivity, savedInstanceState: Bundle?, var taskIt
     }
 
     fun showDetailTask(view: View) {
-        activity.startActivity(DetailTaskActivity.buildIntent(context, taskItem))
+//        activity.startActivity(DetailTaskActivity.buildIntent(context, taskItem))
     }
 }

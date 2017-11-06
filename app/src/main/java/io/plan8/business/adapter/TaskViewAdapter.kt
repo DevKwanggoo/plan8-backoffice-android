@@ -23,10 +23,15 @@ class TaskViewAdapter {
 
             if (isOpenedCalendar) {
                 view.visibility = View.VISIBLE
-//                view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.slide_down))
+//                var slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
+//                slideDownAnimation.setAnimationListener(Animation.AnimationListener{
+//
+//                })
+
             } else {
+//                var slideUpAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
                 view.visibility = View.GONE
-//                view.startAnimation(AnimationUtils.loadAnimation(view.context, R.anim.slide_up))
+                //TODO : init일때 animation말고 걍 키기
 //                view.layoutAnimationListener
             }
 
@@ -35,7 +40,7 @@ class TaskViewAdapter {
 //                public void onAnimationEnd(Animation animation){
 //                    // To Do .. View.startAnimation(mAni2);
 //                }
-//
+
 //                public void onAnimationStart(Animation animation){;}
 
         }
