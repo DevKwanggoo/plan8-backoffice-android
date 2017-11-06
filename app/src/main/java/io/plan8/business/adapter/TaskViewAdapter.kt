@@ -52,7 +52,6 @@ class TaskViewAdapter {
                     }
                 })
                 view.startAnimation(slideUpAnimation)
-                //TODO : init일때 animation말고 걍 키기
             }
         }
 
