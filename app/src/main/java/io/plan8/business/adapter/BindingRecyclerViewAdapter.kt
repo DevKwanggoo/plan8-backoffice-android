@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.plan8.business.model.item.TaskItem
-
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by SSozi on 2017. 9. 15..
@@ -16,25 +14,17 @@ import java.util.ArrayList
 
 abstract class BindingRecyclerViewAdapter<T> : RecyclerView.Adapter<BindingRecyclerViewAdapter.BindingViewHolder>() {
     var data: List<T>? = null
-    set (data) {
-        if (data != null)
-            field = data
-        else
-            field = ArrayList()
-        notifyDataSetChanged()
-    }
+        set (data) {
+            if (data != null)
+                field = data
+            else
+                field = ArrayList()
+            notifyDataSetChanged()
+        }
 
     protected abstract fun selectViewLayoutType(data: T): Int
 
     protected abstract fun bindVariables(binding: ViewDataBinding, data: T)
-
-//    fun setData(data: List<T>?) {
-//        if (data != null)
-//            this.data = data
-//        else
-//            this.data = ArrayList()
-//        notifyDataSetChanged()
-//    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
