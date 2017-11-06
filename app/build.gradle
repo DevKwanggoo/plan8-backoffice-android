@@ -21,14 +21,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'boolean', 'IS_RELEASE', 'true'
-            manifestPlaceholders = [ appName: "플랜에잇콘솔" ]
+            manifestPlaceholders = [appName: "플랜에잇콘솔"]
         }
 
-         debug {
-             minifyEnabled false
-             buildConfigField 'boolean', 'IS_RELEASE', 'false'
-             manifestPlaceholders = [ appName: "플랜에잇콘솔(개발용)" ]
-         }
+        debug {
+            minifyEnabled false
+            buildConfigField 'boolean', 'IS_RELEASE', 'false'
+            manifestPlaceholders = [appName: "플랜에잇콘솔(개발용)"]
+        }
     }
     dataBinding {
         enabled = true

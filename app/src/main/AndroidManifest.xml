@@ -6,32 +6,39 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="io.plan8.business.BaseApplication"
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="io.plan8.business.activity.TaskActivity">
+        <activity android:name=".activity.TaskActivity">
 
-            <!--<intent-filter> -->
-            <!--<action android:name="android.intent.action.MAIN" /> -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-            <!--<category android:name="android.intent.category.LAUNCHER" /> -->
-            <!--</intent-filter> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".activity.LoginActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".activity.LoginAuthorizationActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity android:name=".activity.ScheduleInfoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.LoginAuthorizationActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
     </application>
 
 </manifest>
