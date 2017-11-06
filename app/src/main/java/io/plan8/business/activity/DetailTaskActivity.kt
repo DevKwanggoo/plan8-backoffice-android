@@ -35,4 +35,9 @@ class DetailTaskActivity : AppCompatActivity() {
         binding.unbind()
         super.onDestroy()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.databinding.Bindable
 import android.os.Bundle
 import android.view.View
+import io.plan8.business.R
 import io.plan8.business.model.item.TaskItem
 
 /**
@@ -57,5 +58,6 @@ class DetailTaskActivityVM(activity: Activity, savedInstanceState: Bundle?, var 
 
     fun finish(view: View) {
         activity.onBackPressed()
+        activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
     }
 }

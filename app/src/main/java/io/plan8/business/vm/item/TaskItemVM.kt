@@ -3,6 +3,7 @@ package io.plan8.business.vm.item
 import android.databinding.Bindable
 import android.os.Bundle
 import android.view.View
+import io.plan8.business.R
 import io.plan8.business.activity.DetailTaskActivity
 import io.plan8.business.activity.TaskActivity
 import io.plan8.business.model.item.TaskItem
@@ -45,5 +46,6 @@ class TaskItemVM(activity: TaskActivity, savedInstanceState: Bundle?, var taskIt
 
     fun showDetailTask(view: View) {
         activity.startActivity(DetailTaskActivity.buildIntent(context, taskItem))
+        activity.overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
     }
 }
