@@ -49,10 +49,6 @@ abstract class BindingRecyclerViewAdapter<T> : RecyclerView.Adapter<BindingRecyc
     }
 
     class BindingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val binding: ViewDataBinding
-
-        init {
-            this.binding = DataBindingUtil.bind(view)
-        }
+        val binding: ViewDataBinding = DataBindingUtil.bind(view)
     }
 }

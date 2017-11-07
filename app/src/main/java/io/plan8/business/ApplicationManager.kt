@@ -9,4 +9,6 @@ object ApplicationManager {
     fun init() {
         Log.e("ApplicationManager", "test")
     }
+
+    val BASE_URL:String = "https://m.naver.com/"
 }

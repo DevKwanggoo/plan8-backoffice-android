@@ -26,14 +26,12 @@ class TaskViewAdapter {
         @BindingAdapter("taskViewAdapter:displayCalendar")
         @JvmStatic
         fun setDisplayCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
-            if (!view.isAlreadyInflated) {
-                view.isAlreadyInflated = true
-                view.visibility = View.INVISIBLE
-                return
-            }
-            if (isOpenedCalendar) {
-                var slideDownAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
-                slideDownAnimation.setAnimationListener(object : Animation.AnimationListener {
+            var slideDownAnimation: Animation? = null
+            var slideUpAnimation: Animation? = null
+
+            if (slideDownAnimation == null || slideUpAnimation == null){
+                slideDownAnimation = AnimationUtils.loadAnimation(view.context, R.anim.slide_down)
+                slideDownAnimation!!.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation) {}
 
                     override fun onAnimationRepeat(animation: Animation) {}
@@ -42,11 +40,9 @@ class TaskViewAdapter {
                         view.visibility = View.VISIBLE
                     }
                 })
-                view.startAnimation(slideDownAnimation)
-            } else {
-//                view.visibility = View.GONE
-                val slideUpAnimation: Animation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
-                slideUpAnimation.setAnimationListener(object : Animation.AnimationListener {
+
+                slideUpAnimation = AnimationUtils.loadAnimation(view.context, R.anim.slide_up)
+                slideUpAnimation!!.setAnimationListener(object : Animation.AnimationListener {
                     override fun onAnimationStart(animation: Animation) {}
 
                     override fun onAnimationRepeat(animation: Animation) {}
@@ -55,27 +51,36 @@ class TaskViewAdapter {
                         view.visibility = View.INVISIBLE
                     }
                 })
+            }
+            
+            if (!view.isAlreadyInflated) {
+                view.isAlreadyInflated = true
+                view.visibility = View.INVISIBLE
+                return
+            }
+
+            if (isOpenedCalendar) {
+                view.startAnimation(slideDownAnimation)
+            } else {
                 view.startAnimation(slideUpAnimation)
             }
         }
 
         @BindingAdapter("taskViewAdapter:initCalendar")
         @JvmStatic
-        fun initCalendar(view: MaterialCalendarView, isOpenedCalendar: Boolean) {
-            view.setTitleFormatter(TitleFormatter { day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
+        fun initCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
+            view.setTitleFormatter({ day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
         }
 
         @BindingAdapter("taskViewAdapter:setStatus")
         @JvmStatic
         fun setStatus(view: RelativeLayout, taskStatus: String) {
             view.setBackgroundResource(R.drawable.circle)
-            val bgShape = view.getBackground() as GradientDrawable
-            if (taskStatus.equals(Constants.TASK_STATUS_BLUE)) {
-                bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusBlue))
-            } else if (taskStatus.equals(Constants.TASK_STATUS_ORANGE)) {
-                bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusOrange))
-            } else {
-                bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusRed))
+            val bgShape = view.background as GradientDrawable
+            when (taskStatus) {
+                Constants.TASK_STATUS_BLUE -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusBlue))
+                Constants.TASK_STATUS_ORANGE -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusOrange))
+                else -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusRed))
             }
         }
 

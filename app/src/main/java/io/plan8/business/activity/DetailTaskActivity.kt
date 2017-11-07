@@ -11,13 +11,13 @@ import io.plan8.business.databinding.ActivityDetailTaskBinding
 import io.plan8.business.model.item.TaskItem
 import io.plan8.business.vm.DetailTaskActivityVM
 
-class DetailTaskActivity : AppCompatActivity() {
+class DetailTaskActivity : BaseActivity() {
     private lateinit var binding: ActivityDetailTaskBinding
     private lateinit var vm: DetailTaskActivityVM
 
     companion object {
         fun buildIntent(context: Context, taskItem: TaskItem): Intent {
-            var intent = Intent(context, DetailTaskActivity::class.java)
+            val intent = Intent(context, DetailTaskActivity::class.java)
             intent.putExtra("taskItem", taskItem)
             return intent
         }
@@ -37,7 +37,7 @@ class DetailTaskActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        finish()
         overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
     }
 }

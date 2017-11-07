@@ -10,6 +10,7 @@ import io.plan8.business.BR
 import io.plan8.business.R
 import io.plan8.business.activity.TaskActivity
 import io.plan8.business.adapter.BindingRecyclerViewAdapter
+import io.plan8.business.adapter.RestfulAdapter
 import io.plan8.business.model.item.TaskItem
 import io.plan8.business.util.DateUtil
 import io.plan8.business.vm.item.TaskItemVM
