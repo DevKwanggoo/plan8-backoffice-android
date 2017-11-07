@@ -25,7 +25,7 @@
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}" />
 
-        <LinearLayout
+        <io.plan8.business.view.BlurView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/taskToolbar"
@@ -34,7 +34,6 @@
             android:onClick="@{vm::changeDate}"
             android:orientation="vertical"
             taskViewAdapter:fadeout="@{vm.openedCalendar}" />
-        <!--android:visibility="@{vm.openedCalendar ? View.VISIBLE : View.GONE}"-->
 
         <io.plan8.business.view.Plan8TaskCalendarView
             android:id="@+id/taskCalendarView"

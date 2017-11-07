@@ -14,6 +14,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import io.plan8.business.Constants
 import io.plan8.business.R
+import io.plan8.business.view.BlurView
 import io.plan8.business.view.Plan8TaskCalendarView
 
 
@@ -80,7 +81,12 @@ class TaskViewAdapter {
 
         @BindingAdapter("taskViewAdapter:fadeout")
         @JvmStatic
-        fun fadeout(view: View, display: Boolean) {
+        fun fadeout(view: BlurView, display: Boolean) {
+            if (!view.isAlreadyInflated) {
+                view.isAlreadyInflated = true
+                view.visibility = View.GONE
+                return
+            }
             if (display) {
                 view.visibility = View.VISIBLE
             } else {
@@ -100,6 +106,7 @@ class TaskViewAdapter {
 
                     }
                 })
+                view.visibility = View.VISIBLE
                 view.startAnimation(animation)
             }
         }
