@@ -10,7 +10,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import io.plan8.business.Constants
 import io.plan8.business.R
@@ -27,6 +26,7 @@ class TaskViewAdapter {
         @JvmStatic
         fun setDisplayCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
             if (!view.isAlreadyInflated) {
+                view.selectedDate = CalendarDay.today()
                 view.isAlreadyInflated = true
                 view.visibility = View.INVISIBLE
                 return
@@ -61,7 +61,7 @@ class TaskViewAdapter {
 
         @BindingAdapter("taskViewAdapter:initCalendar")
         @JvmStatic
-        fun initCalendar(view: MaterialCalendarView, isOpenedCalendar: Boolean) {
+        fun initCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
             view.setTitleFormatter(TitleFormatter { day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
         }
 
