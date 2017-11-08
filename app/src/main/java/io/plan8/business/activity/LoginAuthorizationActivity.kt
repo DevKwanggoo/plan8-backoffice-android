@@ -19,6 +19,7 @@ import android.widget.TextView
 import io.plan8.business.BR
 import io.plan8.business.R
 import io.plan8.business.databinding.ActivityLoginAuthorizationBinding
+import io.plan8.business.util.ViewUtil
 import io.plan8.business.vm.LoginAuthorizationActivityVM
 import java.util.*
 
@@ -183,13 +184,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 
         authoEditText!!.isFocusableInTouchMode = true
         authoEditText!!.requestFocus()
-        showKeyboard(authoEditText!!)
-
-
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_DENIED) {
-//            registerSMSReceiver()
-//        }
-
+        ViewUtil.showKeyboard(authoEditText!!)
     }
 
     //TODO : 문자인증번호 파싱 리시버 로직임. 필요할때 주석제거
@@ -241,8 +236,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 //    }
 
     fun nextStep(view: View) {
-        //        progressBar.setVisibility(View.VISIBLE);
-        hideKeyboard(authoEditText!!)
+        ViewUtil.hideKeyboard(authoEditText!!)
         nextActivity()
     }
 
@@ -273,31 +267,12 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 //        super.onDestroy()
 //    }
 
-
     override fun onClick(v: View) {
         if (authoEditText != null) {
-            //            authoEditText.post(new Runnable() {
-            //                @Override
-            //                public void run() {
-            //                    authoEditText.setFocusableInTouchMode(true);
-            //                    authoEditText.requestFocus();
-            //                    new CommonUtils().showKeyboard(authoEditText);
-            //                }
-            //            });
             authoEditText!!.requestFocus()
             authoEditText!!.setSelection(authoEditText!!.text.length)
             authoEditText!!.isFocusableInTouchMode = true
-            showKeyboard(authoEditText!!)
+            ViewUtil.showKeyboard(authoEditText!!)
         }
-    }
-
-    fun hideKeyboard(view: View) {
-        val immhide = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        immhide.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    fun showKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(view, 0)
     }
 }

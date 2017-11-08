@@ -46,8 +46,8 @@
             app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
             app:mcv_selectionColor="@color/colorPrimary"
             app:mcv_showOtherDates="all"
-            taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
-            taskViewAdapter:initCalendar="@{vm.openedCalendar}" />
+            taskViewAdapter:initCalendar="@{vm.openedCalendar}"
+            taskViewAdapter:displayCalendar="@{vm.openedCalendar}" />
 
         <RelativeLayout
             android:id="@+id/taskToolbar"

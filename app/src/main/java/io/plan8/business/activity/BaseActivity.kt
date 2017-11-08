@@ -11,7 +11,7 @@ import android.widget.Toast
  * Created by SSozi on 2017. 11. 2..
  */
 abstract class BaseActivity : AppCompatActivity() {
-    var backPressedTime: Long = 0
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
@@ -48,18 +48,17 @@ abstract class BaseActivity : AppCompatActivity() {
         Log.d("lifeCycle", "onNewIntent :: " + javaClass.simpleName + "  ::  " + hashCode())
     }
 
-    fun onBackPressed(canDoubleClickFinish: Boolean) {
-        if (canDoubleClickFinish) {
-            val tempTime = System.currentTimeMillis()
-            val intervalTime = tempTime - backPressedTime
+    override fun onBackPressed() {
+        val tempTime = System.currentTimeMillis()
+        val intervalTime = tempTime - backPressedTime
 
-            if (intervalTime in 0..2000) {
-                finish()
-            } else {
-                backPressedTime = tempTime
-                val toast = Toast.makeText(baseContext, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT)
-                toast.show()
-            }
+        if (intervalTime in 0..2000) {
+            finish()
+        } else {
+            backPressedTime = tempTime
+            val toast = Toast.makeText(baseContext, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT)
+            toast.show()
         }
+
     }
 }
