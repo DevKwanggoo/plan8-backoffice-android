@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.business.vm.LoginAuthorizationActivityVM" />
+            type="io.plan8.backoffice.vm.LoginAuthorizationActivityVM" />
     </data>
 
     <RelativeLayout

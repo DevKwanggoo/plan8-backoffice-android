@@ -1,0 +1,118 @@
+package io.plan8.backoffice.activity
+
+import android.content.Context
+import android.content.Intent
+import android.databinding.DataBindingUtil
+import android.os.Bundle
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatTextView
+import android.util.Log
+import io.plan8.backoffice.BR
+import io.plan8.backoffice.R
+import io.plan8.backoffice.databinding.ActivityMainBinding
+import io.plan8.backoffice.fragment.BaseFragment
+import io.plan8.backoffice.fragment.MoreFragment
+import io.plan8.backoffice.fragment.TaskFragment
+import io.plan8.backoffice.vm.MainActivityVM
+import kotlinx.android.synthetic.main.activity_main.view.*
+
+class MainActivity : BaseActivity() {
+    var binding: ActivityMainBinding? = null
+    var vm: MainActivityVM? = null
+    var fragmentManager: FragmentManager? = supportFragmentManager
+    var currentTabPosition: Int = 0
+    var fragments: MutableList<BaseFragment>? = ArrayList()
+
+    companion object {
+        fun buildIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        vm = MainActivityVM(this, savedInstanceState)
+        binding!!.setVariable(BR.vm, vm)
+        binding!!.executePendingBindings()
+
+        initTabAndViewPager();
+    }
+
+    override fun onDestroy() {
+        binding!!.unbind()
+        super.onDestroy()
+    }
+
+    fun initTabAndViewPager() {
+        for (i in 0..1) {
+            val tab = binding!!.bottomNaviContainer.mainTabLayout.newTab()
+            tab.setCustomView(R.layout.item_main_tab)
+            if (null != tab.getCustomView()) {
+                Log.e("test", "testtttt " + i)
+                val tabItemTitle: AppCompatTextView = tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle)
+                if (i == 0) {
+                    tabItemTitle.setTextColor(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
+                    tabItemTitle.setText("예약")
+
+                    val taskFragment = TaskFragment()
+                    val bundle = Bundle()
+//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
+                    taskFragment.setArguments(bundle)
+                    fragments!!.add(taskFragment)
+                } else {
+                    tabItemTitle.setText("더보기")
+
+                    val moreFragment = MoreFragment()
+                    val bundle = Bundle()
+//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
+                    moreFragment.setArguments(bundle)
+                    fragments!!.add(moreFragment)
+                }
+                //                        tab.getCustomView().setLayoutParams(params);
+
+                binding!!.bottomNaviContainer.mainTabLayout.addTab(tab)
+            }
+        }
+
+        binding!!.mainViewPager.setOffscreenPageLimit(fragments!!.size)
+
+        val pagerAdapter = object : FragmentStatePagerAdapter(fragmentManager) {
+            override fun getItem(position: Int): Fragment {
+                return fragments!!.get(position)
+            }
+
+            override fun getCount(): Int {
+                return fragments!!.size
+            }
+        }
+        binding!!.mainViewPager.setAdapter(pagerAdapter)
+        binding!!.mainViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding!!.bottomNaviContainer.mainTabLayout))
+        binding!!.bottomNaviContainer.mainTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                currentTabPosition = tab.position
+                binding!!.mainViewPager.setCurrentItem(tab.position)
+                if (null != tab.customView) {
+                    tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle).setTextColor(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
+                }
+//                moveTop()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                if (null != tab) {
+                    if (null != tab.customView) {
+                        tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle).setTextColor(ContextCompat.getColor(applicationContext, R.color.unselectTabItem))
+                    }
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+        })
+    }
+}

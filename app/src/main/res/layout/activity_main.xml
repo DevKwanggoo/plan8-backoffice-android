@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="io.plan8.backoffice.vm.MainActivityVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/mainViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottomNaviContainer" />
+
+        <LinearLayout
+            android:id="@+id/bottomNaviContainer"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1A000000" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/mainTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="47dp" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

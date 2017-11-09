@@ -17,4 +17,7 @@
 
     <color name="defaultRipple">#20000000</color>
     <color name="whiteRipple">#80ffffff</color>
+
+    <color name="selectTabItem">#215EFF</color>
+    <color name="unselectTabItem">#A9B8C1</color>
 </resources>

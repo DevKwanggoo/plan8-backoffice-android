@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.business.vm.LoginActivityVM" />
+            type="io.plan8.backoffice.vm.LoginActivityVM" />
     </data>
 
     <LinearLayout
