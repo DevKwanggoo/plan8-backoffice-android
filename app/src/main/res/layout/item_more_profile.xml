@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="io.plan8.backoffice.vm.item.MoreProfileItemVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/moreProfileImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="#ff0f"
+            app:riv_mutate_background="true"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            app:riv_oval="true"/>
+
+        <LinearLayout
+            android:layout_toRightOf="@+id/moreProfileImage"
+            android:layout_marginLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/defaultDarkColor"
+                android:text="@{vm.profileName}"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grayColor"
+                android:text="@{vm.profilePhoneNumber}"
+                android:textSize="14dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

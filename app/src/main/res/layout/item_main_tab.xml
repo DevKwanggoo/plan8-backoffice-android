@@ -5,14 +5,18 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/mainTabItemIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_centerHorizontal="true"
+        android:tint="@color/unselectTabItem"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/mainTabItemTitle"
+        android:layout_below="@+id/mainTabItemIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
         android:textColor="@color/unselectTabItem"
         android:textSize="13dp" />
 </RelativeLayout>

@@ -20,4 +20,7 @@
 
     <color name="selectTabItem">#215EFF</color>
     <color name="unselectTabItem">#A9B8C1</color>
+
+    <color name="grayLabelColor">#FBFBFB</color>
+    <color name="borderColor">#1A000000</color>
 </resources>

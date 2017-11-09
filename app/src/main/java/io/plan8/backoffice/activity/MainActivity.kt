@@ -3,22 +3,30 @@ package io.plan8.backoffice.activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
+import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.R
 import io.plan8.backoffice.databinding.ActivityMainBinding
 import io.plan8.backoffice.fragment.BaseFragment
 import io.plan8.backoffice.fragment.MoreFragment
 import io.plan8.backoffice.fragment.TaskFragment
+import io.plan8.backoffice.util.ViewUtil
 import io.plan8.backoffice.vm.MainActivityVM
 import kotlinx.android.synthetic.main.activity_main.view.*
+import java.io.ByteArrayOutputStream
 
 class MainActivity : BaseActivity() {
     var binding: ActivityMainBinding? = null
@@ -40,7 +48,7 @@ class MainActivity : BaseActivity() {
         binding!!.setVariable(BR.vm, vm)
         binding!!.executePendingBindings()
 
-        initTabAndViewPager();
+        initTabAndViewPager()
     }
 
     override fun onDestroy() {
@@ -51,26 +59,32 @@ class MainActivity : BaseActivity() {
     fun initTabAndViewPager() {
         for (i in 0..1) {
             val tab = binding!!.bottomNaviContainer.mainTabLayout.newTab()
+            binding!!.mainTabLayout.setSelectedTabIndicatorHeight(0)
             tab.setCustomView(R.layout.item_main_tab)
-            if (null != tab.getCustomView()) {
+            if (null != tab.customView) {
                 Log.e("test", "testtttt " + i)
+                val tabItemIcon: AppCompatImageView = tab.customView!!.findViewById<AppCompatImageView>(R.id.mainTabItemIcon)
                 val tabItemTitle: AppCompatTextView = tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle)
                 if (i == 0) {
+                    tabItemIcon.setImageResource(R.drawable.ic_line_chevron_up)
+                    tabItemIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
+
                     tabItemTitle.setTextColor(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
-                    tabItemTitle.setText("예약")
+                    tabItemTitle.text = "예약"
 
                     val taskFragment = TaskFragment()
                     val bundle = Bundle()
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    taskFragment.setArguments(bundle)
+                    taskFragment.arguments = bundle
                     fragments!!.add(taskFragment)
                 } else {
-                    tabItemTitle.setText("더보기")
+                    tabItemIcon.setImageResource(R.drawable.ic_line_chevron_down)
+                    tabItemTitle.text = "더보기"
 
                     val moreFragment = MoreFragment()
                     val bundle = Bundle()
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    moreFragment.setArguments(bundle)
+                    moreFragment.arguments = bundle
                     fragments!!.add(moreFragment)
                 }
                 //                        tab.getCustomView().setLayoutParams(params);
@@ -79,7 +93,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        binding!!.mainViewPager.setOffscreenPageLimit(fragments!!.size)
+        binding!!.mainViewPager.offscreenPageLimit = fragments!!.size
 
         val pagerAdapter = object : FragmentStatePagerAdapter(fragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -90,13 +104,14 @@ class MainActivity : BaseActivity() {
                 return fragments!!.size
             }
         }
-        binding!!.mainViewPager.setAdapter(pagerAdapter)
+        binding!!.mainViewPager.adapter = pagerAdapter
         binding!!.mainViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding!!.bottomNaviContainer.mainTabLayout))
         binding!!.bottomNaviContainer.mainTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 currentTabPosition = tab.position
-                binding!!.mainViewPager.setCurrentItem(tab.position)
+                binding!!.mainViewPager.currentItem = tab.position
                 if (null != tab.customView) {
+                    tab.customView!!.findViewById<AppCompatImageView>(R.id.mainTabItemIcon).setColorFilter(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
                     tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle).setTextColor(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
                 }
 //                moveTop()
@@ -105,6 +120,7 @@ class MainActivity : BaseActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 if (null != tab) {
                     if (null != tab.customView) {
+                        tab.customView!!.findViewById<AppCompatImageView>(R.id.mainTabItemIcon).setColorFilter(ContextCompat.getColor(applicationContext, R.color.unselectTabItem))
                         tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle).setTextColor(ContextCompat.getColor(applicationContext, R.color.unselectTabItem))
                     }
                 }
