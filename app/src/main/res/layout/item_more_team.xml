@@ -62,7 +62,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/ic_line_chevron_down"
+                android:src="@drawable/ic_solid_check"
                 android:tint="@color/blueColor"
                 android:visibility="@{vm.selectTeamFlag ? View.VISIBLE : View.GONE}" />
         </RelativeLayout>

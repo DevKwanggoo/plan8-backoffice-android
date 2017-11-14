@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.Toast
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.R
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter
@@ -66,5 +68,9 @@ open class MoreFragmentVM(fragment: Fragment
     fun setDatas(data: List<Any>?) {
         this.data = data
         adapter.data = this.data
+    }
+
+    fun logout(view: View){
+        Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show()
     }
 }

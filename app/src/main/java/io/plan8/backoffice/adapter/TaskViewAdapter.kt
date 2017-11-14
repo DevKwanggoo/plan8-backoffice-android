@@ -9,7 +9,9 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import io.plan8.backoffice.Constants
 import io.plan8.backoffice.R
 import io.plan8.backoffice.view.BlurView
@@ -28,7 +30,7 @@ class TaskViewAdapter {
             if (!view.isAlreadyInflated) {
                 view.selectedDate = CalendarDay.today()
                 view.isAlreadyInflated = true
-                view.visibility = View.INVISIBLE
+                view.visibility = View.GONE
                 return
             }
             var slideDownAnimation: Animation? = null
@@ -53,7 +55,7 @@ class TaskViewAdapter {
                     override fun onAnimationRepeat(animation: Animation) {}
 
                     override fun onAnimationEnd(animation: Animation) {
-                        view.visibility = View.INVISIBLE
+                        view.visibility = View.GONE
                     }
                 })
             }
@@ -67,9 +69,9 @@ class TaskViewAdapter {
 
         @BindingAdapter("taskViewAdapter:initCalendar")
         @JvmStatic
-        fun initCalendar(view: Plan8TaskCalendarView, isOpenedCalendar: Boolean) {
-            view.mainViewPager
+        fun initCalendar(view: MaterialCalendarView, isOpenedCalendar: Boolean) {
             view.setTitleFormatter({ day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
+            view.setOnClickListener { Toast.makeText(view.context, "test wtf", Toast.LENGTH_SHORT).show() }
         }
 
         @BindingAdapter("taskViewAdapter:setStatus")

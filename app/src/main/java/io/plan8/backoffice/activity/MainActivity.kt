@@ -66,7 +66,7 @@ class MainActivity : BaseActivity() {
                 val tabItemIcon: AppCompatImageView = tab.customView!!.findViewById<AppCompatImageView>(R.id.mainTabItemIcon)
                 val tabItemTitle: AppCompatTextView = tab.customView!!.findViewById<AppCompatTextView>(R.id.mainTabItemTitle)
                 if (i == 0) {
-                    tabItemIcon.setImageResource(R.drawable.ic_line_chevron_up)
+                    tabItemIcon.setImageResource(R.drawable.ic_line_calendar)
                     tabItemIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
 
                     tabItemTitle.setTextColor(ContextCompat.getColor(applicationContext, R.color.selectTabItem))
@@ -78,7 +78,7 @@ class MainActivity : BaseActivity() {
                     taskFragment.arguments = bundle
                     fragments!!.add(taskFragment)
                 } else {
-                    tabItemIcon.setImageResource(R.drawable.ic_line_chevron_down)
+                    tabItemIcon.setImageResource(R.drawable.ic_solid_more)
                     tabItemTitle.text = "더보기"
 
                     val moreFragment = MoreFragment()

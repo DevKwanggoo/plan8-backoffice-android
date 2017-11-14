@@ -38,7 +38,7 @@ class TaskFragment : BaseFragment() {
         vm = TaskFragmentVM(this, savedInstanceState, testData)
         binding!!.setVariable(BR.vm, vm)
         binding!!.executePendingBindings()
-        BottomSheetDialog(context).show()
+//        BottomSheetDialog(context).show()
         return binding!!.root
     }
 

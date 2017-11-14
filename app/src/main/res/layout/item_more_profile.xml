@@ -12,38 +12,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp">
-        
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/moreProfileImage"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="#ff0f"
-            app:riv_mutate_background="true"
-            android:layout_marginLeft="15dp"
-            android:layout_centerVertical="true"
-            app:riv_oval="true"/>
 
-        <LinearLayout
-            android:layout_toRightOf="@+id/moreProfileImage"
-            android:layout_marginLeft="15dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@drawable/selectable_item_background"
+            android:clickable="true"
+            android:onClick="@{vm::editProfile}">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/defaultDarkColor"
-                android:text="@{vm.profileName}"
-                android:textSize="14dp"/>
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/moreProfileImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:background="#ff0f"
+                app:riv_mutate_background="true"
+                app:riv_oval="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grayColor"
-                android:text="@{vm.profilePhoneNumber}"
-                android:textSize="14dp"/>
-        </LinearLayout>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/moreProfileImage"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.profileName}"
+                    android:textColor="@color/defaultDarkColor"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.profilePhoneNumber}"
+                    android:textColor="@color/grayColor"
+                    android:textSize="14dp" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

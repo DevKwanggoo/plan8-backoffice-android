@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/taskToolbar"
+            android:overScrollMode="never"
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}" />
 
@@ -46,8 +47,9 @@
             app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
             app:mcv_selectionColor="@color/colorPrimary"
             app:mcv_showOtherDates="all"
+            taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
             taskViewAdapter:initCalendar="@{vm.openedCalendar}"
-            taskViewAdapter:displayCalendar="@{vm.openedCalendar}" />
+            />
 
         <RelativeLayout
             android:id="@+id/taskToolbar"

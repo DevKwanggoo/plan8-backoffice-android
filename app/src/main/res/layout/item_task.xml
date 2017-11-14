@@ -13,14 +13,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="101dp"
-        android:background="#ffffff"
-        android:clickable="true"
-        android:onClick="@{vm::showDetailTask}">
+        android:background="#ffffff">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="101dp"
-            android:background="@drawable/selectable_item_background">
+            android:background="@drawable/selectable_item_background"
+            android:clickable="true"
+            android:onClick="@{vm::showDetailTask}">
 
             <LinearLayout
                 android:layout_width="match_parent"
