@@ -1,5 +1,6 @@
 package io.plan8.backoffice.vm
 
+import android.content.Intent
 import android.databinding.Bindable
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.R
+import io.plan8.backoffice.activity.EditTaskActivity
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter
 import io.plan8.backoffice.model.item.TaskItem
 import io.plan8.backoffice.util.DateUtil
@@ -17,7 +19,7 @@ import io.plan8.backoffice.vm.item.TaskItemVM
 /**
  * Created by SSozi on 2017. 11. 2..
  */
-open class TaskFragmentVM(fragment: Fragment
+open class TaskFragmentVM(var fragment: Fragment
                           , savedInstanceState: Bundle?, taskItemList: List<TaskItem>) : FragmentVM(fragment, savedInstanceState) {
     var data: List<TaskItem>? = null
     var selectedDate: String = ""
@@ -48,6 +50,16 @@ open class TaskFragmentVM(fragment: Fragment
         }
 
     var adapter: BindingRecyclerViewAdapter<TaskItem>
+
+    open var emptyFlag: Boolean = false
+        @Bindable
+        get() {
+            return field
+        }
+        set(flag) {
+        field = flag
+        notifyPropertyChanged(BR.emptyFlag)
+    }
 
     fun changeDate(view: View) {
         isOpenedCalendar = !isOpenedCalendar

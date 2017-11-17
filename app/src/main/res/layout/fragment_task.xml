@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:taskViewAdapter="http://schemas.android.com/tools">
 
     <data>
@@ -17,14 +18,41 @@
         android:layout_height="match_parent"
         android:background="#ffffff">
 
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/taskRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/taskToolbar"
-            android:overScrollMode="never"
             android:adapter="@{vm.adapter}"
-            android:layoutManager="@{vm.layoutManager}" />
+            android:layoutManager="@{vm.layoutManager}"
+            android:overScrollMode="never" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/taskToolbar"
+            android:clickable="true"
+            android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}">
+
+            <include
+                layout="@layout/empty_reservation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <!--<RelativeLayout-->
+        <!--android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/grayTextColor"-->
+        <!--android:textSize="20dp"-->
+        <!--android:text="이 날짜에 해당하는 예약 없음"-->
+        <!--android:layout_centerInParent="true"/>-->
+        <!--</RelativeLayout>-->
 
         <io.plan8.backoffice.view.BlurView
             android:layout_width="match_parent"
@@ -48,8 +76,7 @@
             app:mcv_selectionColor="@color/colorPrimary"
             app:mcv_showOtherDates="all"
             taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
-            taskViewAdapter:initCalendar="@{vm.openedCalendar}"
-            />
+            taskViewAdapter:initCalendar="@{vm.openedCalendar}" />
 
         <RelativeLayout
             android:id="@+id/taskToolbar"
@@ -81,6 +108,7 @@
                     android:src="@{vm.openedCalendar? @drawable/ic_line_chevron_up : @drawable/ic_line_chevron_down}"
                     android:tint="#ffffff" />
             </LinearLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>

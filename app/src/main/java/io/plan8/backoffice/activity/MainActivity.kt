@@ -6,7 +6,9 @@ import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -17,6 +19,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import io.intercom.android.sdk.Intercom
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.R
 import io.plan8.backoffice.databinding.ActivityMainBinding
@@ -27,6 +30,9 @@ import io.plan8.backoffice.util.ViewUtil
 import io.plan8.backoffice.vm.MainActivityVM
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.io.ByteArrayOutputStream
+import io.intercom.android.sdk.identity.Registration
+
+
 
 class MainActivity : BaseActivity() {
     var binding: ActivityMainBinding? = null
@@ -49,6 +55,10 @@ class MainActivity : BaseActivity() {
         binding!!.executePendingBindings()
 
         initTabAndViewPager()
+        val registration = Registration.create().withUserId("intercomTestUser")
+        Intercom.client().registerIdentifiedUser(registration)
+        Intercom.client().setBottomPadding(ViewUtil.dpToPx(47.0))
+        Intercom.client().setLauncherVisibility(Intercom.Visibility.VISIBLE)
     }
 
     override fun onDestroy() {
@@ -130,5 +140,30 @@ class MainActivity : BaseActivity() {
 
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            RESULT_OK -> {
+                if (data!!.action == null) {
+                    if (null != fragments) {
+                        MoreFragment.uploadImage(data.data, this)
+                    }
+                } else {
+                    if (null != fragments) {
+                        MoreFragment.uploadImage(getImageUri(applicationContext, data.extras.get("data") as Bitmap), this)
+                        Log.e("test", "test")
+                    }
+                }
+            }
+        }
+    }
+
+    fun getImageUri(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path)
     }
 }

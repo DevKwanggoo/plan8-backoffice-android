@@ -13,18 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="io.plan8.backoffice.activity.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity
-            android:name="io.plan8.backoffice.activity.LoginAuthorizationActivity"
+            android:name=".activity.LoginAuthorizationActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name="io.plan8.backoffice.activity.DetailTaskActivity" />
-        <activity android:name="io.plan8.backoffice.activity.LoginActivity">
+        <activity android:name=".activity.DetailTaskActivity" />
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.EditTaskActivity"></activity>
     </application>
 
 </manifest>

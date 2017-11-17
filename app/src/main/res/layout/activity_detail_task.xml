@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:detailTaskViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -44,6 +46,24 @@
                 android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:onClick="@{vm::openEditActivity}"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="편집"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <!-->내용 - 고객 <!-->
@@ -149,11 +169,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="21dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="8dp"
                         android:text="@{vm.customerAddress}"
-                        android:layout_marginBottom="21dp"
                         android:textColor="#FF3C4858"
                         android:textSize="16dp" />
                 </LinearLayout>
@@ -185,26 +205,89 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="15dp"
-                        android:text="예약일"
-                        android:textColor="#FF8492A6"
-                        android:textSize="12dp" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginTop="8dp"
-                        android:text="@{vm.reservationDate}"
-                        android:textColor="#FF3C4858"
-                        android:textSize="16dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="15dp"
+                            android:text="예약일"
+                            android:textColor="#FF8492A6"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="@{vm.reservationDate}"
+                            android:textColor="#FF3C4858"
+                            android:textSize="16dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:clickable="true"
+                            android:background="@drawable/selectable_item_background"
+                            android:onClick="@{vm::editTaskStatus}">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="15dp"
+                                android:text="상태"
+                                android:textColor="#FF8492A6"
+                                android:textSize="12dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <com.makeramen.roundedimageview.RoundedImageView
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="16dp"
+                                    app:riv_mutate_background="true"
+                                    app:riv_oval="true"
+                                    detailTaskViewAdapter:isTaskStatus="@{vm.reservationStatus}" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="8dp"
+                                    android:text="@{vm.reservationStatus}"
+                                    android:textColor="#FF3C4858"
+                                    android:textSize="16dp" />
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="8dp"
+                                    android:src="@drawable/ic_line_chevron_right"
+                                    android:tint="@color/grayTintColor" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -320,8 +403,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="72dp"
                     android:layout_marginBottom="72dp"
+                    android:minHeight="72dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -336,11 +419,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="21dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="8dp"
                         android:text="@{vm.productionDescription}"
-                        android:layout_marginBottom="21dp"
                         android:textColor="#FF3C4858"
                         android:textSize="16dp" />
                 </LinearLayout>

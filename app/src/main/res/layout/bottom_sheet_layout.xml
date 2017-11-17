@@ -17,22 +17,28 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
+            <RelativeLayout
                 android:id="@+id/bottomSheetFirstItem"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/selectable_item_background"
-                android:gravity="left|center_vertical"
-                android:textColor="@color/grayColor"
-                android:paddingStart="56dp"
-                android:textSize="16dp" />
+                android:background="@drawable/selectable_item_background">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/bottomSheetFirstIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/bottomSheetFirstIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="16dp"
-                android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/bottomSheetFirstTitle"
+                    android:layout_toRightOf="@+id/bottomSheetFirstIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/grayColor"/>
+            </RelativeLayout>
         </RelativeLayout>
 
         <RelativeLayout
@@ -41,22 +47,28 @@
             android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
-            <Button
+            <RelativeLayout
                 android:id="@+id/bottomSheetSecondItem"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:paddingStart="56dp"
-                android:background="@drawable/selectable_item_background"
-                android:gravity="left|center_vertical"
-                android:textColor="@color/grayColor"
-                android:textSize="16dp" />
+                android:background="@drawable/selectable_item_background">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/bottomSheetSecondIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/bottomSheetSecondIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="16dp"
-                android:layout_centerVertical="true" />
+                <TextView
+                    android:id="@+id/bottomSheetSecondTitle"
+                    android:layout_toRightOf="@+id/bottomSheetSecondIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/grayColor"/>
+            </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

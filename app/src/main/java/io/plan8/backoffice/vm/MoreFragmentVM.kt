@@ -23,6 +23,7 @@ open class MoreFragmentVM(fragment: Fragment
                           , savedInstanceState: Bundle?, moreItemList: List<Any>) : FragmentVM(fragment, savedInstanceState) {
     var adapter: BindingRecyclerViewAdapter<Any>
     var data: List<Any>? = null
+    lateinit var moreProfileVM: MoreProfileItemVM
 
     init {
         adapter = object : BindingRecyclerViewAdapter<Any>() {
@@ -45,6 +46,7 @@ open class MoreFragmentVM(fragment: Fragment
                     is MoreProfileItem -> {
                         val moreProfileItemVM = MoreProfileItemVM(fragment, savedInstanceState, data)
                         binding.setVariable(BR.vm, moreProfileItemVM)
+                        moreProfileVM = moreProfileItemVM
                     }
                     is MoreTeamItem -> {
                         val moreTeamItemVM = MoreTeamItemVM(fragment, savedInstanceState, data)

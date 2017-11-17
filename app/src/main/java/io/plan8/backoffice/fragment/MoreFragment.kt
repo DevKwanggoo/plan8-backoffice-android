@@ -1,6 +1,10 @@
 package io.plan8.backoffice.fragment
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +15,16 @@ import io.plan8.backoffice.R
 import io.plan8.backoffice.databinding.FragmentMoreBinding
 import io.plan8.backoffice.model.item.*
 import io.plan8.backoffice.vm.MoreFragmentVM
+import android.provider.MediaStore
+import android.widget.ImageView
+import android.widget.RelativeLayout
+
 
 /**
  * Created by chokwanghwan on 2017. 11. 9..
  */
-class MoreFragment:BaseFragment() {
+class MoreFragment : BaseFragment() {
     var binding: FragmentMoreBinding? = null
-    var vm: MoreFragmentVM? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val testData: MutableList<Any> = mutableListOf()
@@ -42,5 +49,25 @@ class MoreFragment:BaseFragment() {
     override fun onDestroy() {
         binding!!.unbind()
         super.onDestroy()
+    }
+
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        var vm: MoreFragmentVM? = null
+
+        fun uploadImage(data: Uri, activity: Activity) {
+            val uri = data
+            val imagePath = getRealPathFromURI(uri, activity)
+
+            vm!!.moreProfileVM.testUri = uri
+        }
+
+        fun getRealPathFromURI(imageUri: Uri, activity: Activity): String {
+            val path = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = activity.managedQuery(imageUri, path, null, null, null)
+            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            return cursor.getString(columnIndex)
+        }
     }
 }
