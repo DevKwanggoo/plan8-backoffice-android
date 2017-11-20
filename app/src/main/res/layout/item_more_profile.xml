@@ -29,6 +29,7 @@
                 android:layout_marginLeft="15dp"
                 android:background="#ff0f"
                 moreViewAdapter:glide="@{vm.testUri}"
+                android:scaleType="centerCrop"
                 app:riv_mutate_background="true"
                 app:riv_oval="true" />
 

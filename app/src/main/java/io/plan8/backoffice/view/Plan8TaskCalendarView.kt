@@ -2,6 +2,7 @@ package io.plan8.backoffice.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 
 /**

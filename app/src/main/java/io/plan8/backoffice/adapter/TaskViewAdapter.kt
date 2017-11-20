@@ -3,6 +3,9 @@ package io.plan8.backoffice.adapter
 import android.databinding.BindingAdapter
 import android.graphics.drawable.GradientDrawable
 import android.support.v4.content.ContextCompat
+import android.util.Log
+import android.view.DragEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
@@ -30,7 +33,8 @@ class TaskViewAdapter {
             if (!view.isAlreadyInflated) {
                 view.selectedDate = CalendarDay.today()
                 view.isAlreadyInflated = true
-                view.visibility = View.GONE
+                view.visibility = View.INVISIBLE
+                view.isPagingEnabled = false
                 return
             }
             var slideDownAnimation: Animation? = null
@@ -45,6 +49,7 @@ class TaskViewAdapter {
 
                     override fun onAnimationEnd(animation: Animation) {
                         view.visibility = View.VISIBLE
+                        view.isPagingEnabled = true
                     }
                 })
 
@@ -55,7 +60,8 @@ class TaskViewAdapter {
                     override fun onAnimationRepeat(animation: Animation) {}
 
                     override fun onAnimationEnd(animation: Animation) {
-                        view.visibility = View.GONE
+                        view.visibility = View.INVISIBLE
+                        view.isPagingEnabled = false
                     }
                 })
             }
@@ -71,7 +77,6 @@ class TaskViewAdapter {
         @JvmStatic
         fun initCalendar(view: MaterialCalendarView, isOpenedCalendar: Boolean) {
             view.setTitleFormatter({ day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
-            view.setOnClickListener { Toast.makeText(view.context, "test wtf", Toast.LENGTH_SHORT).show() }
         }
 
         @BindingAdapter("taskViewAdapter:setStatus")
