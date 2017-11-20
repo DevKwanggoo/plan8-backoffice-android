@@ -55,10 +55,6 @@ class MainActivity : BaseActivity() {
         binding!!.executePendingBindings()
 
         initTabAndViewPager()
-        val registration = Registration.create().withUserId("intercomTestUser")
-        Intercom.client().registerIdentifiedUser(registration)
-        Intercom.client().setBottomPadding(ViewUtil.dpToPx(47.0))
-        Intercom.client().setLauncherVisibility(Intercom.Visibility.VISIBLE)
     }
 
     override fun onDestroy() {
