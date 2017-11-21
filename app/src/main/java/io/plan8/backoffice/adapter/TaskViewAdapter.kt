@@ -79,15 +79,27 @@ class TaskViewAdapter {
             view.setTitleFormatter({ day: CalendarDay? -> "" + day!!.year + "년 " + (day.month + 1) + "월" })
         }
 
-        @BindingAdapter("taskViewAdapter:setStatus")
+        @BindingAdapter("taskViewAdapter:setReadStatus")
         @JvmStatic
-        fun setStatus(view: RelativeLayout, taskStatus: String) {
+        fun setReadStatus(view: RelativeLayout, taskStatus: String) {
             view.setBackgroundResource(R.drawable.circle)
             val bgShape = view.background as GradientDrawable
             when (taskStatus) {
                 Constants.TASK_STATUS_BLUE -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusBlue))
                 Constants.TASK_STATUS_ORANGE -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusOrange))
-                else -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusRed))
+                Constants.TASK_STATUS_RED -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusRed))
+                else -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.transparent))
+            }
+        }
+
+        @BindingAdapter("taskViewAdapter:setCloseStatus")
+        @JvmStatic
+        fun setCloseStatus(view: RelativeLayout, taskStatus: String) {
+            view.setBackgroundResource(R.drawable.circle)
+            val bgShape = view.background as GradientDrawable
+            when (taskStatus) {
+                Constants.TASK_STATUS_GREEN -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.taskStatusGreen))
+                else -> bgShape.setColor(ContextCompat.getColor(view.context, R.color.transparent))
             }
         }
 

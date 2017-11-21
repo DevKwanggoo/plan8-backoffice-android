@@ -31,10 +31,23 @@
 
                 <RelativeLayout
                     android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="4dp"
-                    taskViewAdapter:setStatus="@{vm.taskStatus}" />
+                    android:layout_marginTop="5dp">
+
+                    <RelativeLayout
+                        android:id="@+id/firstStatus"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        taskViewAdapter:setReadStatus="@{vm.taskStatus}" />
+
+                    <RelativeLayout
+                        android:layout_below="@+id/firstStatus"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginTop="4dp"
+                        taskViewAdapter:setCloseStatus="@{vm.taskCloseStatus}" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

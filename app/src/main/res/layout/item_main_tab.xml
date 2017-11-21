@@ -7,6 +7,7 @@
         android:id="@+id/mainTabItemIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginTop="6dp"
         android:layout_centerHorizontal="true"
         android:tint="@color/unselectTabItem"/>
 

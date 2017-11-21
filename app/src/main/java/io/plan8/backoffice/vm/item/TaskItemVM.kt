@@ -44,6 +44,11 @@ class TaskItemVM(var fragment: Fragment, savedInstanceState: Bundle?, var taskIt
         return taskItem.status
     }
 
+    @Bindable
+    fun getTaskCloseStatus(): String {
+        return taskItem.closeStatus
+    }
+
     fun showDetailTask(view: View) {
         fragment.startActivity(DetailTaskActivity.buildIntent(context, taskItem))
         fragment.activity.overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)

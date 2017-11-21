@@ -7,18 +7,24 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import retrofit2.Callback
 import io.plan8.backoffice.BR
+import io.plan8.backoffice.Constants
 import io.plan8.backoffice.R
+import io.plan8.backoffice.adapter.RestfulAdapter
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding
+import io.plan8.backoffice.model.api.AuthInfo
+import io.plan8.backoffice.model.api.Me
+import io.plan8.backoffice.model.api.Team
 import io.plan8.backoffice.util.ViewUtil
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM
+import retrofit2.Call
+import retrofit2.Response
 import java.util.*
 
 class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListener, View.OnClickListener {
@@ -36,6 +42,8 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
     private var sixthInput: TextView? = null
     private var inputField: LinearLayout? = null
     private var authoEditText: EditText? = null
+    private var isMe: Boolean = false
+    private var isTeam: Boolean = false
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +70,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
         sixthInput = binding.sixthInput
         inputField = binding.authoInputField
         inputField!!.setOnClickListener(this)
-        binding.authNextStep.setOnClickListener{ if (authoEditText!!.text.length >= 6) nextActivity() }
+        binding.authNextStep.setOnClickListener { if (authoEditText!!.text.length >= 6) nextStep() }
         binding.authPrevStep.setOnClickListener { onBackPressed() }
 
         val focusLineList = ArrayList<View>()
@@ -157,7 +165,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
                         }
                         if (s.length == 6) {
 //                            requestOAuth(s.toString())
-                            nextStep(authoEditText!!)
+                            nextStep()
                         }
                     }
                 } else {
@@ -233,16 +241,58 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 //        registerReceiver(broadcastReceiver, intentFilter)
 //    }
 
-    fun nextStep(view: View) {
+    fun nextStep() {
         ViewUtil.hideKeyboard(authoEditText!!)
-        nextActivity()
+
+        RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), "000000").enqueue(object : Callback<AuthInfo> {
+            override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
+                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
+                if (response?.body() != null) {
+
+                    RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
+                        override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
+                            if (response?.body() != null) {
+                                Constants.me = response.body()!!
+                                isMe = true
+                                nextActivity()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Me>?, t: Throwable?) {
+                            Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+
+                    RestfulAdapter.instance!!.serviceApi!!.getTeam("Bearer " + response.body()!!.token).enqueue(object : Callback<List<Team>> {
+                        override fun onFailure(call: Call<List<Team>>?, t: Throwable?) {
+                            Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onResponse(call: Call<List<Team>>?, response: Response<List<Team>>?) {
+                            if (response?.body() != null) {
+                                Constants.team = response.body()!!
+                                isTeam = true
+                                nextActivity()
+                            }
+                        }
+
+                    })
+                }
+            }
+        })
     }
 
     private fun nextActivity() {
-        progressBar!!.visibility = View.GONE
-        startActivity(MainActivity.buildIntent(this))
-        finish()
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+        if (isMe && isTeam) {
+            progressBar!!.visibility = View.GONE
+            startActivity(MainActivity.buildIntent(this))
+            finish()
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+        }
     }
 
     override fun onBackPressed() {
@@ -254,7 +304,7 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent): Boolean {
         if (v.id == authoEditText!!.id && actionId == EditorInfo.IME_ACTION_DONE) {
-            nextStep(v)
+            nextStep()
         }
         return false
     }

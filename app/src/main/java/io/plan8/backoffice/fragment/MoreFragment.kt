@@ -59,7 +59,7 @@ class MoreFragment : BaseFragment() {
             val uri = data
             val imagePath = getRealPathFromURI(uri, activity)
 
-            vm!!.moreProfileVM.testUri = uri
+//            vm!!.moreProfileVM.testUri = uri
         }
 
         fun getRealPathFromURI(imageUri: Uri, activity: Activity): String {

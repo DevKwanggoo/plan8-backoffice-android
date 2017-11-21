@@ -10,5 +10,5 @@ object ApplicationManager {
         Log.e("ApplicationManager", "test")
     }
 
-    val BASE_URL:String = "https://m.naver.com/"
+    val BASE_URL:String = "https://api-sandbox.plan8.io"
 }

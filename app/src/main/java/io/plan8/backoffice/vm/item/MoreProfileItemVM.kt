@@ -31,9 +31,12 @@ import io.plan8.backoffice.Constants
 class MoreProfileItemVM(var fragment: Fragment, savedInstanceState: Bundle?, var MoreProfileItem: MoreProfileItem) : FragmentVM(fragment, savedInstanceState) {
     private var bottomSheet: BottomSheetDialog = BottomSheetDialog(context)
 
-    var testUri: Uri? = null
+    var testUri: String? = null
         @Bindable
         get() {
+            if (Constants.me != null){
+                return Constants.me!!.avatar
+            }
             return field
         }
         set(value) {
