@@ -30,10 +30,18 @@ class MoreFragment : BaseFragment() {
         val testData: MutableList<Any> = mutableListOf()
         //        이름, 전화번호, 주소, 예약일, 예약시간, 종료시간, 상품/이름, 추가 요청 사항, 내부 노트
         testData.add(MoreTitleItem("내 프로필"))
-        testData.add(MoreProfileItem("이해찬", "+821020851422"))
+        var userName = "이름 없음"
+        if (Constants.me!!.userName != null){
+            userName = Constants.me!!.userName!!
+        }
+        testData.add(MoreProfileItem(userName, Constants.me!!.phoneNumber!!))
         testData.add(MoreTitleItem("팀 선택"))
-        testData.add(MoreTeamItem("픽스나우", "fixNow"))
-        testData.add(MoreTeamItem("세탁특공대", "washSwat"))
+
+        if (Constants.me!!.team.isNotEmpty()){
+            for (team in Constants.me!!.team){
+                testData.add(MoreTeamItem(team.teamName, team.teamName))
+            }
+        }
         testData.add(EmptySpaceItem(0))
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.fragment_more, container, false)
         vm = MoreFragmentVM(this, savedInstanceState, testData)

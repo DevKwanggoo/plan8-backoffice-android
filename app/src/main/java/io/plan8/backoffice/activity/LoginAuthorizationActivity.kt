@@ -16,6 +16,7 @@ import retrofit2.Callback
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.Constants
 import io.plan8.backoffice.R
+import io.plan8.backoffice.SharedPreferenceManager
 import io.plan8.backoffice.adapter.RestfulAdapter
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding
 import io.plan8.backoffice.model.api.AuthInfo
@@ -42,8 +43,6 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
     private var sixthInput: TextView? = null
     private var inputField: LinearLayout? = null
     private var authoEditText: EditText? = null
-    private var isMe: Boolean = false
-    private var isTeam: Boolean = false
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -243,56 +242,42 @@ class LoginAuthorizationActivity : BaseActivity(), TextView.OnEditorActionListen
 
     fun nextStep() {
         ViewUtil.hideKeyboard(authoEditText!!)
-
-        RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), "000000").enqueue(object : Callback<AuthInfo> {
-            override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
-                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
-                if (response?.body() != null) {
-
-                    RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
-                        override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
-                            if (response?.body() != null) {
-                                Constants.me = response.body()!!
-                                isMe = true
-                                nextActivity()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<Me>?, t: Throwable?) {
-                            Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
-
-                    RestfulAdapter.instance!!.serviceApi!!.getTeam("Bearer " + response.body()!!.token).enqueue(object : Callback<List<Team>> {
-                        override fun onFailure(call: Call<List<Team>>?, t: Throwable?) {
-                            Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onResponse(call: Call<List<Team>>?, response: Response<List<Team>>?) {
-                            if (response?.body() != null) {
-                                Constants.team = response.body()!!
-                                isTeam = true
-                                nextActivity()
-                            }
-                        }
-
-                    })
-                }
-            }
-        })
+        progressBar!!.visibility = View.VISIBLE
+        if (RestfulAdapter.instance!!.serviceApi != null) {
+//            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
+//                override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
+//                    Toast.makeText(applicationContext, "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show()
+//                    progressBar!!.visibility = View.GONE
+//                    onBackPressed()
+//                }
+//
+//                override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
+//                    if (response?.body() != null) {
+//                        SharedPreferenceManager(applicationContext).userToken = response.body()!!.token
+//                        RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
+//                            override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
+//                                if (response?.body() != null) {
+//                                    Constants.me = response.body()!!
+//                                    nextActivity()
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<Me>?, t: Throwable?) {
+//                                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+//                            }
+//
+//                        })
+//                    }
+//                }
+//            })
+        }
     }
 
     private fun nextActivity() {
-        if (isMe && isTeam) {
-            progressBar!!.visibility = View.GONE
-            startActivity(MainActivity.buildIntent(this))
-            finish()
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
-        }
+        progressBar!!.visibility = View.GONE
+        startActivity(MainActivity.buildIntent(this))
+        finish()
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
     }
 
     override fun onBackPressed() {

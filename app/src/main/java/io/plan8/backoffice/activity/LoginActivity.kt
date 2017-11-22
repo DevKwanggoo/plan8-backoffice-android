@@ -5,14 +5,22 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import io.plan8.backoffice.BR
+import io.plan8.backoffice.Constants
 import io.plan8.backoffice.R
+import io.plan8.backoffice.SharedPreferenceManager
 import io.plan8.backoffice.adapter.RestfulAdapter
 import io.plan8.backoffice.databinding.ActivityLoginBinding
+import io.plan8.backoffice.model.api.AuthInfo
 import io.plan8.backoffice.model.api.LoginInfo
+import io.plan8.backoffice.model.api.Me
+import io.plan8.backoffice.model.api.Team
 import io.plan8.backoffice.vm.LoginActivityVM
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -23,6 +31,7 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     private lateinit var binding: ActivityLoginBinding
     var vm: LoginActivityVM? = null
+    var progressBar: RelativeLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +41,7 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
         binding.setVariable(BR.vm, vm)
         binding.executePendingBindings()
 
-        binding.loginNextStep.setOnClickListener({ nextStep() })
-        binding.loginPhoneNumber.setOnEditorActionListener(this)
-        binding.deleteNumberBtn.setOnClickListener { binding.loginPhoneNumber.setText("") }
+        progressBar = binding.loginProgressBarContainer
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
@@ -48,20 +55,22 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
         val phoneNumber = binding.loginPhoneNumber.text.toString()
 
         if (phoneNumber != "" && phoneNumber.length > 9) {
-            RestfulAdapter.instance!!.serviceApi!!.getPinCode(phoneNumber).enqueue(object : Callback<LoginInfo>{
-                override fun onFailure(call: Call<LoginInfo>?, t: Throwable?) {
-                    Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onResponse(call: Call<LoginInfo>?, response: Response<LoginInfo>?) {
-                    if (response != null){
-                        nextActivity(phoneNumber, response.body()!!.code)
+            if (RestfulAdapter.instance!!.serviceApi != null) {
+                RestfulAdapter.instance!!.serviceApi!!.getPinCode(phoneNumber).enqueue(object : Callback<LoginInfo> {
+                    override fun onFailure(call: Call<LoginInfo>?, t: Throwable?) {
+                        Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     }
-                }
 
-            })
-        } else {
-            Toast.makeText(this, "휴대전화번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                    override fun onResponse(call: Call<LoginInfo>?, response: Response<LoginInfo>?) {
+                        if (response != null) {
+                            nextActivity(phoneNumber, response.body()!!.code)
+                        }
+                    }
+
+                })
+            } else {
+                Toast.makeText(this, "휴대전화번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

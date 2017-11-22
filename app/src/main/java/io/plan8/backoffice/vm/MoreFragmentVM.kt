@@ -1,5 +1,6 @@
 package io.plan8.backoffice.vm
 
+import android.content.Intent
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,6 +10,8 @@ import android.view.View
 import android.widget.Toast
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.R
+import io.plan8.backoffice.SharedPreferenceManager
+import io.plan8.backoffice.activity.LoginActivity
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter
 import io.plan8.backoffice.model.item.TaskItem
 import io.plan8.backoffice.model.item.MoreProfileItem
@@ -19,7 +22,7 @@ import io.plan8.backoffice.vm.item.*
 /**
  * Created by chokwanghwan on 2017. 11. 9..
  */
-open class MoreFragmentVM(fragment: Fragment
+open class MoreFragmentVM(val fragment: Fragment
                           , savedInstanceState: Bundle?, moreItemList: List<Any>) : FragmentVM(fragment, savedInstanceState) {
     var adapter: BindingRecyclerViewAdapter<Any>
     var data: List<Any>? = null
@@ -73,6 +76,10 @@ open class MoreFragmentVM(fragment: Fragment
     }
 
     fun logout(view: View){
-        Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show()
+        SharedPreferenceManager(fragment.context).removeToken()
+        val loginIntent = Intent(fragment.activity, LoginActivity::class.java)
+        fragment.activity.startActivity(loginIntent)
+        fragment.activity.finish()
+        fragment.activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
     }
 }
