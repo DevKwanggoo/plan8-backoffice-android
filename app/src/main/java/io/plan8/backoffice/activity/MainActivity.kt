@@ -31,7 +31,7 @@ import io.plan8.backoffice.vm.MainActivityVM
 import kotlinx.android.synthetic.main.activity_main.view.*
 import java.io.ByteArrayOutputStream
 import io.intercom.android.sdk.identity.Registration
-
+import io.plan8.backoffice.Constants
 
 
 class MainActivity : BaseActivity() {
@@ -53,6 +53,10 @@ class MainActivity : BaseActivity() {
         vm = MainActivityVM(this, savedInstanceState)
         binding!!.setVariable(BR.vm, vm)
         binding!!.executePendingBindings()
+
+        if (Constants.me!!.team.isNotEmpty()){
+            vm!!.emptyTeamFlag = false
+        }
 
         initTabAndViewPager()
     }

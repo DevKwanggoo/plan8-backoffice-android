@@ -11,6 +11,8 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crash.FirebaseCrash
 import io.plan8.backoffice.BR
 import io.plan8.backoffice.Constants
 import io.plan8.backoffice.R
@@ -32,9 +34,13 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
     private lateinit var binding: ActivityLoginBinding
     var vm: LoginActivityVM? = null
     var progressBar: RelativeLayout? = null
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        FirebaseCrash.report(Exception("My first Android non-fatal error"))
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         vm = LoginActivityVM(this, savedInstanceState)
@@ -42,6 +48,8 @@ class LoginActivity : BaseActivity(), TextView.OnEditorActionListener {
         binding.executePendingBindings()
 
         progressBar = binding.loginProgressBarContainer
+        binding.loginPhoneNumber.setOnEditorActionListener(this)
+        binding.loginNextStep.setOnClickListener { nextStep() }
     }
 
     override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {

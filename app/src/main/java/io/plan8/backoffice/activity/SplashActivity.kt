@@ -43,6 +43,8 @@ class SplashActivity : AppCompatActivity() {
                         if (response?.body() != null) {
                             Constants.me = response.body()!!
                             hasTokenStep()
+                        } else {
+                            loginStep()
                         }
                     }
 
@@ -53,12 +55,16 @@ class SplashActivity : AppCompatActivity() {
                 })
             }
         } else {
-            progressBar!!.visibility = View.GONE
-            val loginIntent = Intent(this, LoginActivity::class.java)
-            startActivity(loginIntent)
-            finish()
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+            loginStep()
         }
+    }
+
+    private fun loginStep(){
+        progressBar!!.visibility = View.GONE
+        val loginIntent = Intent(this, LoginActivity::class.java)
+        startActivity(loginIntent)
+        finish()
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
     }
 
     private fun hasTokenStep() {
