@@ -26,12 +26,12 @@ class MainActivityVM(var mainActivity: MainActivity, savedInstanceState: Bundle?
         }
 
     fun teamLogout(view: View){
-//        val intent = Intent(mainActivity, LoginActivity::class.java)
-//        Constants.me = null
-//        Constants.team = null
-//        mainActivity.startActivity(intent)
-//        mainActivity.finish()
-//        mainActivity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
-        emptyTeamFlag = false
+        val intent = Intent(mainActivity, LoginActivity::class.java)
+        Constants.me = null
+        Constants.team = null
+        mainActivity.startActivity(intent)
+        mainActivity.finish()
+        mainActivity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
+//        emptyTeamFlag = false
     }
 }
