@@ -1,12 +1,11 @@
 package io.plan8.backoffice.api
 
-import io.plan8.backoffice.model.api.LoginInfo
-import io.plan8.backoffice.model.api.AuthInfo
-import io.plan8.backoffice.model.api.Me
-import io.plan8.backoffice.model.api.Team
-import okhttp3.ResponseBody
+import io.plan8.backoffice.model.api.*
 import retrofit2.Call
 import retrofit2.http.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+
 
 /**
  * Created by SSozi on 2017. 11. 7..
@@ -26,4 +25,12 @@ interface ApiService {
 
     @GET("1/me/teams")
     fun getTeam(@Header("authorization") authorization: String): Call<List<Team>>
+
+    @Multipart
+    @POST("1/upload")
+    fun postUpload(@Header("authorization") authorization: String, @Part("files") files: RequestBody): Call<List<UploadInfo>>
+
+    @FormUrlEncoded
+    @PUT("1/users/me")
+    fun putMe(@Header("authorization") authorization: String, @FieldMap putMeMap: HashMap<String, String>): Call<Me>
 }

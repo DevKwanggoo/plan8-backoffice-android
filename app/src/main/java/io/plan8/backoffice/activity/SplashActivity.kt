@@ -15,6 +15,7 @@ import io.plan8.backoffice.adapter.RestfulAdapter
 import io.plan8.backoffice.databinding.ActivitySplashBinding
 import io.plan8.backoffice.model.api.Me
 import io.plan8.backoffice.vm.SplashActivityVM
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

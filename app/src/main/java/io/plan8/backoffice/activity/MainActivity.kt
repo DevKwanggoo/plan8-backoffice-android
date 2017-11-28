@@ -54,7 +54,7 @@ class MainActivity : BaseActivity() {
         binding!!.setVariable(BR.vm, vm)
         binding!!.executePendingBindings()
 
-        if (Constants.me!!.team.isNotEmpty()){
+        if (Constants.me!!.team != null && Constants.me!!.team!!.isNotEmpty()) {
             vm!!.emptyTeamFlag = false
         }
 
@@ -153,14 +153,13 @@ class MainActivity : BaseActivity() {
                 } else {
                     if (null != fragments) {
                         MoreFragment.uploadImage(getImageUri(applicationContext, data.extras.get("data") as Bitmap), this)
-                        Log.e("test", "test")
                     }
                 }
             }
         }
     }
 
-    fun getImageUri(context: Context, bitmap: Bitmap): Uri{
+    fun getImageUri(context: Context, bitmap: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)

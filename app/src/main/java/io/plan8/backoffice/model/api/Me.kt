@@ -12,6 +12,6 @@ class Me: BaseModel{
     @SerializedName("updated") lateinit var updated: String
     @SerializedName("phoneNumber") var phoneNumber: String? = null
     @SerializedName("name") var userName: String? = null
-    @SerializedName("avatar") lateinit var avatar: String
-    @SerializedName("teams") lateinit var team: List<Team>
+    @SerializedName("avatar") var avatar: String? = null
+    @SerializedName("memberships") var team: List<Team>? = null
 }
