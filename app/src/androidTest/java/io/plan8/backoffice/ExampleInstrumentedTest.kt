@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("io.plan8.business", appContext.packageName)
+        assertEquals("io.plan8.backoffice", appContext.packageName)
     }
 }

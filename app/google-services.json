@@ -62,7 +62,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:505972408735:android:ca0a359f8d9fc796",
         "android_client_info": {
-          "package_name": "io.plan8.business"
+          "package_name": "io.plan8.backoffice"
         }
       },
       "oauth_client": [
@@ -70,7 +70,7 @@
           "client_id": "505972408735-la2fdqhanevags4qrv60r32uf1gn466u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "io.plan8.business",
+            "package_name": "io.plan8.backoffice",
             "certificate_hash": "62ee1211831be4e676ca2a5ae8679877ffcf763b"
           }
         },
