@@ -26,6 +26,7 @@ class RestfulAdapter {
         @SuppressLint("StaticFieldLeak")
         var instance: RestfulAdapter? = null
         var retrofitServiceApi: ApiService? = null
+        var retrofitAuthServiceApi: ApiService? = null
 
         @Synchronized
         fun build(context: Context): RestfulAdapter {
@@ -62,25 +63,22 @@ class RestfulAdapter {
 
     val authServiceApi: ApiService?
         get() {
-            if (retrofitServiceApi == null) {
-                val client: OkHttpClient.Builder? = OkHttpClient().newBuilder().addInterceptor(object : Interceptor{
-                    override fun intercept(chain: Interceptor.Chain?): Response {
-                        val request: Request = chain!!.request().newBuilder().addHeader("authorization", token).build()
-                        return chain.proceed(request)
-                    }
-
-                })
-
+            if (retrofitAuthServiceApi == null) {
+                val client: OkHttpClient = OkHttpClient()
+                client.newBuilder().addInterceptor { chain ->
+                    val request: Request = chain.request().newBuilder().addHeader("authorization", token).build()
+                    chain.proceed(request)
+                }
 
                 val gson = GsonBuilder()
                         .setLenient()
                         .create()
-//                retrofitServiceApi = Retrofit.Builder()
-//                        .baseUrl(ApplicationManager.BASE_URL)
-//                        .client(client!!)
-//                        .addConverterFactory(GsonConverterFactory.create(gson))
-//                        .build().create(ApiService::class.java)
+                retrofitAuthServiceApi = Retrofit.Builder()
+                        .baseUrl(ApplicationManager.BASE_URL)
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build().create(ApiService::class.java)
             }
-            return retrofitServiceApi
+            return retrofitAuthServiceApi
         }
 }
