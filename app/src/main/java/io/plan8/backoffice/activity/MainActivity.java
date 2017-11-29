@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -65,7 +64,6 @@ public class MainActivity extends BaseActivity {
             tab.setCustomView(R.layout.item_main_tab);
 
             if (null != tab.getCustomView()) {
-                Log.e("test", "testtttt " + i);
                 AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
                 AppCompatTextView tabItemTitle = tab.getCustomView().findViewById(R.id.mainTabItemTitle);
                 if (i == 0) {

@@ -9,20 +9,20 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Comment implements BaseModel {
-    @SerializedName("name") String name;
+    @SerializedName("author") String author;
     @SerializedName("comment") String comment;
 
-    public Comment(String name, String comment) {
-        this.name = name;
+    public Comment(String author, String comment) {
+        this.author = author;
         this.comment = comment;
     }
 
-    public String getName() {
-        return name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getComment() {

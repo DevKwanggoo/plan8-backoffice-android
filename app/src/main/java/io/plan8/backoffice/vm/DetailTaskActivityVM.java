@@ -1,36 +1,67 @@
 package io.plan8.backoffice.vm;
 
 import android.app.Activity;
-import android.databinding.Bindable;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import io.plan8.backoffice.BR;
-import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.activity.EditTaskActivity;
+import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
+import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
 public class DetailTaskActivityVM extends ActivityVM {
-    private TaskItem taskItem;
+    private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private List<BaseModel> datas;
     private BottomSheetDialog bottomSheetDialog;
-    public DetailTaskActivityVM(Activity activity, Bundle savedInstanceState, TaskItem taskItem) {
+
+    public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
         super(activity, savedInstanceState);
-        this.taskItem = taskItem;
+        this.datas = datas;
+        adapter = new BindingRecyclerViewAdapter<BaseModel>() {
+            @Override
+            protected int selectViewLayoutType(BaseModel data) {
+                if (data instanceof TaskItem) {
+                    return R.layout.item_detail_task_header;
+                } else {
+                    return R.layout.item_detail_task_comment;
+                }
+            }
+
+            @Override
+            protected void bindVariables(ViewDataBinding binding, BaseModel data) {
+                if (data instanceof TaskItem) {
+                    binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (TaskItem) data));
+                } else {
+                    binding.setVariable(BR.vm, new DetailTaskCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
+                }
+            }
+        };
+
+        setData(datas);
+
         initBottomSheet();
     }
 
     private void initBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(getActivity().getApplicationContext());
+        bottomSheetDialog = new BottomSheetDialog(getActivity());
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_layout);
         AppCompatImageView bottomSheetFirstImageView = bottomSheetDialog.findViewById(R.id.bottomSheetFirstIcon);
         TextView bottomSheetFirstTitle = bottomSheetDialog.findViewById(R.id.bottomSheetFirstTitle);
@@ -39,15 +70,16 @@ public class DetailTaskActivityVM extends ActivityVM {
             bottomSheetFirstImageView.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.grayColor));
         }
         if (null != bottomSheetFirstTitle) {
-            bottomSheetFirstTitle.setText("이름 편집");
+            bottomSheetFirstTitle.setText("완료");
         }
         RelativeLayout bottomSheetFirstItem = bottomSheetDialog.findViewById(R.id.bottomSheetFirstItem);
         if (null != bottomSheetFirstItem) {
             bottomSheetFirstItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    taskItem.setStatus(Constants.TASK_STATUS_BLUE);
-                    notifyPropertyChanged(BR.reservationStatus);
+                    //TODO : 리스트 갱신
+//                    taskItem.setStatus(Constants.TASK_STATUS_BLUE);
+//                    notifyPropertyChanged(BR.reservationStatus);
                     bottomSheetDialog.hide();
                 }
             });
@@ -60,99 +92,19 @@ public class DetailTaskActivityVM extends ActivityVM {
             bottomSheetSecondImageView.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.grayColor));
         }
         if (null != bottomSheetSecondTitle) {
-            bottomSheetSecondTitle.setText("프로필 사진 변경");
+            bottomSheetSecondTitle.setText("미완료");
         }
         RelativeLayout bottomSheetSecondItem = bottomSheetDialog.findViewById(R.id.bottomSheetSecondItem);
         if (bottomSheetSecondItem != null) {
             bottomSheetSecondItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    taskItem.setStatus(Constants.TASK_STATUS_RED);
-                    notifyPropertyChanged(BR.reservationStatus);
+                    //TODO : 리스트 갱신
+//                    taskItem.setStatus(Constants.TASK_STATUS_RED);
+//                    notifyPropertyChanged(BR.reservationStatus);
                     bottomSheetDialog.hide();
                 }
             });
-        }
-    }
-
-    @Bindable
-    public String getCustomerName() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getCustomerName();
-    }
-
-    @Bindable
-    public String getCustomerPhoneNumber() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getCustomerPhoneNumber();
-    }
-
-    @Bindable
-    public String getCustomerAddress() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getCustomerAddress();
-    }
-
-    @Bindable
-    public String getReservationDate() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getReservationDate();
-    }
-
-    @Bindable
-    public String getReservationTime() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getReservationTime();
-    }
-
-    @Bindable
-    public String getReservationEndTime() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getReservationEndTime();
-    }
-
-    @Bindable
-    public String getProductionName() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getProductionName();
-    }
-
-    @Bindable
-    public String getCustomerRequest() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getCustomerRequest();
-    }
-
-    @Bindable
-    public String getProductionDescription() {
-        if (null == taskItem) {
-            return "";
-        }
-        return taskItem.getProductionDescription();
-    }
-
-    @Bindable
-    public String getReservationStatus() {
-        if (null != taskItem && taskItem.equals(Constants.TASK_STATUS_BLUE)) {
-            return "완료";
-        } else {
-            return "미완료";
         }
     }
 
@@ -161,12 +113,20 @@ public class DetailTaskActivityVM extends ActivityVM {
         getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 
-    public void openEditActivity(View view) {
-        getActivity().startActivity(EditTaskActivity.buildIntent(getActivity()));
-        getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+    public void setData(List<BaseModel> datas) {
+        this.datas = datas;
+        adapter.setData(datas);
     }
 
-    public void editTaskStatus(View view) {
+    public RecyclerView.LayoutManager getLayoutManager() {
+        return new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    public RecyclerView.Adapter getAdapter() {
+        return adapter;
+    }
+
+    public void showBottomSheet() {
         bottomSheetDialog.show();
     }
 }

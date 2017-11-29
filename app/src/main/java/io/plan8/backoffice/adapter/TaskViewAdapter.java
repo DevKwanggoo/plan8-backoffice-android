@@ -99,11 +99,11 @@ public class TaskViewAdapter {
         view.setBackgroundResource(R.drawable.circle);
         GradientDrawable bgShape = (GradientDrawable) view.getBackground();
 
-        if (taskStatus == Constants.TASK_STATUS_BLUE) {
+        if (taskStatus.equals(Constants.TASK_STATUS_BLUE)) {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusBlue));
-        } else if (taskStatus == Constants.TASK_STATUS_ORANGE) {
+        } else if (taskStatus.equals(Constants.TASK_STATUS_ORANGE)) {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusOrange));
-        } else if (taskStatus == Constants.TASK_STATUS_RED) {
+        } else if (taskStatus.equals(Constants.TASK_STATUS_RED)) {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusRed));
         } else {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.transparent));

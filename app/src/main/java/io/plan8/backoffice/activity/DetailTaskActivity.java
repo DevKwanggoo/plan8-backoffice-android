@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
+import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.DetailTaskActivityVM;
 
@@ -24,8 +28,16 @@ public class DetailTaskActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        List<BaseModel> testData = new ArrayList<>();
+        testData.add((TaskItem) getIntent().getSerializableExtra("taskItem"));
+//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
+//        testData.add(new Comment("이주석", "댓글입니당\n댓글요\n그래요 댓글"));
+//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
+//        testData.add(new Comment("이주석", "댓글입니당\n댓글요\n그래요 댓글"));
+//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_task);
-        vm = new DetailTaskActivityVM(this, savedInstanceState, (TaskItem) getIntent().getSerializableExtra("taskItem"));
+        vm = new DetailTaskActivityVM(this, savedInstanceState, testData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
     }
@@ -40,5 +52,11 @@ public class DetailTaskActivity extends BaseActivity {
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+    }
+
+    public void showBottomSheet() {
+        if (null != vm) {
+            vm.showBottomSheet();
+        }
     }
 }

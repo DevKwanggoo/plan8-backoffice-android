@@ -74,18 +74,7 @@ public class MoreFragmentVM extends FragmentVM {
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return true;
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return true;
-            }
-        };
-        return layoutManager;
+        return new LinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
     public RecyclerView.Adapter getAdapter() {
