@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.BuildConfig;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -33,31 +34,35 @@ public class SplashActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
-            String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
-
-            if (RestfulAdapter.getInstance().getServiceApi() != null) {
-                Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
-                meCall.enqueue(new Callback<Me>() {
-                    @Override
-                    public void onResponse(Call<Me> call, Response<Me> response) {
-                        Me me = response.body();
-                        if (me != null) {
-                            ApplicationManager.getInstance().setMe(me);
-                            hasTokenStep();
-                        } else {
-                            loginStep();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Me> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        if (BuildConfig.DEBUG) {
+            hasTokenStep();
         } else {
-            loginStep();
+            if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
+                String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
+
+                if (RestfulAdapter.getInstance().getServiceApi() != null) {
+                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                    meCall.enqueue(new Callback<Me>() {
+                        @Override
+                        public void onResponse(Call<Me> call, Response<Me> response) {
+                            Me me = response.body();
+                            if (me != null) {
+                                ApplicationManager.getInstance().setMe(me);
+                                hasTokenStep();
+                            } else {
+                                loginStep();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Me> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } else {
+                loginStep();
+            }
         }
     }
 
