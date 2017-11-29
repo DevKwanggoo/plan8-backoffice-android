@@ -11,12 +11,10 @@ import io.plan8.backoffice.model.BaseModel;
 public class Comment implements BaseModel {
     @SerializedName("author") String author;
     @SerializedName("comment") String comment;
-    @SerializedName("created") String created;
 
-    public Comment(String author, String comment, String created) {
+    public Comment(String author, String comment) {
         this.author = author;
         this.comment = comment;
-        this.created = created;
     }
 
     public String getAuthor() {
@@ -33,13 +31,5 @@ public class Comment implements BaseModel {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
     }
 }

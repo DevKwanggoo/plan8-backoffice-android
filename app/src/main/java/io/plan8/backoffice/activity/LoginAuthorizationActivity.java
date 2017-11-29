@@ -251,6 +251,40 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private void nextStep() {
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
+
+        //TODO : 임시용 릴리즈때 제거
+        nextActivity();
+
+
+//        if (RestfulAdapter.instance!!.serviceApi != null) {
+//            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
+//                override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
+//                    Toast.makeText(applicationContext, "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show()
+//                    progressBar!!.visibility = View.GONE
+//                    onBackPressed()
+//                }
+//
+//                override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
+//                    if (response?.body() != null) {
+//                        SharedPreferenceManager(applicationContext).userToken = response.body()!!.token
+//
+//                        RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
+//                            override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
+//                                if (response?.body() != null) {
+//                                    Constants.me = response.body()!!
+//                                            nextActivity()
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<Me>?, t: Throwable?) {
+//                                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+//                            }
+//
+//                        })
+//                    }
+//                }
+//            })
+//        }
     }
 
     private void nextActivity() {
