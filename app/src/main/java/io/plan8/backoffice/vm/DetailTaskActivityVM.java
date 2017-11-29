@@ -19,9 +19,11 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.item.Comment;
+import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
+import io.plan8.backoffice.vm.item.DetailTaskMoreButtonItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -40,6 +42,8 @@ public class DetailTaskActivityVM extends ActivityVM {
             protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof TaskItem) {
                     return R.layout.item_detail_task_header;
+                } else if (data instanceof DetailTaskMoreButtonItem) {
+                    return R.layout.item_detail_task_more_button;
                 } else {
                     return R.layout.item_detail_task_comment;
                 }
@@ -49,6 +53,8 @@ public class DetailTaskActivityVM extends ActivityVM {
             protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof TaskItem) {
                     binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (TaskItem) data));
+                } else if (data instanceof DetailTaskMoreButtonItem) {
+                    binding.setVariable(BR.vm, new DetailTaskMoreButtonItemVM(getActivity(), savedInstanceState, (DetailTaskMoreButtonItem) data));
                 } else {
                     binding.setVariable(BR.vm, new DetailTaskCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
                 }

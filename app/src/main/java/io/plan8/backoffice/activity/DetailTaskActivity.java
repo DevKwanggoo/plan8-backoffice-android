@@ -14,12 +14,14 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.item.Comment;
+import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.DetailTaskActivityVM;
 
 public class DetailTaskActivity extends BaseActivity {
     private ActivityDetailTaskBinding binding;
     private DetailTaskActivityVM vm;
+    private TaskItem taskItem;
 
     public static Intent buildIntent(Context context, TaskItem taskItem) {
         Intent intent = new Intent(context, DetailTaskActivity.class);
@@ -30,8 +32,10 @@ public class DetailTaskActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.taskItem = (TaskItem) getIntent().getSerializableExtra("taskItem");
         List<BaseModel> testData = new ArrayList<>();
-        testData.add((TaskItem) getIntent().getSerializableExtra("taskItem"));
+        testData.add(taskItem);
+        testData.add(new DetailTaskMoreButtonItem("이전 내용 보기"));
         testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
         testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
         testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
@@ -64,5 +68,10 @@ public class DetailTaskActivity extends BaseActivity {
     public void deleteComment(Comment comment) {
         //TODO : 코멘트 삭제
         Toast.makeText(getApplicationContext(), "댓글 삭제", Toast.LENGTH_SHORT).show();
+    }
+
+    public void callMoreComment() {
+        //TODO : 이전 내용 보기
+        Toast.makeText(getApplicationContext(), "이전 내용 보기", Toast.LENGTH_SHORT).show();
     }
 }

@@ -125,7 +125,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="12dp"
-            android:background="#1A000000" />
+            android:background="#19000000" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -339,5 +339,12 @@
                 android:textColor="#FF3C4858"
                 android:textSize="16dp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#19000000" />
     </LinearLayout>
 </layout>
