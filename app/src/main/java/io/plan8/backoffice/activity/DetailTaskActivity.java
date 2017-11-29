@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.DetailTaskActivityVM;
 
@@ -30,11 +32,10 @@ public class DetailTaskActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         List<BaseModel> testData = new ArrayList<>();
         testData.add((TaskItem) getIntent().getSerializableExtra("taskItem"));
-//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
-//        testData.add(new Comment("이주석", "댓글입니당\n댓글요\n그래요 댓글"));
-//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
-//        testData.add(new Comment("이주석", "댓글입니당\n댓글요\n그래요 댓글"));
-//        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글"));
+        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
+        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
+        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
+        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_task);
         vm = new DetailTaskActivityVM(this, savedInstanceState, testData);
@@ -58,5 +59,10 @@ public class DetailTaskActivity extends BaseActivity {
         if (null != vm) {
             vm.showBottomSheet();
         }
+    }
+
+    public void deleteComment(Comment comment) {
+        //TODO : 코멘트 삭제
+        Toast.makeText(getApplicationContext(), "댓글 삭제", Toast.LENGTH_SHORT).show();
     }
 }
