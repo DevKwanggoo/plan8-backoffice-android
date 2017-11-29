@@ -1,6 +1,7 @@
 package io.plan8.backoffice.view;
 
 import android.content.Context;
+import android.util.AttributeSet;
 
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
@@ -14,6 +15,11 @@ public class Plan8TaskCalendarView extends MaterialCalendarView {
     public Plan8TaskCalendarView(Context context) {
         super(context);
     }
+
+    public Plan8TaskCalendarView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
 
     public boolean isAlreadyInflated() {
         return isAlreadyInflated;

@@ -251,6 +251,11 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private void nextStep() {
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
+
+        //TODO : 임시용 릴리즈때 제거
+        nextActivity();
+
+
 //        if (RestfulAdapter.instance!!.serviceApi != null) {
 //            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
 //                override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {

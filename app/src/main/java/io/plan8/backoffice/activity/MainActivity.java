@@ -48,7 +48,10 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (ApplicationManager.getInstance().getMe().getTeams() != null && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
+        if (null != ApplicationManager.getInstance().getMe()
+                && null != ApplicationManager.getInstance().getMe().getTeams()
+                && ApplicationManager.getInstance().getMe().getTeams() != null
+                && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
             vm.setEmptyTeamFlag(false);
         }
 
@@ -95,6 +98,7 @@ public class MainActivity extends BaseActivity {
 
         binding.mainViewPager.setOffscreenPageLimit(fragments.size());
 
+        fragmentManager = getSupportFragmentManager();
         FragmentStatePagerAdapter pagerAdapter = new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {

@@ -46,7 +46,6 @@ public class TaskFragment extends BaseFragment {
         vm = new TaskFragmentVM(this, savedInstanceState, testData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
-
         return binding.getRoot();
     }
 
