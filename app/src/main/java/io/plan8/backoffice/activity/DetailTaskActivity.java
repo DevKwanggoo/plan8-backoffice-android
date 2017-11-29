@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +71,17 @@ public class DetailTaskActivity extends BaseActivity {
 
     public void deleteComment(Comment comment) {
         //TODO : 코멘트 삭제
-        Toast.makeText(getApplicationContext(), "댓글 삭제", Toast.LENGTH_SHORT).show();
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .content("댓글을 삭제하시겠어요?")
+                .positiveText("삭제")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Toast.makeText(getApplicationContext(), "댓글 삭제", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build();
+        dialog.show();
     }
 
     public void callMoreComment() {
