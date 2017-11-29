@@ -1,27 +1,131 @@
 {
   "project_info": {
-    "project_number": "871666820571",
-    "firebase_url": "https://plan8-backoffice-sandbox.firebaseio.com",
-    "project_id": "plan8-backoffice-sandbox",
-    "storage_bucket": "plan8-backoffice-sandbox.appspot.com"
+    "project_number": "505972408735",
+    "firebase_url": "https://plan8-app-sandbox.firebaseio.com",
+    "project_id": "plan8-app-sandbox",
+    "storage_bucket": "plan8-app-sandbox.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:871666820571:android:377a4dd2d5c5dda9",
+        "mobilesdk_app_id": "1:505972408735:android:0136825c29d2969a",
+        "android_client_info": {
+          "package_name": "co.starshell.plan8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505972408735-6mrru4ve3302bslj12o613uoud71qefl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.starshell.plan8",
+            "certificate_hash": "62ee1211831be4e676ca2a5ae8679877ffcf763b"
+          }
+        },
+        {
+          "client_id": "505972408735-dr6r86kblr8n4vqg0770ehkeoefdgded.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfzpBXColqDmAtaDbRwCjB_UTGujkwjaE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505972408735-8eb9obepd1nkqic1se3d2nf5io3c4apf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.starshell.plan8",
+                "app_store_id": "1190850119"
+              }
+            },
+            {
+              "client_id": "505972408735-dr6r86kblr8n4vqg0770ehkeoefdgded.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505972408735:android:ca0a359f8d9fc796",
+        "android_client_info": {
+          "package_name": "io.plan8.business"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505972408735-la2fdqhanevags4qrv60r32uf1gn466u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.plan8.business",
+            "certificate_hash": "62ee1211831be4e676ca2a5ae8679877ffcf763b"
+          }
+        },
+        {
+          "client_id": "505972408735-dr6r86kblr8n4vqg0770ehkeoefdgded.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfzpBXColqDmAtaDbRwCjB_UTGujkwjaE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505972408735-8eb9obepd1nkqic1se3d2nf5io3c4apf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.starshell.plan8",
+                "app_store_id": "1190850119"
+              }
+            },
+            {
+              "client_id": "505972408735-dr6r86kblr8n4vqg0770ehkeoefdgded.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505972408735:android:377a4dd2d5c5dda9",
         "android_client_info": {
           "package_name": "io.plan8.backoffice"
         }
       },
       "oauth_client": [
         {
-          "client_id": "871666820571-uabgl4gseqj1sbfdc5nhv1mima2ch5oq.apps.googleusercontent.com",
+          "client_id": "505972408735-dr6r86kblr8n4vqg0770ehkeoefdgded.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDNcG_DkMKsnKg_0SziuBSIYhxudebQH8I"
+          "current_key": "AIzaSyCfzpBXColqDmAtaDbRwCjB_UTGujkwjaE"
         }
       ],
       "services": {

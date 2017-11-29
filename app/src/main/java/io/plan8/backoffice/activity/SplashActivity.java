@@ -5,10 +5,19 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivitySplashBinding;
+import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.vm.SplashActivityVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashActivity extends BaseActivity {
     private ActivitySplashBinding binding;
@@ -24,28 +33,28 @@ public class SplashActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (SharedPreferenceManager(getApplicationContext()).userToken != "") {
-            String token = SharedPreferenceManager(getApplicationContext()).userToken;
+        if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
+            String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
-            if (RestfulAdapter.getInstance().serviceApi != null) {
-                RestfulAdapter.getInstance().serviceApi.getMe("Bearer " + token);
-//                        .enqueue(object :
-//                Callback<Me> {
-//                    override fun onResponse(call:Call<Me>?,response:
-//                    Response<Me>?){
-//                        if (response.body() != null) {
-//                            Constants.me = response.body();
-//                            hasTokenStep();
-//                        } else {
-//                            loginStep();
-//                        }
-//                    }
-//                    override fun onFailure(call:Call<Me>?,t:
-//                    Throwable ?){
-//                        Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                })
+            if (RestfulAdapter.getInstance().getServiceApi() != null) {
+                Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                meCall.enqueue(new Callback<Me>() {
+                    @Override
+                    public void onResponse(Call<Me> call, Response<Me> response) {
+                        Me me = response.body();
+                        if (me != null) {
+                            ApplicationManager.getInstance().setMe(me);
+                            hasTokenStep();
+                        } else {
+                            loginStep();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Me> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         } else {
             loginStep();
@@ -53,17 +62,17 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void loginStep() {
-        progressBar.setVisibility(View.GONE);
+        binding.splashProgressBarContainer.setVisibility(View.GONE);
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 
-    private void hasTokenStep(){
-        progressBar.setVisibility(View.GONE);
+    private void hasTokenStep() {
+        binding.splashProgressBarContainer.setVisibility(View.GONE);
         startActivity(MainActivity.buildIntent(this));
         finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 }

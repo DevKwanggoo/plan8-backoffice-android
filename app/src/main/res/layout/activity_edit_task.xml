@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        
         <RelativeLayout
             android:id="@+id/editTaskToolbar"
             android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@color/transparent"
                 android:textColor="@color/defaultDarkColor" />
-
+            
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -12,26 +12,39 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.plan8.backoffice.BR;
+import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
+import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.item.LabelItem;
+import io.plan8.backoffice.model.item.MoreProfileItem;
+import io.plan8.backoffice.model.item.MoreTeamItem;
+import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
+import io.plan8.backoffice.vm.item.LabelItemVM;
+import io.plan8.backoffice.vm.item.MoreProfileItemVM;
+import io.plan8.backoffice.vm.item.MoreTeamItemVM;
 
 /**
  * Created by SSozi on 2017. 11. 28..
  */
 
-public class MoreFragmentVM {
+public class MoreFragmentVM extends FragmentVM {
+    private List<BaseModel> datas;
     private FragmentMoreBinding binding;
     private BindingRecyclerViewAdapter adapter;
     private List<Object> moreItemList = new ArrayList<>();
 
-    public MoreFragmentVM(Fragment fragment, @Nullable Bundle savedInstanceState) {
+    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
         super(fragment, savedInstanceState);
+        this.datas = datas;
 
         adapter = new BindingRecyclerViewAdapter() {
             @Override
             protected int selectViewLayoutType(Object data) {
-                if (data instanceof MoreTitleItem){
+                if (data instanceof LabelItem) {
                     return R.layout.item_more_title;
                 } else if (data instanceof MoreProfileItem) {
                     return R.layout.item_more_profile;
@@ -45,14 +58,14 @@ public class MoreFragmentVM {
 
             @Override
             protected void bindVariables(ViewDataBinding binding, Object data) {
-                if (data instanceof MoreTitleItem){
-                    binding.setVariable(BR.vm, new MoreTitleItemVM(getFragment(), getSavedInstanceState()), data);
+                if (data instanceof LabelItem) {
+                    binding.setVariable(BR.vm, new LabelItemVM(getFragment(), savedInstanceState, (LabelItem) data));
                 } else if (data instanceof MoreProfileItem) {
-                    binding.setVariable(BR.vm, new MoreProfileItem(getFragment(), getSavedInstanceState()), data);
+                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (MoreProfileItem) data));
                 } else if (data instanceof MoreTeamItem) {
-                    binding.setVariable(BR.vm, new MoreTeamItem(getFragment(), getSavedInstanceState()), data);
+                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (MoreTeamItem) data));
                 } else {
-                    binding.setVariable(BR.vm, new EmptySpaceItem(getFragment(), getSavedInstanceState()));
+                    binding.setVariable(BR.vm, new EmptySpaceItemVM(getFragment(), savedInstanceState));
                 }
             }
         };
@@ -83,11 +96,11 @@ public class MoreFragmentVM {
         if (null != adapter) adapter.setData(data);
     }
 
-    public void logout(View view){
-        SharedPreferenceManager(getFragment().getContext()).removeToken();
+    public void logout(View view) {
+        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
         Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
         getFragment().getActivity().startActivity(loginIntent);
         getFragment().getActivity().finish();
-        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
+        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 }

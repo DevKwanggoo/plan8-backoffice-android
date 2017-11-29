@@ -15,11 +15,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
+import io.plan8.backoffice.BR;
+import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
+import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Upload;
+import io.plan8.backoffice.model.item.EmptySpaceItem;
+import io.plan8.backoffice.model.item.LabelItem;
+import io.plan8.backoffice.model.item.MoreProfileItem;
+import io.plan8.backoffice.model.item.MoreTeamItem;
+import io.plan8.backoffice.vm.MoreFragmentVM;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by SSozi on 2017. 11. 28..
@@ -27,31 +41,32 @@ import okhttp3.RequestBody;
 
 public class MoreFragment extends BaseFragment {
     private FragmentMoreBinding binding;
+    private MoreFragmentVM vm;
     private RelativeLayout progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        List<Object> testData = new ArrayList<>();
+        List<BaseModel> testData = new ArrayList<>();
         String userName;
 
-        if (Constants.getMe().getUserName() != null) {
-            userName = Constants.getMe().getUserName();
+        if (ApplicationManager.getInstance().getMe().getName() != null) {
+            userName = ApplicationManager.getInstance().getMe().getName();
         } else {
             userName = "이름없음";
         }
 
-        testData.add(new MoreProfileItem(userName, Constants.getMe().getPhoneNumber()));
-        testData.add(new MoreTitleItem("팀 선택"));
+        testData.add(new MoreProfileItem(userName, ApplicationManager.getInstance().getMe().getPhoneNumber()));
+        testData.add(new LabelItem("팀 선택"));
 
-        if (Constants.getMe().getTeam() != null && Constants.getMe().getTeam().size() > 0) {
-            for (int i = 0; i < Constants.getMe().getTeam().size(); i++) {
-                testData.add(new MoreTeamItem(Constants.getMe().getTeam().getTeamName(), Constants.getMe().getTeam().getTeamName()));
+        if (ApplicationManager.getInstance().getMe().getTeams() != null && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
+            for (int i = 0; i < ApplicationManager.getInstance().getMe().getTeams().size(); i++) {
+                testData.add(new MoreTeamItem(ApplicationManager.getInstance().getMe().getTeams().get(i).getName(), ApplicationManager.getInstance().getMe().getTeams().get(i).getName()));
             }
         }
         testData.add(new EmptySpaceItem(0));
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
-        vm = MoreFragmentVM(this, savedInstanceState, testData);
+        vm = new MoreFragmentVM(this, savedInstanceState, testData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
@@ -79,22 +94,18 @@ public class MoreFragment extends BaseFragment {
         File files = new File(absolutePath);
         RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(uri)), files);
         MultipartBody.Part multipart = MultipartBody.Part.createFormData("files", files.getName(), requestFile);
+        Call<List<Upload>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), multipart);
+        uploadCall.enqueue(new Callback<List<Upload>>() {
+            @Override
+            public void onResponse(Call<List<Upload>> call, Response<List<Upload>> response) {
 
-//        if (RestfulAdapter.instance !!.serviceApi != null){
-//            RestfulAdapter.instance !!.serviceApi !!.
-//            postUpload("Bearer " + SharedPreferenceManager(activity).userToken, requestFile).enqueue(object :
-//            Callback<List<UploadInfo>> {
-//                override fun onResponse(call:Call<List<UploadInfo>>?,response:
-//                Response<List<UploadInfo>>?){
-//                    Log.e("test", "test")
-//                }
-//
-//                override fun onFailure(call:Call<List<UploadInfo>>?,t:
-//                Throwable ?){
-//                    Log.e("test", "test")
-//                }
-//            })
-//        }
+            }
+
+            @Override
+            public void onFailure(Call<List<Upload>> call, Throwable t) {
+
+            }
+        });
     }
 
     private String getRealPathFromURI(Uri imageUri) {

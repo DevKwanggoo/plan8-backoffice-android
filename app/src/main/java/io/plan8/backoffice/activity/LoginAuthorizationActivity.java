@@ -16,8 +16,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
+import io.plan8.backoffice.util.ViewUtil;
+import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
 
 public class LoginAuthorizationActivity extends BaseActivity implements TextView.OnEditorActionListener, View.OnClickListener {
     private ActivityLoginAuthorizationBinding binding;
@@ -39,13 +42,13 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login_authorization);
-        vm = LoginAuthorizationActivityVM(this, savedInstanceState);
+        vm = new LoginAuthorizationActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
-        authoTitle = binding.authorizationTitle
+        authoTitle = binding.authorizationTitle;
         authoTitle.setText("'$phoneNumber’ 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
         authoEditText = binding.authorizationCodeInputEditText;
         authoEditText.setOnEditorActionListener(this);
@@ -194,8 +197,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         authoEditText.addTextChangedListener(textWatcher);
         authoEditText.setFocusableInTouchMode(true);
         authoEditText.requestFocus();
-
-        ViewUtil.showKeyboard(authoEditText);
+        ViewUtil.getInstance().showKeyboard(authoEditText);
     }
 
     //TODO : 문자인증번호 파싱 리시버 로직임. 필요할때 주석제거
@@ -247,7 +249,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
 //    }
 
     private void nextStep() {
-        ViewUtil.hideKeyboard(authoEditText);
+        ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
 //        if (RestfulAdapter.instance!!.serviceApi != null) {
 //            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
@@ -284,7 +286,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         progressBar.setVisibility(View.GONE);
         startActivity(MainActivity.buildIntent(this));
         finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity)
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 
     @Override
@@ -292,7 +294,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
-        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
+        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 
     @Override
@@ -309,7 +311,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             authoEditText.requestFocus();
             authoEditText.setSelection(authoEditText.getText().length());
             authoEditText.setFocusableInTouchMode(true);
-            ViewUtil.showKeyboard(authoEditText);
+            ViewUtil.getInstance().showKeyboard(authoEditText);
         }
     }
 }

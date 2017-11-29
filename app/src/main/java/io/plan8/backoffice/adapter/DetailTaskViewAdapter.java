@@ -5,6 +5,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import io.plan8.backoffice.R;
+
 /**
  * Created by SSozi on 2017. 11. 28..
  */
@@ -12,10 +14,10 @@ import com.makeramen.roundedimageview.RoundedImageView;
 public class DetailTaskViewAdapter {
     @BindingAdapter("detailTaskViewAdapter:isTaskStatus")
     public static void isTaskStatus(RoundedImageView view, String taskStatus) {
-        if (taskStatus == "완료"){
-            view.setBackgroundColor(ContextCompat.getColor(view.getContext() ,R.color.taskStatusBlue))
+        if (taskStatus.equals("완료")) {
+            view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusBlue));
         } else {
-            view.setBackgroundColor(ContextCompat.getColor(view.getContext() ,R.color.taskStatusRed))
+            view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusRed));
         }
     }
 }

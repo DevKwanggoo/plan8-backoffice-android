@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#2979ff</color>
+    <color name="colorPrimaryDark">#2979ff</color>
+    <color name="colorAccent">#2979ff</color>
+
+    <color name="white">#ffffffff</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="defaultDarkColor">#FF3C4858</color>
+    <color name="grayColor">#FF8492A6</color>
+    <color name="blueColor">#FF3F89DE</color>
+
+    <color name="taskStatusBlue">#2979ff</color>
+    <color name="taskStatusOrange">#FFB229</color>
+    <color name="taskStatusRed">#FF2936</color>
+    <color name="taskStatusGreen">#44ce00</color>
+    <color name="taskStatusGray">#d8dfe4</color>
+
+    <color name="defaultRipple">#20000000</color>
+    <color name="whiteRipple">#80ffffff</color>
+
+    <color name="selectTabItem">#215EFF</color>
+    <color name="unselectTabItem">#A9B8C1</color>
+
+    <color name="grayLabelColor">#FBFBFB</color>
+    <color name="borderColor">#1A000000</color>
+
+    <color name="grayTextColor">#acb4bf</color>
+
+    <color name="lineViewColor">#d8dfe4</color>
+
+    <color name="grayTintColor">#6d848f</color>
 </resources>

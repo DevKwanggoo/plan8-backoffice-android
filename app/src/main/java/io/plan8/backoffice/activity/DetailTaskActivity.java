@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
+import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
+import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.vm.DetailTaskActivityVM;
 
 public class DetailTaskActivity extends BaseActivity {
     private ActivityDetailTaskBinding binding;
@@ -21,8 +24,8 @@ public class DetailTaskActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail.task);
-        vm = DetailTaskActivityVM(this, savedInstanceState, getIntent().getSerializableExtra("taskItem"));
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_task);
+        vm = new DetailTaskActivityVM(this, savedInstanceState, (TaskItem) getIntent().getSerializableExtra("taskItem"));
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
     }
@@ -36,6 +39,6 @@ public class DetailTaskActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         finish();
-        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity)
+        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 }

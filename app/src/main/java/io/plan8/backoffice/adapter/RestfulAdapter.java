@@ -5,8 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.concurrent.TimeUnit;
-
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.api.ApiService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -63,7 +62,7 @@ public class RestfulAdapter {
              */
             //Retrofit 설정
             newApiService = new Retrofit.Builder()
-                    .baseUrl(Constants.API_SERVICE_URL)
+                    .baseUrl(ApplicationManager.getInstance().getServerUrl())
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build().create(ApiService.class); //인터페이스 연결

@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -20,9 +20,13 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
+import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
+import io.plan8.backoffice.fragment.TaskFragment;
+import io.plan8.backoffice.vm.MainActivityVM;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -40,12 +44,12 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        vm = MainActivityVM(this, savedInstanceState);
+        vm = new MainActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (Constants.getMe().getTeam() != null && Constants.getMe().getTeam().size > 0) {
-            vm.emptyTeamFlag = false;
+        if (ApplicationManager.getInstance().getMe().getTeams() != null && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
+            vm.setEmptyTeamFlag(false);
         }
 
         initTabAndViewPager();
@@ -63,24 +67,24 @@ public class MainActivity extends BaseActivity {
                 AppCompatTextView tabItemTitle = tab.getCustomView().findViewById(R.id.mainTabItemTitle);
                 if (i == 0) {
                     tabItemIcon.setImageResource(R.drawable.ic_line_calendar);
-                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem))
+                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
 
-                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem))
+                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                     tabItemTitle.setText("예약");
 
                     TaskFragment taskFragment = new TaskFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    taskFragment.arguments = bundle;
+                    taskFragment.setArguments(bundle);
                     fragments.add(taskFragment);
                 } else {
-                    tabItemIcon.setImageResource(R.drawable.ic_solid_more)
+                    tabItemIcon.setImageResource(R.drawable.ic_solid_more);
                     tabItemTitle.setText("더보기");
 
                     MoreFragment moreFragment = new MoreFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    moreFragment.arguments = bundle;
+                    moreFragment.setArguments(bundle);
                     fragments.add(moreFragment);
                 }
                 //                        tab.getCustomView().setLayoutParams(params);
@@ -91,7 +95,7 @@ public class MainActivity extends BaseActivity {
 
         binding.mainViewPager.setOffscreenPageLimit(fragments.size());
 
-        FragmentStatePagerAdapter pagerAdapter = new FragmentStatePagerAdapter() {
+        FragmentStatePagerAdapter pagerAdapter = new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 return fragments.get(position);
@@ -109,17 +113,17 @@ public class MainActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 currentTabPosition = tab.getPosition();
                 binding.mainViewPager.setCurrentItem(tab.getPosition());
-                if (tab.getCustomView() != null){
-                    tab.getCustomView().findViewById(R.id.mainTabItemIcon).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
-                    tab.getCustomView().findViewById(R.id.mainTabTitle).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                if (tab.getCustomView() != null) {
+                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                if (tab != null){
-                    tab.getCustomView().findViewById(R.id.mainTabItemIcon).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
-                    tab.getCustomView().findViewById(R.id.mainTabTitle).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                if (tab != null) {
+                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
                 }
             }
 
@@ -136,12 +140,12 @@ public class MainActivity extends BaseActivity {
         switch (resultCode) {
             case RESULT_OK:
                 if (data.getAction() == null) {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreMenuFragment) {
-                        ((MoreMenuFragment) fragments.get(1)).uploadImage(data.getData());
+                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(1)).uploadImage(data.getData());
                     }
                 } else {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreMenuFragment) {
-                        ((MoreMenuFragment) fragments.get(1)).uploadImage(getImageUri(getApplicationContext(),(Bitmap) data.getExtras().get("data")));
+                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(1)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
                     }
                 }
             default:
