@@ -6,6 +6,8 @@ import java.util.List;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.Upload;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -25,13 +27,13 @@ import retrofit2.http.Part;
 public interface ApiService {
     @FormUrlEncoded
     @POST("1/auth/pin-code")
-    Call<Login> getPinCode(@Field("phoneNumber") String phoneNumber);
+    Call<Login> getPinCode(@Field("mobileNumber") String mobileNumber);
 
     @FormUrlEncoded
     @POST("1/auth/token")
     Call<Auth> getAuthIfo(@Field("code") String code, @Field("pinCode") String pinCode);
 
-    @GET("1/me")
+    @GET("1/users/me")
     Call<Me> getMe(@Header("authorization") String auth);
 
     @Multipart
@@ -41,4 +43,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("1/users/me")
     Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
+
+    @GET("1/users/me/reservations")
+    Call<List<Reservation>> getReservations(@Header("authorization") String auth);
+
+    @GET("1/users/me/teams")
+    Call<List<Team>> getTeams(@Header("authorization") String auth);
 }

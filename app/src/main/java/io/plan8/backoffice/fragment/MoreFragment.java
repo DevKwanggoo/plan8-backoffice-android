@@ -61,15 +61,15 @@ public class MoreFragment extends BaseFragment {
             userName = ApplicationManager.getInstance().getMe().getName();
             phoneNumber = ApplicationManager.getInstance().getMe().getPhoneNumber();
         }
-
+        testData.add(new LabelItem("내 프로필"));
         testData.add(new MoreProfileItem(userName, phoneNumber));
         testData.add(new LabelItem("팀 선택"));
 
-        if (null != ApplicationManager.getInstance().getMe()
-                && null != ApplicationManager.getInstance().getMe().getTeams()
-                && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
-            for (int i = 0; i < ApplicationManager.getInstance().getMe().getTeams().size(); i++) {
-                testData.add(new MoreTeamItem(ApplicationManager.getInstance().getMe().getTeams().get(i).getName(), ApplicationManager.getInstance().getMe().getTeams().get(i).getName()));
+        if (null != ApplicationManager.getInstance().getTeams()) {
+            if (ApplicationManager.getInstance().getTeams().size() > 0) {
+                for (int i = 0; i < ApplicationManager.getInstance().getTeams().size(); i++) {
+                    testData.add(new MoreTeamItem(ApplicationManager.getInstance().getTeams().get(i).getName(), ApplicationManager.getInstance().getTeams().get(i).getName(), ApplicationManager.getInstance().getTeams().get(i).getLogo()));
+                }
             }
         }
         testData.add(new EmptySpaceItem(0));

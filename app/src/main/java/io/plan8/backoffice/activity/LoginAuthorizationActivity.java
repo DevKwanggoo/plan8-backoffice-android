@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
@@ -25,6 +27,8 @@ import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
 import retrofit2.Call;
@@ -46,6 +50,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private TextView sixthInput;
     private LinearLayout inputField;
     private EditText authoEditText;
+    private boolean isTeam = false;
+    private boolean isReservation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         authoTitle = binding.authorizationTitle;
-        authoTitle.setText("'"+phoneNumber+"' 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
+        authoTitle.setText("'" + phoneNumber + "' 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
         authoEditText = binding.authorizationCodeInputEditText;
         authoEditText.setOnEditorActionListener(this);
 
@@ -75,7 +81,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         binding.authNextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (authoEditText.getText().length() >= 6) nextStep();
+                if (authoEditText.getText().length() >= 6) authStep();
             }
         });
         binding.authPrevStep.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +187,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                             focusLineList.get(i).setVisibility(View.GONE);
                         }
                         if (s.length() == 6) {
-                            nextStep();
+                            authStep();
                         }
                     }
                 } else {
@@ -257,7 +263,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
 //        registerReceiver(broadcastReceiver, intentFilter)
 //    }
 
-    private void nextStep() {
+    private void authStep() {
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -265,16 +271,16 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         authCall.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(Call<Auth> call, Response<Auth> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), response.body().getToken());
 
-                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
                     meCall.enqueue(new Callback<Me>() {
                         @Override
                         public void onResponse(Call<Me> call, Response<Me> response) {
-                            if (response.body() != null){
+                            if (response.body() != null) {
                                 ApplicationManager.getInstance().setMe(response.body());
-                                nextActivity();
+                                nextStep();
                             }
                         }
 
@@ -295,11 +301,49 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         });
     }
 
+    private void nextStep() {
+        Call<List<Team>> getTeams = RestfulAdapter.getInstance().getServiceApi().getTeams("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+        getTeams.enqueue(new Callback<List<Team>>() {
+            @Override
+            public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
+                if (response.body() != null) {
+                    isTeam = true;
+                    ApplicationManager.getInstance().setTeams(response.body());
+                    nextActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Team>> call, Throwable t) {
+                Log.e("api : ", "failure");
+            }
+        });
+
+        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+        getReservations.enqueue(new Callback<List<Reservation>>() {
+            @Override
+            public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
+                if (response.body() != null) {
+                    isReservation = true;
+                    ApplicationManager.getInstance().setReservations(response.body());
+                    nextActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Reservation>> call, Throwable t) {
+                Log.e("api : ", "failure");
+            }
+        });
+    }
+
     private void nextActivity() {
-        progressBar.setVisibility(View.GONE);
-        startActivity(MainActivity.buildIntent(this));
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (isTeam && isReservation) {
+            progressBar.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 
     @Override

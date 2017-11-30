@@ -87,11 +87,11 @@ public class MoreFragmentVM extends FragmentVM {
     }
 
     public void logout(View view) {
-//        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
-//        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
-//        getFragment().getActivity().startActivity(loginIntent);
-//        getFragment().getActivity().finish();
-//        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-        ((MainActivity) getFragment().getActivity()).setEmptyFlag(false);
+        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
+        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
+        getFragment().getActivity().startActivity(loginIntent);
+        getFragment().getActivity().finish();
+        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+//        ((MainActivity) getFragment().getActivity()).setEmptyFlag(false);
     }
 }

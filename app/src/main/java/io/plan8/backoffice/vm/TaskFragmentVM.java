@@ -27,10 +27,10 @@ public class TaskFragmentVM extends FragmentVM {
     private boolean isOpenedCalendar;
     private String toolbarTitle;
     private BindingRecyclerViewAdapter<TaskItem> adapter;
-    private boolean emptyFlag;
+    private boolean emptyFlag = true;
 
 
-    public TaskFragmentVM(final Fragment fragment, final Bundle savedInstanceState, List<TaskItem> taskItems) {
+    public TaskFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
         this.taskItems = taskItems;
         selectedDate = DateUtil.getInstance().getCurrentDate();

@@ -20,6 +20,7 @@
             android:layout_height="50dp">
 
             <RelativeLayout
+                android:id="@+id/previewClose"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -43,6 +44,7 @@
                 android:text="IMG_1325.JPG"/>
 
             <RelativeLayout
+                android:id="@+id/previewDownload"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true">

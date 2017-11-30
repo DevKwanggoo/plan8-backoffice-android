@@ -14,7 +14,8 @@ public class User implements BaseModel {
     @SerializedName("id") String userId;
     @SerializedName("updated") String updated;
     @SerializedName("created") String created;
-    @SerializedName("name") String name;
+    @SerializedName("username") String userName;
+    @SerializedName("hasPassword") boolean hasPassword;
 
     public User() {
     }
@@ -39,7 +40,11 @@ public class User implements BaseModel {
         return created;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
+    }
+
+    public boolean isHasPassword() {
+        return hasPassword;
     }
 }
