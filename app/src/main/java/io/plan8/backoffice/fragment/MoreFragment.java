@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
@@ -22,6 +24,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Upload;
 import io.plan8.backoffice.model.item.EmptySpaceItem;
 import io.plan8.backoffice.model.item.LabelItem;
@@ -47,7 +50,7 @@ public class MoreFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        List<BaseModel> testData = new ArrayList<>();
+        List<Object> testData = new ArrayList<>();
         String userName;
         String phoneNumber;
 
@@ -70,12 +73,14 @@ public class MoreFragment extends BaseFragment {
             }
         }
         testData.add(new EmptySpaceItem(0));
+
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
         vm = new MoreFragmentVM(this, savedInstanceState, testData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
         progressBar = binding.moreMenuProgressBar;
+        vm.setData(testData);
 
         return binding.getRoot();
     }
@@ -103,12 +108,29 @@ public class MoreFragment extends BaseFragment {
         uploadCall.enqueue(new Callback<List<Upload>>() {
             @Override
             public void onResponse(Call<List<Upload>> call, Response<List<Upload>> response) {
+                if (response.body() != null){
+                    HashMap<String, String> putMeImage = new HashMap<String, String>();
+                    putMeImage.put("avatar", response.body().get(0).getUrl());
+                    Call<Me> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
+                    putMe.enqueue(new Callback<Me>() {
+                        @Override
+                        public void onResponse(Call<Me> call, Response<Me> response) {
+                            if (response.body() != null){
+                                refreshFragment();
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<Me> call, Throwable t) {
+                            Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
 
             @Override
             public void onFailure(Call<List<Upload>> call, Throwable t) {
-
+                Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -119,5 +141,13 @@ public class MoreFragment extends BaseFragment {
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+    }
+
+    private void refreshFragment() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commitAllowingStateLoss();
     }
 }

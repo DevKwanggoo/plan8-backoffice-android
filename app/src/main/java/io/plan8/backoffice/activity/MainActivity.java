@@ -167,4 +167,8 @@ public class MainActivity extends BaseActivity {
         binding.unbind();
         super.onDestroy();
     }
+
+    public void setEmptyFlag(boolean flag){
+        vm.setEmptyTeamFlag(flag);
+    }
 }

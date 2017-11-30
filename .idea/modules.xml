@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plan8-backoffice-android.iml" filepath="$PROJECT_DIR$/plan8-backoffice-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plan8-android-backoffice.iml" filepath="$PROJECT_DIR$/plan8-android-backoffice.iml" />
     </modules>
   </component>
 </project>

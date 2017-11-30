@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.BuildConfig;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -59,6 +60,7 @@ public class SplashActivity extends BaseActivity {
         } else {
             loginStep();
         }
+
     }
 
     private void loginStep() {

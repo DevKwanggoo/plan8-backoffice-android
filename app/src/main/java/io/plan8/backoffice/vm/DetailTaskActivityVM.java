@@ -16,11 +16,16 @@ import java.util.List;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.activity.DetailTaskActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.item.Comment;
+import io.plan8.backoffice.model.item.CommentFile;
+import io.plan8.backoffice.model.item.CommentReplaceItem;
 import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.vm.item.DetailTaskCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
+import io.plan8.backoffice.vm.item.DetailTaskCommentReplaceItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
 
 /**
@@ -40,6 +45,10 @@ public class DetailTaskActivityVM extends ActivityVM {
             protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof TaskItem) {
                     return R.layout.item_detail_task_header;
+                } else if (data instanceof CommentFile) {
+                    return R.layout.item_detail_task_comment_file;
+                } else if (data instanceof CommentReplaceItem) {
+                    return R.layout.item_detail_task_comment_replace;
                 } else {
                     return R.layout.item_detail_task_comment;
                 }
@@ -49,6 +58,10 @@ public class DetailTaskActivityVM extends ActivityVM {
             protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof TaskItem) {
                     binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (TaskItem) data));
+                } else if (data instanceof CommentFile) {
+                    binding.setVariable(BR.vm, new DetailTaskCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
+                } else if (data instanceof CommentReplaceItem) {
+                    binding.setVariable(BR.vm, new DetailTaskCommentReplaceItemVM(getActivity(), savedInstanceState, (CommentReplaceItem) data));
                 } else {
                     binding.setVariable(BR.vm, new DetailTaskCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
                 }
@@ -109,8 +122,9 @@ public class DetailTaskActivityVM extends ActivityVM {
     }
 
     public void finish(View view) {
-        getActivity().onBackPressed();
-        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+//        getActivity().onBackPressed();
+//        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        ((DetailTaskActivity) getActivity()).pickImageForCamera();
     }
 
     public void setData(List<BaseModel> datas) {

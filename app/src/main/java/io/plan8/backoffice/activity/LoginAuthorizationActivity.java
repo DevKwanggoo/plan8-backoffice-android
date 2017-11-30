@@ -13,14 +13,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
+import io.plan8.backoffice.model.api.Auth;
+import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginAuthorizationActivity extends BaseActivity implements TextView.OnEditorActionListener, View.OnClickListener {
     private ActivityLoginAuthorizationBinding binding;
@@ -49,7 +58,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         authoTitle = binding.authorizationTitle;
-        authoTitle.setText("'$phoneNumber’ 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
+        authoTitle.setText("'"+phoneNumber+"' 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
         authoEditText = binding.authorizationCodeInputEditText;
         authoEditText.setOnEditorActionListener(this);
 
@@ -252,39 +261,38 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
 
-        //TODO : 임시용 릴리즈때 제거
-        nextActivity();
+        Call<Auth> authCall = RestfulAdapter.getInstance().getServiceApi().getAuthIfo(getIntent().getStringExtra("code"), authoEditText.getText().toString());
+        authCall.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(Call<Auth> call, Response<Auth> response) {
+                if (response.body() != null){
+                    SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), response.body().getToken());
 
+                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+                    meCall.enqueue(new Callback<Me>() {
+                        @Override
+                        public void onResponse(Call<Me> call, Response<Me> response) {
+                            if (response.body() != null){
+                                ApplicationManager.getInstance().setMe(response.body());
+                                nextActivity();
+                            }
+                        }
 
-//        if (RestfulAdapter.instance!!.serviceApi != null) {
-//            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
-//                override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
-//                    Toast.makeText(applicationContext, "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show()
-//                    progressBar!!.visibility = View.GONE
-//                    onBackPressed()
-//                }
-//
-//                override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
-//                    if (response?.body() != null) {
-//                        SharedPreferenceManager(applicationContext).userToken = response.body()!!.token
-//
-//                        RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
-//                            override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
-//                                if (response?.body() != null) {
-//                                    Constants.me = response.body()!!
-//                                            nextActivity()
-//                                }
-//                            }
-//
-//                            override fun onFailure(call: Call<Me>?, t: Throwable?) {
-//                                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//                            }
-//
-//                        })
-//                    }
-//                }
-//            })
-//        }
+                        @Override
+                        public void onFailure(Call<Me> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Auth> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                onBackPressed();
+            }
+        });
     }
 
     private void nextActivity() {
