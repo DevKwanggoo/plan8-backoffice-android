@@ -120,17 +120,47 @@ public class DetailTaskActivityVM extends ActivityVM {
         }
     }
 
+    private int mentionStartIndex = -1;
+
     public OnTextChangeListener getTextChangeListener() {
         if (null == onTextChangeListener) {
+
             onTextChangeListener = new OnTextChangeListener() {
                 @Override
-                public void onChange(EditText editText) {
+                public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {
                     String text = editText.getText().toString();
-                    if (text.length()>0) {
+                    if (text.length() > 0) {
                         setActiveSendBtn(true);
                     } else {
                         setActiveSendBtn(false);
                     }
+
+//                    if (isBackpress) {
+//                        charIndex -= 1;
+//                    }
+//                    String character;
+//                    if (charIndex >= 0) {
+//                        character = Character.toString(charSequence.charAt(charIndex));
+//                    } else {
+//                        character = "";
+//                    }
+//
+//                    if (character.equals("@")) {
+//                        mentionStartIndex = charIndex;
+//                    }
+//
+//                    if (character.equals(" ")
+//                            || character.equals("\n")) {
+//                        mentionStartIndex = -1;
+//                    }
+//
+//                    if (mentionStartIndex != -1) {
+//                        String testTargetItem = "";
+//                        for (int j = mentionStartIndex; j <= charIndex; j++) {
+//                            testTargetItem += text.charAt(j);
+//                        }
+//                        Log.e("mention", testTargetItem);
+//                    }
                 }
             };
         }

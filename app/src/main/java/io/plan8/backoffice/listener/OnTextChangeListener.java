@@ -7,5 +7,5 @@ import android.widget.EditText;
  */
 
 public interface OnTextChangeListener {
-    void onChange(EditText editText);
+    void onChange(EditText editText, CharSequence charSequence, int index, boolean isBackpress);
 }

@@ -34,8 +34,14 @@ public class DetailTaskViewAdapter {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                listener.onChange(view);
+            public void onTextChanged(CharSequence charSequence, int index, int eventCode, int i2) {
+                boolean isBackPress;
+                if (eventCode == 0) {
+                    isBackPress = false;
+                } else {
+                    isBackPress = true;
+                }
+                listener.onChange(view, charSequence, index, isBackPress);
             }
 
             @Override
