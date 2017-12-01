@@ -22,12 +22,14 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskMoreButtonItemVM;
+import io.plan8.backoffice.vm.item.MentionItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -35,10 +37,13 @@ import io.plan8.backoffice.vm.item.DetailTaskMoreButtonItemVM;
 
 public class DetailTaskActivityVM extends ActivityVM {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private BindingRecyclerViewAdapter<User> mentionAdapter;
     private List<BaseModel> datas;
+    private List<User> userList;
     private BottomSheetDialog bottomSheetDialog;
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
+    private String currentText = "";
 
     public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
         super(activity, savedInstanceState);
@@ -68,6 +73,20 @@ public class DetailTaskActivityVM extends ActivityVM {
         };
 
         setData(datas);
+
+        mentionAdapter = new BindingRecyclerViewAdapter<User>() {
+            @Override
+            protected int selectViewLayoutType(User data) {
+                return R.layout.item_mention;
+            }
+
+            @Override
+            protected void bindVariables(ViewDataBinding binding, User data) {
+                binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
+            }
+        };
+
+        setAutoCompleteMentionData(null);
 
         initBottomSheet();
     }
@@ -120,53 +139,6 @@ public class DetailTaskActivityVM extends ActivityVM {
         }
     }
 
-    private int mentionStartIndex = -1;
-
-    public OnTextChangeListener getTextChangeListener() {
-        if (null == onTextChangeListener) {
-
-            onTextChangeListener = new OnTextChangeListener() {
-                @Override
-                public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {
-                    String text = editText.getText().toString();
-                    if (text.length() > 0) {
-                        setActiveSendBtn(true);
-                    } else {
-                        setActiveSendBtn(false);
-                    }
-
-//                    if (isBackpress) {
-//                        charIndex -= 1;
-//                    }
-//                    String character;
-//                    if (charIndex >= 0) {
-//                        character = Character.toString(charSequence.charAt(charIndex));
-//                    } else {
-//                        character = "";
-//                    }
-//
-//                    if (character.equals("@")) {
-//                        mentionStartIndex = charIndex;
-//                    }
-//
-//                    if (character.equals(" ")
-//                            || character.equals("\n")) {
-//                        mentionStartIndex = -1;
-//                    }
-//
-//                    if (mentionStartIndex != -1) {
-//                        String testTargetItem = "";
-//                        for (int j = mentionStartIndex; j <= charIndex; j++) {
-//                            testTargetItem += text.charAt(j);
-//                        }
-//                        Log.e("mention", testTargetItem);
-//                    }
-                }
-            };
-        }
-        return onTextChangeListener;
-    }
-
     @Bindable
     public boolean isActiveSendBtn() {
         return isActiveSendBtn;
@@ -187,12 +159,20 @@ public class DetailTaskActivityVM extends ActivityVM {
         adapter.setData(datas);
     }
 
-    public RecyclerView.LayoutManager getLayoutManager() {
+    public RecyclerView.LayoutManager getVerticalLayoutManager() {
         return new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+    }
+
+    public RecyclerView.LayoutManager getHorizontalLayoutManager() {
+        return new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
     }
 
     public RecyclerView.Adapter getAdapter() {
         return adapter;
+    }
+
+    public BindingRecyclerViewAdapter<User> getMentionAdapter() {
+        return mentionAdapter;
     }
 
     public void showBottomSheet() {
@@ -205,5 +185,64 @@ public class DetailTaskActivityVM extends ActivityVM {
 
     public void sendComment(View view) {
         Toast.makeText(getActivity().getApplicationContext(), "메시지 전송", Toast.LENGTH_SHORT).show();
+    }
+
+    public void setAutoCompleteMentionData(List<User> userList) {
+        this.userList = userList;
+        if (null != userList) {
+            mentionAdapter.setData(userList);
+        }
+        notifyPropertyChanged(BR.emptyMentionList);
+    }
+
+    public OnTextChangeListener getTextChangeListener() {
+        if (null == onTextChangeListener) {
+
+            onTextChangeListener = new OnTextChangeListener() {
+                @Override
+                public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {
+                    currentText = editText.getText().toString();
+                    if (currentText.length() > 0) {
+                        setActiveSendBtn(true);
+                    } else {
+                        setActiveSendBtn(false);
+                    }
+                    notifyPropertyChanged(BR.emptyMentionList);
+                }
+            };
+        }
+        return onTextChangeListener;
+    }
+
+    @Bindable
+    public boolean isEmptyMentionList() {
+        if (currentText.length() <= 0) {
+            return true;
+        }
+
+        if (null == userList
+                || userList.size() <= 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Bindable
+    public String getCurrentText() {
+        return currentText;
+    }
+
+    public void setCurrentText(String text) {
+        this.currentText = text;
+        notifyPropertyChanged(BR.currentText);
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 }
