@@ -92,6 +92,5 @@ public class MoreFragmentVM extends FragmentVM {
         getFragment().getActivity().startActivity(loginIntent);
         getFragment().getActivity().finish();
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-//        ((MainActivity) getFragment().getActivity()).setEmptyFlag(false);
     }
 }

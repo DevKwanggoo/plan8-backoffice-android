@@ -30,6 +30,7 @@
     <color name="grayTextColor">#acb4bf</color>
 
     <color name="lineViewColor">#d8dfe4</color>
+    <color name="inActiveViewColor">#d8dfe4</color>
 
     <color name="grayTintColor">#6d848f</color>
 </resources>

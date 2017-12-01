@@ -1,6 +1,7 @@
 package io.plan8.backoffice.vm;
 
 import android.app.Activity;
+import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
@@ -9,8 +10,10 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,15 +21,18 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailTaskActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
+import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
 import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.item.DetailTaskCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskCommentReplaceItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
+import io.plan8.backoffice.vm.item.DetailTaskMoreButtonItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -36,6 +42,8 @@ public class DetailTaskActivityVM extends ActivityVM {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private List<BaseModel> datas;
     private BottomSheetDialog bottomSheetDialog;
+    private boolean isActiveSendBtn;
+    private OnTextChangeListener onTextChangeListener;
 
     public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
         super(activity, savedInstanceState);
@@ -49,6 +57,8 @@ public class DetailTaskActivityVM extends ActivityVM {
                     return R.layout.item_detail_task_comment_file;
                 } else if (data instanceof CommentReplaceItem) {
                     return R.layout.item_detail_task_comment_replace;
+                } else if (data instanceof DetailTaskMoreButtonItem) {
+                    return R.layout.item_detail_task_more_button;
                 } else {
                     return R.layout.item_detail_task_comment;
                 }
@@ -62,6 +72,8 @@ public class DetailTaskActivityVM extends ActivityVM {
                     binding.setVariable(BR.vm, new DetailTaskCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
                 } else if (data instanceof CommentReplaceItem) {
                     binding.setVariable(BR.vm, new DetailTaskCommentReplaceItemVM(getActivity(), savedInstanceState, (CommentReplaceItem) data));
+                } else if (data instanceof DetailTaskMoreButtonItem) {
+                    binding.setVariable(BR.vm, new DetailTaskMoreButtonItemVM(getActivity(), savedInstanceState, (DetailTaskMoreButtonItem) data));
                 } else {
                     binding.setVariable(BR.vm, new DetailTaskCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
                 }
@@ -121,6 +133,33 @@ public class DetailTaskActivityVM extends ActivityVM {
         }
     }
 
+    public OnTextChangeListener getTextChangeListener() {
+        if (null == onTextChangeListener) {
+            onTextChangeListener = new OnTextChangeListener() {
+                @Override
+                public void onChange(EditText editText) {
+                    String text = editText.getText().toString();
+                    if (text.length()>0) {
+                        setActiveSendBtn(true);
+                    } else {
+                        setActiveSendBtn(false);
+                    }
+                }
+            };
+        }
+        return onTextChangeListener;
+    }
+
+    @Bindable
+    public boolean isActiveSendBtn() {
+        return isActiveSendBtn;
+    }
+
+    public void setActiveSendBtn(boolean isActiveSendBtn) {
+        this.isActiveSendBtn = isActiveSendBtn;
+        notifyPropertyChanged(BR.activeSendBtn);
+    }
+
     public void finish(View view) {
 //        getActivity().onBackPressed();
 //        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
@@ -142,5 +181,13 @@ public class DetailTaskActivityVM extends ActivityVM {
 
     public void showBottomSheet() {
         bottomSheetDialog.show();
+    }
+
+    public void uploadFile(View view) {
+        Toast.makeText(getActivity().getApplicationContext(), "파일 업로드", Toast.LENGTH_SHORT).show();
+    }
+
+    public void sendComment(View view) {
+        Toast.makeText(getActivity().getApplicationContext(), "메시지 전송", Toast.LENGTH_SHORT).show();
     }
 }

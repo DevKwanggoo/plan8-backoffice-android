@@ -9,7 +9,7 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class User implements BaseModel {
-    @SerializedName("phoneNumber") String phoneNumber;
+    @SerializedName("mobileNumber") String mobileNumber;
     @SerializedName("avatar") String avatar;
     @SerializedName("id") String userId;
     @SerializedName("updated") String updated;
@@ -20,8 +20,8 @@ public class User implements BaseModel {
     public User() {
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
     public String getAvatar() {

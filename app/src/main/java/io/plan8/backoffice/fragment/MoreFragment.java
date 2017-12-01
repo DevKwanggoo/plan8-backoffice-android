@@ -59,7 +59,7 @@ public class MoreFragment extends BaseFragment {
             phoneNumber = "";
         } else {
             userName = ApplicationManager.getInstance().getMe().getName();
-            phoneNumber = ApplicationManager.getInstance().getMe().getPhoneNumber();
+            phoneNumber = ApplicationManager.getInstance().getMe().getMobileNumber();
         }
         testData.add(new LabelItem("내 프로필"));
         testData.add(new MoreProfileItem(userName, phoneNumber));
