@@ -29,8 +29,7 @@ public class TaskFragmentVM extends FragmentVM {
     private BindingRecyclerViewAdapter<TaskItem> adapter;
     private boolean emptyFlag = true;
 
-
-    public TaskFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
+    public TaskFragmentVM(final Fragment fragment, final Bundle savedInstanceState, List<TaskItem> taskItems) {
         super(fragment, savedInstanceState);
         this.taskItems = taskItems;
         selectedDate = DateUtil.getInstance().getCurrentDate();

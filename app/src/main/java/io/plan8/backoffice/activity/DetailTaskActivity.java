@@ -1,6 +1,5 @@
 package io.plan8.backoffice.activity;
 
-import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;

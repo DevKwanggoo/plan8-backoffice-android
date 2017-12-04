@@ -212,6 +212,7 @@ public class DetailTaskActivityVM extends ActivityVM {
             setEmptyMentionList(true);
 //            return true;
         } else {
+            //TODO : 멘션 아이템의 클릭이벤트 발생시 요기 지나가게 해야함.
             setEmptyMentionList(false);
         }
 //        notifyPropertyChanged(BR.emptyMentionList);
@@ -229,7 +230,10 @@ public class DetailTaskActivityVM extends ActivityVM {
                     } else {
                         setActiveSendBtn(false);
                     }
-                    if (currentText.length() <= 0 || !currentText.contains("@")) {
+
+                    //TODO : 마지막 index가 공백이면 setEmptyMentionList(true);
+                    if (currentText.length() <= 0
+                            || !currentText.contains("@")) {
                         setEmptyMentionList(true);
                     }
                 }
