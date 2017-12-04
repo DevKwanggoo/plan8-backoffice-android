@@ -8,7 +8,7 @@ import io.plan8.backoffice.model.BaseModel;
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
-public class BusinessHours implements BaseModel {
+public class Shifts implements BaseModel {
     @SerializedName("monday") Week monday;
     @SerializedName("tuesday") Week tuesday;
     @SerializedName("wednesday") Week wednesday;
@@ -16,6 +16,9 @@ public class BusinessHours implements BaseModel {
     @SerializedName("friday") Week friday;
     @SerializedName("saturday") Week saturday;
     @SerializedName("sunday") Week sunday;
+    @SerializedName("morningTime") Week morningTime;
+    @SerializedName("lunchTime") Week lunchTime;
+    @SerializedName("dinnerTime") Week dinnerTime;
 
     private class Week implements BaseModel{
         @SerializedName("open") boolean isOpen;
@@ -23,7 +26,7 @@ public class BusinessHours implements BaseModel {
         @SerializedName("endMinuted") int endMinuted;
     }
 
-    public BusinessHours() {
+    public Shifts() {
     }
 
     public Week getMonday() {

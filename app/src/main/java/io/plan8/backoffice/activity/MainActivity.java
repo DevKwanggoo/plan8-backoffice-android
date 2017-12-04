@@ -47,11 +47,14 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (null != ApplicationManager.getInstance().getMe()
-                && null != ApplicationManager.getInstance().getMe().getTeams()
-                && ApplicationManager.getInstance().getMe().getTeams() != null
-                && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
-            vm.setEmptyTeamFlag(false);
+        if (ApplicationManager.getInstance().getTeams() != null) {
+            if (ApplicationManager.getInstance().getTeams().size() == 0) {
+                vm.setEmptyTeamFlag(true);
+            } else {
+                vm.setEmptyTeamFlag(false);
+            }
+        } else {
+            vm.setEmptyTeamFlag(true);
         }
 
         initTabAndViewPager();
@@ -166,5 +169,9 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         binding.unbind();
         super.onDestroy();
+    }
+
+    public void setEmptyFlag(boolean flag){
+        vm.setEmptyTeamFlag(flag);
     }
 }

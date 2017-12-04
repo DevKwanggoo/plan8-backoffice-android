@@ -50,4 +50,12 @@ public class MoreTeamItemVM extends FragmentVM {
     public void selectTeam(View view) {
         setSelectTeamFlag(!clickFlag);
     }
+
+    @Bindable
+    public String getTeamLogo(){
+        if (null != moreTeamItem.getLogo()){
+            return moreTeamItem.getLogo();
+        }
+        return "";
+    }
 }

@@ -26,7 +26,7 @@ public class MentionItemVM extends ActivityVM {
         if (null == user) {
             return "";
         }
-        return user.getName();
+        return user.getUserName();
     }
 
     @Bindable

@@ -39,18 +39,21 @@
                 android:layout_height="match_parent" />
         </FrameLayout>
 
-        <!--<RelativeLayout-->
-        <!--android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@color/grayTextColor"-->
-        <!--android:textSize="20dp"-->
-        <!--android:text="이 날짜에 해당하는 예약 없음"-->
-        <!--android:layout_centerInParent="true"/>-->
-        <!--</RelativeLayout>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/taskToolbar"
+            android:clickable="true"
+            android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="이 날짜에 해당하는 예약 없음"
+                android:textColor="@color/grayTextColor"
+                android:textSize="20dp" />
+        </RelativeLayout>
 
         <io.plan8.backoffice.view.BlurView
             android:layout_width="match_parent"
@@ -108,6 +111,5 @@
             </LinearLayout>
 
         </RelativeLayout>
-
     </RelativeLayout>
 </layout>

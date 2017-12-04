@@ -14,7 +14,7 @@ public class Me implements BaseModel {
     @SerializedName("id") String id;
     @SerializedName("created") String created;
     @SerializedName("updated") String updated;
-    @SerializedName("phoneNumber") String phoneNumber;
+    @SerializedName("mobileNumber") String mobileNumber;
     @SerializedName("name") String name;
     @SerializedName("avatar") String avatar;
     @SerializedName("memberships") List<Team> teams;
@@ -34,8 +34,8 @@ public class Me implements BaseModel {
         return updated;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
     public String getName() {

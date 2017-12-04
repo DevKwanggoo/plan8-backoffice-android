@@ -9,10 +9,12 @@ import io.plan8.backoffice.model.BaseModel;
 public class MoreTeamItem implements BaseModel {
     private String name;
     private String description;
+    private String logo;
 
-    public MoreTeamItem(String name, String description) {
+    public MoreTeamItem(String name, String description, String logo) {
         this.name = name;
         this.description = description;
+        this.logo = logo;
     }
 
     public String getName() {
@@ -29,5 +31,13 @@ public class MoreTeamItem implements BaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

@@ -176,7 +176,7 @@ public class MoreProfileItemVM extends FragmentVM {
     @Bindable
     public String getProfileName() {
         if (null == moreProfileItem) {
-            return "";
+            return "이름 없음";
         }
         return moreProfileItem.getName();
     }
@@ -191,7 +191,7 @@ public class MoreProfileItemVM extends FragmentVM {
         if (null == moreProfileItem) {
             return "";
         }
-        return moreProfileItem.getPhoneNumber();
+        return moreProfileItem.getMobileNumber();
     }
 
     public void editProfile(View view) {

@@ -34,9 +34,9 @@ public class SplashActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (BuildConfig.DEBUG) {
-            hasTokenStep();
-        } else {
+//        if (BuildConfig.DEBUG) {
+//            hasTokenStep();
+//        } else {
             if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
                 String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
@@ -63,7 +63,8 @@ public class SplashActivity extends BaseActivity {
             } else {
                 loginStep();
             }
-        }
+//        }
+
     }
 
     private void loginStep() {

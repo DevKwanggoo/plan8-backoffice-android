@@ -16,6 +16,7 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.LoginActivity;
+import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.model.BaseModel;
@@ -32,12 +33,12 @@ import io.plan8.backoffice.vm.item.MoreTeamItemVM;
  */
 
 public class MoreFragmentVM extends FragmentVM {
-    private List<BaseModel> datas;
+    private List<Object> datas;
     private FragmentMoreBinding binding;
     private BindingRecyclerViewAdapter adapter;
     private List<Object> moreItemList = new ArrayList<>();
 
-    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
+    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<Object> datas) {
         super(fragment, savedInstanceState);
         this.datas = datas;
 

@@ -21,23 +21,31 @@ import io.plan8.backoffice.util.MentionsLoader;
  */
 
 public class User implements BaseModel, Mentionable {
-    @SerializedName("phoneNumber") String phoneNumber;
-    @SerializedName("avatar") String avatar;
-    @SerializedName("id") String userId;
-    @SerializedName("updated") String updated;
-    @SerializedName("created") String created;
-    @SerializedName("name") String name;
+    @SerializedName("mobileNumber")
+    String mobileNumber;
+    @SerializedName("avatar")
+    String avatar;
+    @SerializedName("id")
+    String userId;
+    @SerializedName("updated")
+    String updated;
+    @SerializedName("created")
+    String created;
+    @SerializedName("username")
+    String userName;
+    @SerializedName("hasPassword")
+    boolean hasPassword;
 
     public User() {
     }
 
-    public User(String name, String avatar) {
-        this.name = name;
+    public User(String userName, String avatar) {
+        this.userName = userName;
         this.avatar = avatar;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
     public String getAvatar() {
@@ -56,8 +64,12 @@ public class User implements BaseModel, Mentionable {
         return created;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
+    }
+
+    public boolean isHasPassword() {
+        return hasPassword;
     }
 
     @NonNull
@@ -65,9 +77,9 @@ public class User implements BaseModel, Mentionable {
     public String getTextForDisplayMode(MentionDisplayMode mode) {
         switch (mode) {
             case FULL:
-                return name;
+                return userName;
             case PARTIAL:
-                String[] words = name.split(" ");
+                String[] words = userName.split(" ");
                 return (words.length > 1) ? words[0] : "";
             case NONE:
             default:
@@ -84,12 +96,12 @@ public class User implements BaseModel, Mentionable {
 
     @Override
     public int getSuggestibleId() {
-        return name.hashCode();
+        return userName.hashCode();
     }
 
     @Override
     public String getSuggestiblePrimaryText() {
-        return name;
+        return userName;
     }
 
     @Override
@@ -99,12 +111,12 @@ public class User implements BaseModel, Mentionable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
+        dest.writeString(userName);
         dest.writeString(avatar);
     }
 
     public User(Parcel in) {
-        name = in.readString();
+        userName = in.readString();
         avatar = in.readString();
     }
 
@@ -144,7 +156,7 @@ public class User implements BaseModel, Mentionable {
             List<User> suggestions = new ArrayList<>();
             if (teamList != null) {
                 for (User suggestion : teamList) {
-                    String name = suggestion.getName().toLowerCase();
+                    String name = suggestion.getUserName().toLowerCase();
                     if (name.startsWith(namePrefixes[0])) {
                         suggestions.add(suggestion);
                     }
