@@ -162,5 +162,6 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
     public void replaceToMention(User user) {
         vm.setUserList(null);
         vm.setCurrentText(vm.getCurrentText() + " (" + user.getName() + ") ");
+        vm.setEmptyMentionList(true);
     }
 }

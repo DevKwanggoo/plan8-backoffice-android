@@ -44,6 +44,7 @@ public class DetailTaskActivityVM extends ActivityVM {
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
     private String currentText = "";
+    private boolean isEmptyMentionList;
 
     public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
         super(activity, savedInstanceState);
@@ -192,7 +193,14 @@ public class DetailTaskActivityVM extends ActivityVM {
         if (null != userList) {
             mentionAdapter.setData(userList);
         }
-        notifyPropertyChanged(BR.emptyMentionList);
+        if (null == userList
+                || userList.size() <= 0) {
+            setEmptyMentionList(true);
+//            return true;
+        } else {
+            setEmptyMentionList(false);
+        }
+//        notifyPropertyChanged(BR.emptyMentionList);
     }
 
     public OnTextChangeListener getTextChangeListener() {
@@ -207,7 +215,9 @@ public class DetailTaskActivityVM extends ActivityVM {
                     } else {
                         setActiveSendBtn(false);
                     }
-                    notifyPropertyChanged(BR.emptyMentionList);
+                    if (currentText.length() <= 0 || !currentText.contains("@")) {
+                        setEmptyMentionList(true);
+                    }
                 }
             };
         }
@@ -216,16 +226,12 @@ public class DetailTaskActivityVM extends ActivityVM {
 
     @Bindable
     public boolean isEmptyMentionList() {
-        if (currentText.length() <= 0) {
-            return true;
-        }
+        return isEmptyMentionList;
+    }
 
-        if (null == userList
-                || userList.size() <= 0) {
-            return true;
-        }
-
-        return false;
+    public void setEmptyMentionList(boolean emptyMentionList) {
+        this.isEmptyMentionList = emptyMentionList;
+        notifyPropertyChanged(BR.emptyMentionList);
     }
 
     @Bindable
