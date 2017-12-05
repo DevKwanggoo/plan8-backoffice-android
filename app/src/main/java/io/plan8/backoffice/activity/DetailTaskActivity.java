@@ -161,6 +161,9 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
 
     @Override
     public void onBackPressed() {
+        Intent mainIntent = MainActivity.buildIntent(getApplicationContext());
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainIntent);
         finish();
         overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }

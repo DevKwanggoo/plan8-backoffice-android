@@ -24,6 +24,7 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
+import io.plan8.backoffice.fragment.NotificationFragment;
 import io.plan8.backoffice.fragment.TaskFragment;
 import io.plan8.backoffice.vm.MainActivityVM;
 
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTabAndViewPager() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             TabLayout.Tab tab = binding.mainTabLayout.newTab();
             binding.mainTabLayout.setSelectedTabIndicatorHeight(0);
             tab.setCustomView(R.layout.item_main_tab);
@@ -81,6 +82,15 @@ public class MainActivity extends BaseActivity {
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
                     taskFragment.setArguments(bundle);
                     fragments.add(taskFragment);
+                } else if (i == 1) {
+                    tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
+                    tabItemTitle.setText("알림");
+
+                    NotificationFragment notiFragment = new NotificationFragment();
+                    Bundle bundle = new Bundle();
+//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
+                    notiFragment.setArguments(bundle);
+                    fragments.add(notiFragment);
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
                     tabItemTitle.setText("더보기");

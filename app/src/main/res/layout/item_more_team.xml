@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:moreViewAdapter="http://schemas.android.com/tools">
+    xmlns:commonAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:background="#ff0f"
-                moreViewAdapter:glide="@{vm.teamLogo}"
+                commonAdapter:glide="@{vm.teamLogo}"
                 app:riv_corner_radius="5dp"
                 app:riv_mutate_background="true" />
 
