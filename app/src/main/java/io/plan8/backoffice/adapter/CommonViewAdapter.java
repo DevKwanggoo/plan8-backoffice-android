@@ -17,7 +17,7 @@ public class CommonViewAdapter {
         Glide.with(view.getContext()).load("http://i.imgur.com/DvpvklR.png").into(view);
     }
 
-    @BindingAdapter("moreViewAdapter:glide")
+    @BindingAdapter("commonViewAdapter:glide")
     public static void glide(RoundedImageView view, String url) {
         if (url != null && !url.equals("")) {
             Glide.with(view.getContext())

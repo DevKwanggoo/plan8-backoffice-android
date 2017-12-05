@@ -26,6 +26,7 @@
 
     <color name="grayLabelColor">#FBFBFB</color>
     <color name="borderColor">#1A000000</color>
+    <color name="roundedBorderColor">#26000000</color>
 
     <color name="grayTextColor">#acb4bf</color>
 
