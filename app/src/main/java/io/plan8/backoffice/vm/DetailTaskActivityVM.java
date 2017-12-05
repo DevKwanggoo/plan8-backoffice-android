@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,6 +50,7 @@ public class DetailTaskActivityVM extends ActivityVM {
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
     private String currentText = "";
+    private int currentTextIndex;
     private boolean isEmptyMentionList;
 
     public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
@@ -210,12 +212,9 @@ public class DetailTaskActivityVM extends ActivityVM {
         if (null == userList
                 || userList.size() <= 0) {
             setEmptyMentionList(true);
-//            return true;
         } else {
-            //TODO : 멘션 아이템의 클릭이벤트 발생시 요기 지나가게 해야함.
             setEmptyMentionList(false);
         }
-//        notifyPropertyChanged(BR.emptyMentionList);
     }
 
     public OnTextChangeListener getTextChangeListener() {
@@ -225,15 +224,21 @@ public class DetailTaskActivityVM extends ActivityVM {
                 @Override
                 public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {
                     currentText = editText.getText().toString();
+
+                    if (isBackpress) {
+                        currentTextIndex = charIndex - 1;
+                    } else {
+                        currentTextIndex = charIndex;
+                    }
                     if (currentText.length() > 0) {
                         setActiveSendBtn(true);
                     } else {
                         setActiveSendBtn(false);
                     }
 
-                    //TODO : 마지막 index가 공백이면 setEmptyMentionList(true);
                     if (currentText.length() <= 0
-                            || !currentText.contains("@")) {
+                            || !currentText.contains("@")
+                            || editText.getText().toString().substring(editText.getText().length() - 1).equals(" ")) {
                         setEmptyMentionList(true);
                     }
                 }
@@ -268,5 +273,30 @@ public class DetailTaskActivityVM extends ActivityVM {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public void replaceToMention(User user) {
+        setUserList(null);
+        setEmptyMentionList(true);
+
+        int index = 0;
+        for (int i = currentTextIndex; i >= 0; i--) {
+            Log.e("test", "" + index);
+            if (currentText.charAt(i) == '@') {
+                index = i;
+                break;
+            }
+        }
+        setCurrentText(currentText.substring(0, index) + "@" + user.getUserName() + " ");
+        setSelection();
+    }
+
+    @Bindable
+    public int getTextLength() {
+        return 0;
+    }
+
+    public void setSelection() {
+        notifyPropertyChanged(BR.textLength);
     }
 }

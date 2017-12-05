@@ -63,6 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="@{vm.comment}"
                         android:textColor="#3c4858"
+                        commonViewAdapter:mention="@{vm.comment}"
                         android:textSize="14dp" />
                 </LinearLayout>
             </RelativeLayout>

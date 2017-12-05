@@ -65,13 +65,10 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
     private MentionsEditText mentionsEditText;
     private User.UserLoader user;
     private static final String BUCKET = "user";
+    private boolean isAlreadyReplaceMention;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
-//            .setWordBreakChars("@")
-//            .setExplicitChars("")
-//            .setMaxNumKeywords(2)
-//            .setThreshold(1)
             .build();
 
     public static Intent buildIntent(Context context, TaskItem taskItem) {
@@ -88,7 +85,7 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
         testData.add(taskItem);
         testData.add(new DetailTaskMoreButtonItem("이전 내용 보기"));
         testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
-        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
+        testData.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
         testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
         testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
 
@@ -149,6 +146,9 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
 
     @Override
     public void onReceiveSuggestionsResult(@NonNull SuggestionsResult result, @NonNull String bucket) {
+        if (isAlreadyReplaceMention) {
+            return;
+        }
         List<User> userList = (List<User>) result.getSuggestions();
         vm.setAutoCompleteMentionData(userList);
     }
@@ -324,8 +324,8 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
     }
 
     public void replaceToMention(User user) {
-        vm.setUserList(null);
-        vm.setCurrentText(vm.getCurrentText() + " (" + user.getUserName() + ") ");
-        vm.setEmptyMentionList(true);
+        isAlreadyReplaceMention = true;
+        vm.replaceToMention(user);
+        isAlreadyReplaceMention = false;
     }
 }
