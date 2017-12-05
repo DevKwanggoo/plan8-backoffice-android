@@ -7,6 +7,7 @@ import com.onesignal.OneSignal;
 
 import io.intercom.android.sdk.Intercom;
 import io.plan8.backoffice.adapter.RestfulAdapter;
+import io.plan8.backoffice.handler.OneSignalNotificationOpenedHandler;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -23,6 +24,7 @@ public class BaseApplication extends MultiDexApplication {
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
+                .setNotificationOpenedHandler(new OneSignalNotificationOpenedHandler(getApplicationContext()))
                 .init();
     }
 }
