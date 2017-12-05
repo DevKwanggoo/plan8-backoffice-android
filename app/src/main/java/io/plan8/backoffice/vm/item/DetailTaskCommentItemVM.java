@@ -50,10 +50,4 @@ public class DetailTaskCommentItemVM extends ActivityVM {
         }
         return comment.getCreated();
     }
-
-    public void deleteComment(View view) {
-        if (getActivity() instanceof DetailTaskActivity) {
-            ((DetailTaskActivity) getActivity()).deleteComment(comment);
-        }
-    }
 }
