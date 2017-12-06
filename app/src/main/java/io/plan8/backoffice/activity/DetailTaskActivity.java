@@ -40,13 +40,13 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.api.Upload;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
-import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.DetailTaskActivityVM;
 import okhttp3.MediaType;
@@ -61,7 +61,7 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
     private DetailTaskActivityVM vm;
     private Uri captureImageUri;
     private long fileLength;
-    private TaskItem taskItem;
+    private Reservation reservation;
     private MentionsEditText mentionsEditText;
     private User.UserLoader user;
     private static final String BUCKET = "user";
@@ -71,18 +71,18 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
             .setMaxNumKeywords(1)
             .build();
 
-    public static Intent buildIntent(Context context, TaskItem taskItem) {
+    public static Intent buildIntent(Context context, Reservation reservation) {
         Intent intent = new Intent(context, DetailTaskActivity.class);
-        intent.putExtra("taskItem", taskItem);
+        intent.putExtra("reservation", reservation);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.taskItem = (TaskItem) getIntent().getSerializableExtra("taskItem");
+        this.reservation = (Reservation) getIntent().getSerializableExtra("taskItem");
         List<BaseModel> testData = new ArrayList<>();
-        testData.add(taskItem);
+        testData.add(reservation);
         testData.add(new DetailTaskMoreButtonItem("이전 내용 보기"));
         testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
         testData.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));

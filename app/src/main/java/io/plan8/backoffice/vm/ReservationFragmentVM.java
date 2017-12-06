@@ -13,49 +13,51 @@ import java.util.List;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
-import io.plan8.backoffice.vm.item.TaskItemVM;
+import io.plan8.backoffice.vm.item.ReservationItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
-public class TaskFragmentVM extends FragmentVM {
-    private List<TaskItem> taskItems;
+public class ReservationFragmentVM extends FragmentVM {
     private String selectedDate;
     private boolean isOpenedCalendar;
     private String toolbarTitle;
-    private BindingRecyclerViewAdapter<TaskItem> adapter;
+    private BindingRecyclerViewAdapter<Reservation> adapter;
     private boolean emptyFlag = true;
+    private List<Reservation> reservations;
 
-    public TaskFragmentVM(final Fragment fragment, final Bundle savedInstanceState, List<TaskItem> taskItems) {
+    public ReservationFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
-        this.taskItems = taskItems;
         selectedDate = DateUtil.getInstance().getCurrentDate();
-        adapter = new BindingRecyclerViewAdapter<TaskItem>() {
+        adapter = new BindingRecyclerViewAdapter<Reservation>() {
             @Override
-            protected int selectViewLayoutType(TaskItem data) {
+            protected int selectViewLayoutType(Reservation data) {
                 return R.layout.item_task;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, TaskItem data) {
-                TaskItemVM taskItemVM = new TaskItemVM(fragment, savedInstanceState, data);
-                binding.setVariable(BR.vm, taskItemVM);
+            protected void bindVariables(ViewDataBinding binding, Reservation data) {
+                ReservationItemVM reservationItemVM = new ReservationItemVM(fragment, savedInstanceState, data);
+                binding.setVariable(BR.vm, reservationItemVM);
             }
         };
-
-        setDatas(taskItems);
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getFragment().getContext());
     }
 
-    public void setDatas(List<TaskItem> taskItems) {
-        this.taskItems = taskItems;
-        adapter.setData(taskItems);
+    public void setDatas(List<Reservation> reservations) {
+        this.reservations = reservations;
+        if (null == reservations || reservations.size() == 0) {
+            setEmptyFlag(true);
+        } else {
+            setEmptyFlag(false);
+        }
+        adapter.setData(reservations);
     }
 
     @Bindable
@@ -91,7 +93,7 @@ public class TaskFragmentVM extends FragmentVM {
         notifyPropertyChanged(BR.selectedDate);
     }
 
-    public BindingRecyclerViewAdapter<TaskItem> getAdapter() {
+    public BindingRecyclerViewAdapter<Reservation> getAdapter() {
         return adapter;
     }
 

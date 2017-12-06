@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -22,11 +23,17 @@ import java.util.List;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.fragment.NotificationFragment;
-import io.plan8.backoffice.fragment.TaskFragment;
+import io.plan8.backoffice.fragment.ReservationFragment;
+import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.vm.MainActivityVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -48,15 +55,26 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (ApplicationManager.getInstance().getTeams() != null) {
-            if (ApplicationManager.getInstance().getTeams().size() == 0) {
-                vm.setEmptyTeamFlag(true);
-            } else {
-                vm.setEmptyTeamFlag(false);
+        Call<List<Team>> getTeams = RestfulAdapter.getInstance().getServiceApi().getTeams("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+        getTeams.enqueue(new Callback<List<Team>>() {
+            @Override
+            public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
+                if (response.body() != null) {
+                    List<Team> teams = response.body();
+                    ApplicationManager.getInstance().setTeams(teams);
+                    if (null == teams || teams.size()==0) {
+                        vm.setEmptyTeamFlag(true);
+                    } else {
+                        vm.setEmptyTeamFlag(false);
+                    }
+                }
             }
-        } else {
-            vm.setEmptyTeamFlag(true);
-        }
+
+            @Override
+            public void onFailure(Call<List<Team>> call, Throwable t) {
+                Log.e("api : ", "failure");
+            }
+        });
 
         initTabAndViewPager();
     }
@@ -77,11 +95,11 @@ public class MainActivity extends BaseActivity {
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                     tabItemTitle.setText("예약");
 
-                    TaskFragment taskFragment = new TaskFragment();
+                    ReservationFragment reservationFragment = new ReservationFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    taskFragment.setArguments(bundle);
-                    fragments.add(taskFragment);
+                    reservationFragment.setArguments(bundle);
+                    fragments.add(reservationFragment);
                 } else if (i == 1) {
                     tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
                     tabItemTitle.setText("알림");
