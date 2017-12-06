@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.item.TaskItemVM" />
+            type="io.plan8.backoffice.vm.item.ReservationItemVM" />
     </data>
 
     <RelativeLayout

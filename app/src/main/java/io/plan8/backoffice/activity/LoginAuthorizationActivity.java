@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
@@ -27,8 +25,6 @@ import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
 import retrofit2.Call;
@@ -50,8 +46,6 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private TextView sixthInput;
     private LinearLayout inputField;
     private EditText authoEditText;
-    private boolean isTeam = false;
-    private boolean isReservation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +274,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         public void onResponse(Call<Me> call, Response<Me> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setMe(response.body());
-                                nextStep();
+                                nextActivity();
                             }
                         }
 
@@ -301,49 +295,11 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         });
     }
 
-    private void nextStep() {
-        Call<List<Team>> getTeams = RestfulAdapter.getInstance().getServiceApi().getTeams("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-        getTeams.enqueue(new Callback<List<Team>>() {
-            @Override
-            public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                if (response.body() != null) {
-                    isTeam = true;
-                    ApplicationManager.getInstance().setTeams(response.body());
-                    nextActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Team>> call, Throwable t) {
-                Log.e("api : ", "failure");
-            }
-        });
-
-        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-        getReservations.enqueue(new Callback<List<Reservation>>() {
-            @Override
-            public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
-                if (response.body() != null) {
-                    isReservation = true;
-                    ApplicationManager.getInstance().setReservations(response.body());
-                    nextActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Reservation>> call, Throwable t) {
-                Log.e("api : ", "failure");
-            }
-        });
-    }
-
     private void nextActivity() {
-        if (isTeam && isReservation) {
-            progressBar.setVisibility(View.GONE);
-            startActivity(MainActivity.buildIntent(this));
-            finish();
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
-        }
+        progressBar.setVisibility(View.GONE);
+        startActivity(MainActivity.buildIntent(this));
+        finish();
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 
     @Override
@@ -357,7 +313,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     @Override
     public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
         if (v.getId() == authoEditText.getId() && i == EditorInfo.IME_ACTION_DONE) {
-            nextStep();
+            nextActivity();
         }
         return false;
     }

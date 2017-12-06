@@ -7,71 +7,72 @@ import android.view.View;
 
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailTaskActivity;
-import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.vm.FragmentVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
-public class TaskItemVM extends FragmentVM {
-    private TaskItem taskItem;
-    public TaskItemVM(Fragment fragment, Bundle savedInstanceState, TaskItem taskItem) {
+public class ReservationItemVM extends FragmentVM {
+    private Reservation reservation;
+
+    public ReservationItemVM(Fragment fragment, Bundle savedInstanceState, Reservation reservation) {
         super(fragment, savedInstanceState);
-        this.taskItem = taskItem;
+        this.reservation = reservation;
     }
 
     @Bindable
     public String getReservationTime() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getReservationTime();
+        return reservation.getStart();
     }
 
     @Bindable
     public String getCustomerName() {
-        if (null == taskItem) {
+        if (null == reservation || null == reservation.getUser()) {
             return "";
         }
-        return taskItem.getCustomerName();
+        return reservation.getUser().getUserName();
     }
 
     @Bindable
     public String getCustomerAddress() {
-        if (null == taskItem) {
+        if (null == reservation || null == reservation.getAddress()) {
             return "";
         }
 
-        return taskItem.getCustomerAddress();
+        return reservation.getAddress().getName();
     }
 
     @Bindable
     public String getProductionName() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getProductionName();
+        return "" + reservation.getTotalPrice();
     }
 
     @Bindable
     public String getTaskStatus() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getStatus();
+        return reservation.getStatus();
     }
 
     @Bindable
     public String getTaskCloseStatus() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getCloseStatus();
+        return reservation.getStatus();
     }
 
     public void showDetailTask(View view) {
-        getFragment().startActivity(DetailTaskActivity.buildIntent(getFragment().getContext(), taskItem));
+        getFragment().startActivity(DetailTaskActivity.buildIntent(getFragment().getContext(), reservation));
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 }

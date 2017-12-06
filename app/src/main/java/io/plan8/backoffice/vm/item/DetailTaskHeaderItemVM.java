@@ -7,7 +7,7 @@ import android.view.View;
 
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.activity.DetailTaskActivity;
-import io.plan8.backoffice.model.item.TaskItem;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -15,88 +15,88 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class DetailTaskHeaderItemVM extends ActivityVM {
-    private TaskItem taskItem;
+    private Reservation reservation;
 
-    public DetailTaskHeaderItemVM(Activity activity, Bundle savedInstanceState, TaskItem taskItem) {
+    public DetailTaskHeaderItemVM(Activity activity, Bundle savedInstanceState, Reservation reservation) {
         super(activity, savedInstanceState);
-        this.taskItem = taskItem;
+        this.reservation = reservation;
     }
 
     @Bindable
     public String getCustomerName() {
-        if (null == taskItem) {
+        if (null == reservation || null == reservation.getUser()) {
             return "";
         }
-        return taskItem.getCustomerName();
+        return reservation.getUser().getUserName();
     }
 
     @Bindable
     public String getCustomerPhoneNumber() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getCustomerPhoneNumber();
+        return reservation.getMobileNumber();
     }
 
     @Bindable
     public String getCustomerAddress() {
-        if (null == taskItem) {
+        if (null == reservation || null == reservation.getAddress()) {
             return "";
         }
-        return taskItem.getCustomerAddress();
+        return reservation.getAddress().getName();
     }
 
     @Bindable
     public String getReservationDate() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getReservationDate();
+        return reservation.getStart();
     }
 
     @Bindable
     public String getReservationTime() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getReservationTime();
+        return reservation.getStart();
     }
 
     @Bindable
     public String getReservationEndTime() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getReservationEndTime();
+        return reservation.getEnd();
     }
 
     @Bindable
     public String getProductionName() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getProductionName();
+        return "" + reservation.getTotalPrice();
     }
 
     @Bindable
     public String getCustomerRequest() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getCustomerRequest();
+        return reservation.getAddtionalRequest();
     }
 
     @Bindable
     public String getProductionDescription() {
-        if (null == taskItem) {
+        if (null == reservation) {
             return "";
         }
-        return taskItem.getProductionDescription();
+        return "";
     }
 
     @Bindable
     public String getReservationStatus() {
-        if (null != taskItem && taskItem.equals(Constants.TASK_STATUS_BLUE)) {
+        if (null != reservation && reservation.equals(Constants.TASK_STATUS_BLUE)) {
             return "완료";
         } else {
             return "미완료";

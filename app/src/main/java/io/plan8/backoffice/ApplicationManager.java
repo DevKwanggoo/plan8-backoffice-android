@@ -44,12 +44,4 @@ public class ApplicationManager {
     public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
 }

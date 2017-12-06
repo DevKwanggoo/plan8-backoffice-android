@@ -24,12 +24,12 @@ import io.plan8.backoffice.activity.DetailTaskActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
 import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
-import io.plan8.backoffice.model.item.TaskItem;
 import io.plan8.backoffice.vm.item.DetailTaskCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
 import io.plan8.backoffice.vm.item.DetailTaskCommentReplaceItemVM;
@@ -59,7 +59,7 @@ public class DetailTaskActivityVM extends ActivityVM {
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
             protected int selectViewLayoutType(BaseModel data) {
-                if (data instanceof TaskItem) {
+                if (data instanceof Reservation) {
                     return R.layout.item_detail_task_header;
                 } else if (data instanceof CommentFile) {
                     return R.layout.item_detail_task_comment_file;
@@ -74,8 +74,8 @@ public class DetailTaskActivityVM extends ActivityVM {
 
             @Override
             protected void bindVariables(ViewDataBinding binding, BaseModel data) {
-                if (data instanceof TaskItem) {
-                    binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (TaskItem) data));
+                if (data instanceof Reservation) {
+                    binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (Reservation) data));
                 } else if (data instanceof CommentFile) {
                     binding.setVariable(BR.vm, new DetailTaskCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
                 } else if (data instanceof CommentReplaceItem) {
