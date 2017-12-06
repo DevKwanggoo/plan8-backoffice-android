@@ -27,8 +27,7 @@
                 android:layout_height="36dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                commonViewAdapter:glide="@{vm.testUri}"
-                android:scaleType="centerCrop"
+                commonViewAdapter:glide="@{vm.avatar}"
                 app:riv_mutate_background="true"
                 app:riv_border_color="#26000000"
                 app:riv_border_width="1dp"
@@ -46,14 +45,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{vm.profileName}"
+                    android:fontFamily="sans-serif"
                     android:textColor="@color/defaultDarkColor"
                     android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.profilePhoneNumber}"
+                    android:text="@{vm.profileUserName}"
                     android:textColor="@color/grayColor"
+                    android:fontFamily="sans-serif"
                     android:textSize="14dp" />
             </LinearLayout>
         </RelativeLayout>

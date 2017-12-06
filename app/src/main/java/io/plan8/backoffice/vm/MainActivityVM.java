@@ -17,7 +17,7 @@ import io.plan8.backoffice.activity.MainActivity;
  */
 
 public class MainActivityVM extends ActivityVM {
-    private boolean emptyTeamFlag = true;
+    private boolean emptyTeamFlag = false;
     private MainActivity activity;
 
     public MainActivityVM(Activity activity, Bundle savedInstanceState) {

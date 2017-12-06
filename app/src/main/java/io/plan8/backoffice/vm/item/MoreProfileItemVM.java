@@ -44,12 +44,12 @@ import retrofit2.Response;
 
 public class MoreProfileItemVM extends FragmentVM implements View.OnClickListener {
     private String url;
-    private MoreProfileItem moreProfileItem;
+    private Me me;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
 
-    public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, MoreProfileItem moreProfileItem) {
+    public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, Me me) {
         super(fragment, savedInstanceState);
-        this.moreProfileItem = moreProfileItem;
+        this.me = me;
         initBottomSheet();
     }
 
@@ -70,38 +70,27 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     }
 
     @Bindable
-    public String getTestUri() {
+    public String getAvatar() {
         if (null != ApplicationManager.getInstance().getMe()) {
             return ApplicationManager.getInstance().getMe().getAvatar();
-        } else {
-            return url;
         }
-    }
-
-    public void setTestUri(String uri) {
-        this.url = uri;
-        notifyPropertyChanged(BR.testUri);
+        return "";
     }
 
     @Bindable
     public String getProfileName() {
-        if (null == moreProfileItem) {
+        if (null == me.getName()) {
             return "이름 없음";
         }
-        return moreProfileItem.getName();
-    }
-
-    public void setMoreProfileItem(String profileName) {
-        moreProfileItem.setName(profileName);
-        notifyPropertyChanged(BR.profileName);
+        return me.getName();
     }
 
     @Bindable
-    public String getProfilePhoneNumber() {
-        if (null == moreProfileItem) {
-            return "";
+    public String getProfileUserName() {
+        if (me != null && me.getUsername() != null){
+            return "@" + me.getUsername();
         }
-        return moreProfileItem.getMobileNumber();
+        return "";
     }
 
     public void editProfile(View view) {
@@ -117,7 +106,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                     .inputType(InputType.TYPE_CLASS_TEXT)
                     .positiveText("완료")
                     .negativeText("취소")
-                    .input("다른 사람에게 표시될 프로필명을 입력하세요.", moreProfileItem.getName(), new MaterialDialog.InputCallback() {
+                    .input("다른 사람에게 표시될 프로필명을 입력하세요.", me.getName(), new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                             if (!input.equals("")) {
@@ -139,9 +128,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                             }
                             dialog.dismiss();
                         }
-                    });
-
-
+                    }).show();
         } else {
             plan8BottomSheetDialog.hide();
             if (ContextCompat.checkSelfPermission(getFragment().getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED

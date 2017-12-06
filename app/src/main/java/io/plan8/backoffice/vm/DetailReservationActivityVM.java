@@ -22,6 +22,7 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Reservation;
@@ -41,12 +42,12 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
-public class DetailReservationActivityVM extends ActivityVM {
+public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private BindingRecyclerViewAdapter<User> mentionAdapter;
     private List<BaseModel> datas;
     private List<User> userList;
-    private BottomSheetDialog bottomSheetDialog;
+    private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
     private String currentText = "";
@@ -108,51 +109,13 @@ public class DetailReservationActivityVM extends ActivityVM {
     }
 
     private void initBottomSheet() {
-        bottomSheetDialog = new BottomSheetDialog(getActivity());
-        bottomSheetDialog.setContentView(R.layout.bottom_sheet_layout);
-        AppCompatImageView bottomSheetFirstImageView = bottomSheetDialog.findViewById(R.id.bottomSheetFirstIcon);
-        TextView bottomSheetFirstTitle = bottomSheetDialog.findViewById(R.id.bottomSheetFirstTitle);
-        if (null != bottomSheetFirstImageView) {
-            bottomSheetFirstImageView.setImageResource(R.drawable.ic_line_field);
-            bottomSheetFirstImageView.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.grayColor));
-        }
-        if (null != bottomSheetFirstTitle) {
-            bottomSheetFirstTitle.setText("완료");
-        }
-        RelativeLayout bottomSheetFirstItem = bottomSheetDialog.findViewById(R.id.bottomSheetFirstItem);
-        if (null != bottomSheetFirstItem) {
-            bottomSheetFirstItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO : 리스트 갱신
-//                    taskItem.setStatus(Constants.TASK_STATUS_BLUE);
-//                    notifyPropertyChanged(BR.reservationStatus);
-                    bottomSheetDialog.hide();
-                }
-            });
-        }
-
-        final AppCompatImageView bottomSheetSecondImageView = bottomSheetDialog.findViewById(R.id.bottomSheetSecondIcon);
-        TextView bottomSheetSecondTitle = bottomSheetDialog.findViewById(R.id.bottomSheetSecondTitle);
-        if (null != bottomSheetSecondImageView) {
-            bottomSheetSecondImageView.setImageResource(R.drawable.ic_line_field);
-            bottomSheetSecondImageView.setColorFilter(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.grayColor));
-        }
-        if (null != bottomSheetSecondTitle) {
-            bottomSheetSecondTitle.setText("미완료");
-        }
-        RelativeLayout bottomSheetSecondItem = bottomSheetDialog.findViewById(R.id.bottomSheetSecondItem);
-        if (bottomSheetSecondItem != null) {
-            bottomSheetSecondItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO : 리스트 갱신
-//                    taskItem.setStatus(Constants.TASK_STATUS_RED);
-//                    notifyPropertyChanged(BR.reservationStatus);
-                    bottomSheetDialog.hide();
-                }
-            });
-        }
+        plan8BottomSheetDialog = new Plan8BottomSheetDialog(getActivity().getApplicationContext());
+        plan8BottomSheetDialog.setFirstItem("완료");
+        plan8BottomSheetDialog.getFirstItem().setOnClickListener(this);
+        plan8BottomSheetDialog.setSecondItem("미완료");
+        plan8BottomSheetDialog.getSecondItem().setOnClickListener(this);
+        plan8BottomSheetDialog.setThirdItem("대기");
+        plan8BottomSheetDialog.getThirdItem().setOnClickListener(this);
     }
 
     @Bindable
@@ -193,7 +156,7 @@ public class DetailReservationActivityVM extends ActivityVM {
     }
 
     public void showBottomSheet() {
-        bottomSheetDialog.show();
+        plan8BottomSheetDialog.show();
     }
 
     public void uploadFile(View view) {
@@ -298,5 +261,16 @@ public class DetailReservationActivityVM extends ActivityVM {
 
     public void setSelection() {
         notifyPropertyChanged(BR.textLength);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.bottomSheetFirstItem){
+            Toast.makeText(getActivity(), "완료", Toast.LENGTH_SHORT).show();
+        } else if (view.getId() == R.id.bottomSheetSecondItem) {
+            Toast.makeText(getActivity(), "미완료", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "대기", Toast.LENGTH_SHORT).show();
+        }
     }
 }

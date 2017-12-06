@@ -16,13 +16,12 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.LoginActivity;
-import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
-import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.model.item.MoreProfileItem;
-import io.plan8.backoffice.model.item.MoreTeamItem;
 import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
 import io.plan8.backoffice.vm.item.LabelItemVM;
 import io.plan8.backoffice.vm.item.MoreProfileItemVM;
@@ -47,9 +46,9 @@ public class MoreFragmentVM extends FragmentVM {
             protected int selectViewLayoutType(Object data) {
                 if (data instanceof LabelItem) {
                     return R.layout.item_more_title;
-                } else if (data instanceof MoreProfileItem) {
+                } else if (data instanceof Me) {
                     return R.layout.item_more_profile;
-                } else if (data instanceof MoreTeamItem) {
+                } else if (data instanceof Team) {
                     return R.layout.item_more_team;
                 } else {
                     return R.layout.item_empty_space;
@@ -61,10 +60,10 @@ public class MoreFragmentVM extends FragmentVM {
             protected void bindVariables(ViewDataBinding binding, Object data) {
                 if (data instanceof LabelItem) {
                     binding.setVariable(BR.vm, new LabelItemVM(getFragment(), savedInstanceState, (LabelItem) data));
-                } else if (data instanceof MoreProfileItem) {
-                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (MoreProfileItem) data));
-                } else if (data instanceof MoreTeamItem) {
-                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (MoreTeamItem) data));
+                } else if (data instanceof Me) {
+                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (Me) data));
+                } else if (data instanceof Team) {
+                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (Team) data));
                 } else {
                     binding.setVariable(BR.vm, new EmptySpaceItemVM(getFragment(), savedInstanceState));
                 }

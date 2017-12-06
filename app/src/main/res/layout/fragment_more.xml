@@ -26,6 +26,7 @@
                 android:layout_centerInParent="true"
                 android:text="더보기"
                 android:textColor="#ffffff"
+                android:textStyle="bold"
                 android:textSize="16dp" />
         </RelativeLayout>
 
@@ -55,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:textColor="@color/blueColor"
+                    android:fontFamily="sans-serif"
                     android:text="로그아웃"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>

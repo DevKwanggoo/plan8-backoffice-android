@@ -20,12 +20,16 @@ import io.plan8.backoffice.R;
  */
 
 public class Plan8BottomSheetDialog extends BottomSheetDialog {
-    public RelativeLayout firstItem;
-    public AppCompatImageView firstIcon;
-    public TextView firstTitle;
+    private RelativeLayout firstItem;
+    private AppCompatImageView firstIcon;
+    private TextView firstTitle;
     private RelativeLayout secondItem;
     private AppCompatImageView secondIcon;
     private TextView secondTitle;
+    private RelativeLayout thirdItem;
+    private AppCompatImageView thirdIcon;
+    private TextView thirdTitle;
+
 
     public Plan8BottomSheetDialog(@NonNull Context context) {
         super(context);
@@ -51,6 +55,10 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         secondItem = findViewById(R.id.bottomSheetSecondItem);
         secondIcon = findViewById(R.id.bottomSheetSecondIcon);
         secondTitle = findViewById(R.id.bottomSheetSecondTitle);
+
+        thirdItem = findViewById(R.id.bottomSheetThirdItem);
+        thirdIcon = findViewById(R.id.bottomSheetThirdIcon);
+        thirdTitle = findViewById(R.id.bottomSheetThirdTitle);
     }
 
     public RelativeLayout getFirstItem() {
@@ -61,9 +69,18 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         return secondItem;
     }
 
+    public RelativeLayout getThirdItem() {
+        return thirdItem;
+    }
+
     public void hideIcon() {
         firstIcon.setVisibility(View.GONE);
         secondIcon.setVisibility(View.GONE);
+    }
+
+    public void setFirstItem(String title) {
+        firstIcon.setVisibility(View.GONE);
+        firstTitle.setText(title);
     }
 
     public void setFirstItem(int iconResId, String title) {
@@ -72,9 +89,19 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         firstTitle.setText(title);
     }
 
+    public void setSecondItem(String title) {
+        secondIcon.setVisibility(View.GONE);
+        secondTitle.setText(title);
+    }
+
     public void setSecondItem(int iconResId, String title) {
         secondIcon.setImageResource(iconResId);
         secondIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.grayColor));
         secondTitle.setText(title);
+    }
+
+    public void setThirdItem(String title) {
+        thirdIcon.setVisibility(View.GONE);
+        thirdTitle.setText(title);
     }
 }

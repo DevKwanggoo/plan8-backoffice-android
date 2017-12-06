@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:text="@{vm.replaceTitle}"
             android:textColor="@color/defaultDarkColor"
+            android:fontFamily="sans-serif"
             android:layout_centerInParent="true"
             android:textSize="12dp" />
 
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:text="@{vm.createdDate}"
             android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
             android:layout_marginLeft="5dp"
             android:textColor="@color/grayColor"
             android:textSize="12dp" />

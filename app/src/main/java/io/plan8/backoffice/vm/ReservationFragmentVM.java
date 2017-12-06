@@ -74,7 +74,10 @@ public class ReservationFragmentVM extends FragmentVM {
 
     @Bindable
     public String getToolbarTitle() {
-        return toolbarTitle;
+        if (toolbarTitle != null && !toolbarTitle.equals("")) {
+            return toolbarTitle;
+        }
+        return DateUtil.getInstance().getCurrentDate();
     }
 
     public void setToolbarTitle(String toolbarTitle) {
