@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity {
     private FragmentManager fragmentManager;
     private int currentTabPosition = 0;
     private List<Fragment> fragments = new ArrayList<>();
+    private List<Team> teams;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -59,7 +60,7 @@ public class MainActivity extends BaseActivity {
         getTeams.enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                List<Team> teams = response.body();
+                teams = response.body();
                 ApplicationManager.getInstance().setTeams(teams);
                 if (null == teams || teams.size() == 0) {
                     vm.setEmptyTeamFlag(true);

@@ -38,7 +38,7 @@ import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
-import io.plan8.backoffice.databinding.ActivityDetailTaskBinding;
+import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
@@ -46,9 +46,9 @@ import io.plan8.backoffice.model.api.Upload;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
 import io.plan8.backoffice.model.item.Comment;
-import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
+import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
-import io.plan8.backoffice.vm.DetailTaskActivityVM;
+import io.plan8.backoffice.vm.DetailReservationActivityVM;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -56,9 +56,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailTaskActivity extends BaseActivity implements SuggestionsResultListener {
-    private ActivityDetailTaskBinding binding;
-    private DetailTaskActivityVM vm;
+public class DetailReservationActivity extends BaseActivity implements SuggestionsResultListener {
+    private ActivityDetailReservationBinding binding;
+    private DetailReservationActivityVM vm;
     private Uri captureImageUri;
     private long fileLength;
     private Reservation reservation;
@@ -72,7 +72,7 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
             .build();
 
     public static Intent buildIntent(Context context, Reservation reservation) {
-        Intent intent = new Intent(context, DetailTaskActivity.class);
+        Intent intent = new Intent(context, DetailReservationActivity.class);
         intent.putExtra("reservation", reservation);
         return intent;
     }
@@ -80,10 +80,10 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.reservation = (Reservation) getIntent().getSerializableExtra("taskItem");
+        this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
         List<BaseModel> testData = new ArrayList<>();
         testData.add(reservation);
-        testData.add(new DetailTaskMoreButtonItem("이전 내용 보기"));
+        testData.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
         testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
         testData.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
         testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
@@ -95,8 +95,8 @@ public class DetailTaskActivity extends BaseActivity implements SuggestionsResul
         testData.add(new CommentReplaceItem("삼주석", "작업일자", "2분 전"));
         testData.add(new CommentFile("사주석", "doc", "1일 전", "filefilefilefilefile"));
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_task);
-        vm = new DetailTaskActivityVM(this, savedInstanceState, testData);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
+        vm = new DetailReservationActivityVM(this, savedInstanceState, testData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 

@@ -6,10 +6,10 @@ import io.plan8.backoffice.model.BaseModel;
  * Created by chokwanghwan on 2017. 11. 29..
  */
 
-public class DetailTaskMoreButtonItem implements BaseModel {
+public class DetailReservationMoreButtonItem implements BaseModel {
     private String text;
 
-    public DetailTaskMoreButtonItem(String text) {
+    public DetailReservationMoreButtonItem(String text) {
         this.text = text;
     }
 

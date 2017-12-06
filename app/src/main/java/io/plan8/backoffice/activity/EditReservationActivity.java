@@ -7,23 +7,23 @@ import android.os.Bundle;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.databinding.ActivityEditTaskBinding;
-import io.plan8.backoffice.vm.EditTaskActivityVM;
+import io.plan8.backoffice.databinding.ActivityEditReservationBinding;
+import io.plan8.backoffice.vm.EditReservationActivityVM;
 
-public class EditTaskActivity extends BaseActivity {
-    private ActivityEditTaskBinding binding;
-    private EditTaskActivityVM vm;
+public class EditReservationActivity extends BaseActivity {
+    private ActivityEditReservationBinding binding;
+    private EditReservationActivityVM vm;
 
     public static Intent buildIntent(Context context) {
-        Intent intent = new Intent(context, EditTaskActivity.class);
+        Intent intent = new Intent(context, EditReservationActivity.class);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_task);
-        vm = new EditTaskActivityVM(this, savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_reservation);
+        vm = new EditReservationActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
     }

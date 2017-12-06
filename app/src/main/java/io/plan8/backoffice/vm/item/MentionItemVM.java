@@ -5,7 +5,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
-import io.plan8.backoffice.activity.DetailTaskActivity;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.ActivityVM;
 
@@ -38,8 +38,8 @@ public class MentionItemVM extends ActivityVM {
     }
 
     public void clickMention(View view) {
-        if (getActivity() instanceof DetailTaskActivity) {
-            ((DetailTaskActivity) getActivity()).replaceToMention(user);
+        if (getActivity() instanceof DetailReservationActivity) {
+            ((DetailReservationActivity) getActivity()).replaceToMention(user);
         }
     }
 }

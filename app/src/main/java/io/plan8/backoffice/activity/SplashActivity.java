@@ -3,9 +3,12 @@ package io.plan8.backoffice.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
@@ -23,10 +26,12 @@ public class SplashActivity extends BaseActivity {
     private ActivitySplashBinding binding;
     private SplashActivityVM vm;
     private RelativeLayout progressBar;
+    private SplashActivity self;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         vm = new SplashActivityVM(this, savedInstanceState);
@@ -36,34 +41,42 @@ public class SplashActivity extends BaseActivity {
 //        if (BuildConfig.DEBUG) {
 //            hasTokenStep();
 //        } else {
-            if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
-                String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
+        if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
+            String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
-                if (RestfulAdapter.getInstance().getServiceApi() != null) {
-                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
-                    meCall.enqueue(new Callback<Me>() {
-                        @Override
-                        public void onResponse(Call<Me> call, Response<Me> response) {
-                            Me me = response.body();
-                            if (me != null) {
-                                ApplicationManager.getInstance().setMe(me);
-                                hasTokenStep();
-                            } else {
-                                loginStep();
-                            }
+            if (RestfulAdapter.getInstance().getServiceApi() != null) {
+                Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                meCall.enqueue(new Callback<Me>() {
+                    @Override
+                    public void onResponse(Call<Me> call, Response<Me> response) {
+                        Me me = response.body();
+                        if (me != null) {
+                            ApplicationManager.getInstance().setMe(me);
+                            hasTokenStep();
+                        } else {
+                            loginStep();
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<Me> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            } else {
-                loginStep();
+                    @Override
+                    public void onFailure(Call<Me> call, Throwable t) {
+                        MaterialDialog dialog = new MaterialDialog.Builder(self)
+                                .content("문제가 발생했어요.\n잠시 후 다시 시도해주세요.")
+                                .positiveText("닫기")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        finish();
+                                    }
+                                })
+                                .build();
+                        dialog.show();
+                    }
+                });
             }
-//        }
-
+        } else {
+            loginStep();
+        }
     }
 
     private void loginStep() {

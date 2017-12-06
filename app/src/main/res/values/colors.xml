@@ -12,11 +12,9 @@
     <color name="blueColor">#FF3F89DE</color>
     <color name="darkColor">#000000</color>
 
-    <color name="taskStatusBlue">#2979ff</color>
-    <color name="taskStatusOrange">#FFB229</color>
-    <color name="taskStatusRed">#FF2936</color>
-    <color name="taskStatusGreen">#44ce00</color>
-    <color name="taskStatusGray">#d8dfe4</color>
+    <color name="reservationComplte">#2979ff</color>
+    <color name="reservationIncomplte">#d8dfe4</color>
+    <color name="reservationCanceled">#ff2936</color>
 
     <color name="defaultRipple">#20000000</color>
     <color name="whiteRipple">#80ffffff</color>

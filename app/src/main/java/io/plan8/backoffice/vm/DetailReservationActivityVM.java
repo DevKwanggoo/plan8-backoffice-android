@@ -20,7 +20,7 @@ import java.util.List;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.activity.DetailTaskActivity;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
@@ -29,19 +29,19 @@ import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
-import io.plan8.backoffice.model.item.DetailTaskMoreButtonItem;
-import io.plan8.backoffice.vm.item.DetailTaskCommentFileItemVM;
-import io.plan8.backoffice.vm.item.DetailTaskCommentItemVM;
-import io.plan8.backoffice.vm.item.DetailTaskCommentReplaceItemVM;
-import io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM;
-import io.plan8.backoffice.vm.item.DetailTaskMoreButtonItemVM;
+import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
+import io.plan8.backoffice.vm.item.DetailReservationCommentFileItemVM;
+import io.plan8.backoffice.vm.item.DetailReservationCommentItemVM;
+import io.plan8.backoffice.vm.item.DetailReservationCommentReplaceItemVM;
+import io.plan8.backoffice.vm.item.DetailReservationHeaderItemVM;
+import io.plan8.backoffice.vm.item.DetailReservationMoreButtonItemVM;
 import io.plan8.backoffice.vm.item.MentionItemVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
-public class DetailTaskActivityVM extends ActivityVM {
+public class DetailReservationActivityVM extends ActivityVM {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private BindingRecyclerViewAdapter<User> mentionAdapter;
     private List<BaseModel> datas;
@@ -53,37 +53,37 @@ public class DetailTaskActivityVM extends ActivityVM {
     private int currentTextIndex;
     private boolean isEmptyMentionList;
 
-    public DetailTaskActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
+    public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
         super(activity, savedInstanceState);
         this.datas = datas;
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
             protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof Reservation) {
-                    return R.layout.item_detail_task_header;
+                    return R.layout.item_detail_reservation_header;
                 } else if (data instanceof CommentFile) {
-                    return R.layout.item_detail_task_comment_file;
+                    return R.layout.item_detail_reservation_comment_file;
                 } else if (data instanceof CommentReplaceItem) {
-                    return R.layout.item_detail_task_comment_replace;
-                } else if (data instanceof DetailTaskMoreButtonItem) {
-                    return R.layout.item_detail_task_more_button;
+                    return R.layout.item_detail_reservation_comment_replace;
+                } else if (data instanceof DetailReservationMoreButtonItem) {
+                    return R.layout.item_detail_reservation_more_button;
                 } else {
-                    return R.layout.item_detail_task_comment;
+                    return R.layout.item_detail_reservation_comment;
                 }
             }
 
             @Override
             protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof Reservation) {
-                    binding.setVariable(BR.vm, new DetailTaskHeaderItemVM(getActivity(), savedInstanceState, (Reservation) data));
+                    binding.setVariable(BR.vm, new DetailReservationHeaderItemVM(getActivity(), savedInstanceState, (Reservation) data));
                 } else if (data instanceof CommentFile) {
-                    binding.setVariable(BR.vm, new DetailTaskCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
+                    binding.setVariable(BR.vm, new DetailReservationCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
                 } else if (data instanceof CommentReplaceItem) {
-                    binding.setVariable(BR.vm, new DetailTaskCommentReplaceItemVM(getActivity(), savedInstanceState, (CommentReplaceItem) data));
-                } else if (data instanceof DetailTaskMoreButtonItem) {
-                    binding.setVariable(BR.vm, new DetailTaskMoreButtonItemVM(getActivity(), savedInstanceState, (DetailTaskMoreButtonItem) data));
+                    binding.setVariable(BR.vm, new DetailReservationCommentReplaceItemVM(getActivity(), savedInstanceState, (CommentReplaceItem) data));
+                } else if (data instanceof DetailReservationMoreButtonItem) {
+                    binding.setVariable(BR.vm, new DetailReservationMoreButtonItemVM(getActivity(), savedInstanceState, (DetailReservationMoreButtonItem) data));
                 } else {
-                    binding.setVariable(BR.vm, new DetailTaskCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    binding.setVariable(BR.vm, new DetailReservationCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
                 }
             }
         };
@@ -168,7 +168,7 @@ public class DetailTaskActivityVM extends ActivityVM {
     public void finish(View view) {
 //        getActivity().onBackPressed();
 //        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-        ((DetailTaskActivity) getActivity()).pickImageForCamera();
+        ((DetailReservationActivity) getActivity()).pickImageForCamera();
     }
 
     public void setData(List<BaseModel> datas) {

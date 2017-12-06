@@ -14,18 +14,17 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
 
-import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.view.BlurView;
-import io.plan8.backoffice.view.Plan8TaskCalendarView;
+import io.plan8.backoffice.view.Plan8ReservationCalendarView;
 
 /**
  * Created by SSozi on 2017. 11. 28..
  */
 
-public class TaskViewAdapter {
-    @BindingAdapter("taskViewAdapter:displayCalendar")
-    public static void setDisplayCalendar(final Plan8TaskCalendarView view, Boolean isOpenedCalendar) {
+public class ReservationViewAdapter {
+    @BindingAdapter("reservationViewAdapter:displayCalendar")
+    public static void setDisplayCalendar(final Plan8ReservationCalendarView view, Boolean isOpenedCalendar) {
         Animation slideDownAnimation;
         Animation slideUpAnimation;
 
@@ -84,7 +83,7 @@ public class TaskViewAdapter {
         }
     }
 
-    @BindingAdapter("taskViewAdapter:initCalendar")
+    @BindingAdapter("reservationViewAdapter:initCalendar")
     public static void initCalendar(MaterialCalendarView view, Boolean isOpenedCalendar) {
         view.setTitleFormatter(new TitleFormatter() {
             @Override
@@ -94,34 +93,23 @@ public class TaskViewAdapter {
         });
     }
 
-    @BindingAdapter("taskViewAdapter:setReadStatus")
-    public static void setReadStatus(RelativeLayout view, String taskStatus) {
+    @BindingAdapter("reservationViewAdapter:setReadStatus")
+    public static void setReadStatus(RelativeLayout view, String reservationStatus) {
         view.setBackgroundResource(R.drawable.circle);
         GradientDrawable bgShape = (GradientDrawable) view.getBackground();
 
-        if (taskStatus.equals(Constants.TASK_STATUS_BLUE)) {
-            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusBlue));
-        } else if (taskStatus.equals(Constants.TASK_STATUS_ORANGE)) {
-            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusOrange));
-        } else if (taskStatus.equals(Constants.TASK_STATUS_RED)) {
-            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusRed));
-        } else {
+//        if (reservationStatus.equals(Constants.RESERVATION_STATUS_COMPLETE)) {
+//            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.reservationComplte));
+//        } else if (reservationStatus.equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
+//            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.reservationIncomplte));
+//        } else if (reservationStatus.equals(Constants.RESERVATION_STATUS_CANCELED)) {
+//            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.reservationCanceled));
+//        } else {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.transparent));
-        }
+//        }
     }
 
-    @BindingAdapter("taskViewAdapter:setCloseStatus")
-    public static void setCloseStatus(RelativeLayout view, String taskStatus) {
-        view.setBackgroundResource(R.drawable.circle);
-        GradientDrawable bgShape = (GradientDrawable) view.getBackground();
-        if (taskStatus == Constants.TASK_STATUS_GREEN) {
-            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.taskStatusGreen));
-        } else {
-            bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.transparent));
-        }
-    }
-
-    @BindingAdapter("taskViewAdapter:fadeout")
+    @BindingAdapter("reservationViewAdapter:fadeout")
     public static void fadeout(final BlurView view, Boolean display) {
         if (!view.isAlreadyInflated()) {
             view.setAlreadyInflated(true);

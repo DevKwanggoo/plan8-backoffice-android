@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:detailTaskViewAdapter="http://schemas.android.com/tools">
+    xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.item.DetailTaskHeaderItemVM" />
+            type="io.plan8.backoffice.vm.item.DetailReservationHeaderItemVM" />
     </data>
 
     <LinearLayout
@@ -184,7 +183,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/selectable_item_background"
                     android:clickable="true"
-                    android:onClick="@{vm::editTaskStatus}"
+                    android:onClick="@{vm::editReservationStatus}"
                     android:orientation="vertical">
 
                     <TextView
@@ -200,21 +199,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <com.makeramen.roundedimageview.RoundedImageView
+                        <RelativeLayout
                             android:layout_width="12dp"
                             android:layout_height="12dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginStart="16dp"
-                            app:riv_mutate_background="true"
-                            app:riv_oval="true"
-                            detailTaskViewAdapter:isTaskStatus="@{vm.reservationStatus}" />
+                            commonViewAdapter:setReservationStatus="@{vm.reservationStatus}" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="8dp"
-                            android:text="@{vm.reservationStatus}"
+                            android:text="@{vm.reservationStatusText}"
                             android:textColor="#FF3C4858"
                             android:textSize="16dp" />
 

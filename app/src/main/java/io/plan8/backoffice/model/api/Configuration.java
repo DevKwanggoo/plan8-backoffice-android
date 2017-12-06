@@ -9,108 +9,88 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Configuration implements BaseModel {
-    @SerializedName("shifts") Shifts businessHours;
     @SerializedName("transportation") String transportation;
-    @SerializedName("address") Address address;
     @SerializedName("weight") long weight;
-    @SerializedName("id") int configId;
-    @SerializedName("timeSlotSize") int timeSlotSize;
-    @SerializedName("reservableDays") int reservableDays;
-    @SerializedName("marginLeftMinutes") int marginLeftMinutes;
-    @SerializedName("marginRightMinutes") int marginRightMinutes;
-
-
-    // TODO : 이 아래는 모델에서 제거 됬지만 확정되기 전 까지 남겨놓음.
-    @SerializedName("enable") boolean enable;
-    @SerializedName("durationOfTemporaryReservation") String durationOfTemporaryReservation;
-    @SerializedName("cancelableHours") String cancelableHours;
-    @SerializedName("startingPoint") StartingPoint startingPoint;
-    @SerializedName("addressRestrictionRules") String addressRestrictionRules;
-    @SerializedName("teamId") String teamId;
-
-    private class StartingPoint implements BaseModel {
-        @SerializedName("id") String id;
-        @SerializedName("address") String address;
-        @SerializedName("latitude") long latitude;
-        @SerializedName("longitude") long longitude;
-
-        public String getId() {
-            return id;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public long getLatitude() {
-            return latitude;
-        }
-
-        public long getLongitude() {
-            return longitude;
-        }
-    }
+    @SerializedName("assignable") boolean assignable;
+    @SerializedName("useTeamShifts") boolean useTeamShifts;
+    @SerializedName("useTeamTransportation") boolean useTeamTransportation;
+    @SerializedName("useTeamAddress") boolean useTeamAddress;
+    @SerializedName("useTeamWeight") boolean useTeamWeight;
+    @SerializedName("shifts") Shifts shifts;
+    @SerializedName("address") Address address;
 
     public Configuration() {
-    }
-
-    public int getConfigId() {
-        return configId;
-    }
-
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public Shifts getBusinessHours() {
-        return businessHours;
-    }
-
-    public String getDurationOfTemporaryReservation() {
-        return durationOfTemporaryReservation;
-    }
-
-    public int getTimeSlotSize() {
-        return timeSlotSize;
-    }
-
-    public int getReservableDays() {
-        return reservableDays;
-    }
-
-    public int getMarginLeftMinutes() {
-        return marginLeftMinutes;
-    }
-
-    public int getMarginRightMinutes() {
-        return marginRightMinutes;
-    }
-
-    public String getCancelableHours() {
-        return cancelableHours;
     }
 
     public String getTransportation() {
         return transportation;
     }
 
-    public StartingPoint getStartingPoint() {
-        return startingPoint;
+    public void setTransportation(String transportation) {
+        this.transportation = transportation;
     }
 
-    public String getAddressRestrictionRules() {
-        return addressRestrictionRules;
+    public long getWeight() {
+        return weight;
     }
 
-    public String getTeamId() {
-        return teamId;
+    public void setWeight(long weight) {
+        this.weight = weight;
+    }
+
+    public boolean isAssignable() {
+        return assignable;
+    }
+
+    public void setAssignable(boolean assignable) {
+        this.assignable = assignable;
+    }
+
+    public boolean isUseTeamShifts() {
+        return useTeamShifts;
+    }
+
+    public void setUseTeamShifts(boolean useTeamShifts) {
+        this.useTeamShifts = useTeamShifts;
+    }
+
+    public boolean isUseTeamTransportation() {
+        return useTeamTransportation;
+    }
+
+    public void setUseTeamTransportation(boolean useTeamTransportation) {
+        this.useTeamTransportation = useTeamTransportation;
+    }
+
+    public boolean isUseTeamAddress() {
+        return useTeamAddress;
+    }
+
+    public void setUseTeamAddress(boolean useTeamAddress) {
+        this.useTeamAddress = useTeamAddress;
+    }
+
+    public boolean isUseTeamWeight() {
+        return useTeamWeight;
+    }
+
+    public void setUseTeamWeight(boolean useTeamWeight) {
+        this.useTeamWeight = useTeamWeight;
+    }
+
+    public Shifts getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(Shifts shifts) {
+        this.shifts = shifts;
     }
 
     public Address getAddress() {
         return address;
     }
 
-    public Long getWeight() {
-        return weight;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

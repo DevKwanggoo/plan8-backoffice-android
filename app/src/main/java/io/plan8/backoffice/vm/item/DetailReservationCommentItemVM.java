@@ -3,9 +3,7 @@ package io.plan8.backoffice.vm.item;
 import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.view.View;
 
-import io.plan8.backoffice.activity.DetailTaskActivity;
 import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.vm.ActivityVM;
 
@@ -13,10 +11,10 @@ import io.plan8.backoffice.vm.ActivityVM;
  * Created by chokwanghwan on 2017. 11. 29..
  */
 
-public class DetailTaskCommentItemVM extends ActivityVM {
+public class DetailReservationCommentItemVM extends ActivityVM {
     private Comment comment;
 
-    public DetailTaskCommentItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
+    public DetailReservationCommentItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
         super(activity, savedInstanceState);
         this.comment = comment;
     }

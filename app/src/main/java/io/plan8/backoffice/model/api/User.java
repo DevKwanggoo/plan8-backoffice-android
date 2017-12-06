@@ -33,6 +33,8 @@ public class User implements BaseModel, Mentionable {
     String created;
     @SerializedName("username")
     String userName;
+    @SerializedName("name")
+    String name;
     @SerializedName("hasPassword")
     boolean hasPassword;
 
@@ -66,6 +68,10 @@ public class User implements BaseModel, Mentionable {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean isHasPassword() {

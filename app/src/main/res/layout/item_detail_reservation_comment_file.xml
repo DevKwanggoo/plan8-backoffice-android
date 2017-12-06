@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.item.DetailTaskCommentFileItemVM" />
+            type="io.plan8.backoffice.vm.item.DetailReservationCommentFileItemVM" />
     </data>
 
     <RelativeLayout

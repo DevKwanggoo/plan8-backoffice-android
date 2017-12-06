@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:detailTaskViewAdapter="http://schemas.android.com/apk/res-auto"
+    xmlns:detailReservationViewAdapter="http://schemas.android.com/apk/res-auto"
     xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.DetailTaskActivityVM" />
+            type="io.plan8.backoffice.vm.DetailReservationActivityVM" />
     </data>
 
     <RelativeLayout
@@ -20,7 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/detailTaskBottomContainer"
+            android:layout_above="@+id/detailReservationBottomContainer"
             android:orientation="vertical">
 
             <!-->툴바부분<!-->
@@ -65,7 +65,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/detailTaskBottomContainer"
+            android:id="@+id/detailReservationBottomContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -90,7 +90,7 @@
             </RelativeLayout>
 
             <View
-                android:id="@+id/detailTaskChatBoxDivider"
+                android:id="@+id/detailReservationChatBoxDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#26000000" />
@@ -129,7 +129,7 @@
                         android:textColorHint="#acb4bf"
                         android:textSize="14dp"
                         android:text="@{vm.currentText}"
-                        detailTaskViewAdapter:onTextChange="@{vm.textChangeListener}" />
+                        detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}" />
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -140,7 +140,7 @@
             android:layout_alignParentBottom="true">
 
             <RelativeLayout
-                android:id="@+id/detailTaskFileUploadBtn"
+                android:id="@+id/detailReservationFileUploadBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -155,7 +155,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/detailTaskCommentSendBtn"
+                android:id="@+id/detailReservationCommentSendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

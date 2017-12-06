@@ -11,10 +11,10 @@ import io.plan8.backoffice.vm.ActivityVM;
  * Created by SSozi on 2017. 11. 29..
  */
 
-public class DetailTaskCommentReplaceItemVM extends ActivityVM {
+public class DetailReservationCommentReplaceItemVM extends ActivityVM {
     private CommentReplaceItem replaceItem;
 
-    public DetailTaskCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, CommentReplaceItem replaceItem) {
+    public DetailReservationCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, CommentReplaceItem replaceItem) {
         super(activity, savedInstanceState);
         this.replaceItem = replaceItem;
     }

@@ -5,12 +5,10 @@ package io.plan8.backoffice;
  */
 
 public class Constants {
-    //task status
-    public static final String TASK_STATUS_BLUE ="taskStatusBlue";
-    public static final String TASK_STATUS_ORANGE = "taskStatusOrange";
-    public static final String TASK_STATUS_RED = "taskStatusRed";
-    public static final String TASK_STATUS_GREEN = "taskStatusGreen";
-    public static final String TASK_STATUS_GRAY = "taskStatusGray";
+    //reservation status
+    public static final String RESERVATION_STATUS_COMPLETE = "complete";
+    public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
+    public static final String RESERVATION_STATUS_CANCELED = "canceled";
 
     //change Image code
     public static final int SELECT_IMAGE_CODE = 2000;

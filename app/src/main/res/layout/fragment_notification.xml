@@ -16,7 +16,7 @@
             android:id="@+id/notificationToolbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/taskStatusBlue">
+            android:background="@color/reservationComplte">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

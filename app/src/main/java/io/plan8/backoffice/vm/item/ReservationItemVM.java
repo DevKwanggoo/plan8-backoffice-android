@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.activity.DetailTaskActivity;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.vm.FragmentVM;
 
@@ -56,7 +56,7 @@ public class ReservationItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getTaskStatus() {
+    public String getReservationStatus() {
         if (null == reservation) {
             return "";
         }
@@ -64,15 +64,15 @@ public class ReservationItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getTaskCloseStatus() {
+    public String getReservationCloseStatus() {
         if (null == reservation) {
             return "";
         }
         return reservation.getStatus();
     }
 
-    public void showDetailTask(View view) {
-        getFragment().startActivity(DetailTaskActivity.buildIntent(getFragment().getContext(), reservation));
+    public void showDetailReservation(View view) {
+        getFragment().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation));
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 }

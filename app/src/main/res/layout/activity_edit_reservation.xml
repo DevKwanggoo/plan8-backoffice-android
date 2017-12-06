@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.EditTaskActivityVM" />
+            type="io.plan8.backoffice.vm.EditReservationActivityVM" />
     </data>
 
     <RelativeLayout
@@ -13,17 +13,17 @@
         android:layout_height="match_parent">
         
         <RelativeLayout
-            android:id="@+id/editTaskToolbar"
+            android:id="@+id/editReservationToolbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/taskStatusBlue">
+            android:background="@color/reservationComplte">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingStart="15dp"
                 android:clickable="true"
-                android:onClick="@{vm::finishEditTask}"
+                android:onClick="@{vm::finishEditReservation}"
                 android:paddingEnd="15dp">
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
                 android:clickable="true"
-                android:onClick="@{vm::completeEditTask}">
+                android:onClick="@{vm::completeEditReservation}">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="72dp"
-            android:layout_below="@+id/editTaskToolbar"
+            android:layout_below="@+id/editReservationToolbar"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
 

@@ -12,10 +12,10 @@ import io.plan8.backoffice.vm.BaseVM;
  * Created by SSozi on 2017. 11. 29..
  */
 
-public class DetailTaskCommentFileItemVM extends ActivityVM {
+public class DetailReservationCommentFileItemVM extends ActivityVM {
     private CommentFile commentFile;
 
-    public DetailTaskCommentFileItemVM(Activity activity, Bundle savedInstanceState, CommentFile commentFile) {
+    public DetailReservationCommentFileItemVM(Activity activity, Bundle savedInstanceState, CommentFile commentFile) {
         super(activity, savedInstanceState);
         this.commentFile = commentFile;
     }

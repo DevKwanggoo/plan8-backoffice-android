@@ -34,7 +34,7 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
         if (actionType == OSNotificationAction.ActionType.ActionTaken)
             Log.e("OneSignalExample", "Button pressed with id: " + result.action.actionID);
 
-//        Intent detailTaskIntent = DetailTaskActivity.buildIntent(context, new Reservation("김형규", "01065117399", "서울시 중구", "2017-12-12", "오후 12:00", "오후 1:00", "아이폰", "빨리와주세요", "디스크립션", Constants.TASK_STATUS_BLUE, ""));
+//        Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, new Reservation("김형규", "01065117399", "서울시 중구", "2017-12-12", "오후 12:00", "오후 1:00", "아이폰", "빨리와주세요", "디스크립션", Constants.TASK_STATUS_BLUE, ""));
 //        detailTaskIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //        context.startActivity(detailTaskIntent);
     }

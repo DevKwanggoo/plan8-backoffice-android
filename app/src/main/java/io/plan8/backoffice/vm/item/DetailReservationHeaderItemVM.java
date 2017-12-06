@@ -6,18 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.plan8.backoffice.Constants;
-import io.plan8.backoffice.activity.DetailTaskActivity;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
  * Created by chokwanghwan on 2017. 11. 29..
  */
 
-public class DetailTaskHeaderItemVM extends ActivityVM {
+public class DetailReservationHeaderItemVM extends ActivityVM {
     private Reservation reservation;
 
-    public DetailTaskHeaderItemVM(Activity activity, Bundle savedInstanceState, Reservation reservation) {
+    public DetailReservationHeaderItemVM(Activity activity, Bundle savedInstanceState, Reservation reservation) {
         super(activity, savedInstanceState);
         this.reservation = reservation;
     }
@@ -96,16 +97,20 @@ public class DetailTaskHeaderItemVM extends ActivityVM {
 
     @Bindable
     public String getReservationStatus() {
-        if (null != reservation && reservation.equals(Constants.TASK_STATUS_BLUE)) {
-            return "완료";
-        } else {
-            return "미완료";
+        if (null == reservation) {
+            return Constants.RESERVATION_STATUS_INCOMPLETE;
         }
+        return reservation.getStatus();
     }
 
-    public void editTaskStatus(View view) {
-        if (getActivity() instanceof DetailTaskActivity) {
-            ((DetailTaskActivity) getActivity()).showBottomSheet();
+    @Bindable
+    public String getReservationStatusText() {
+        return ViewUtil.getInstance().getStatusText(reservation);
+    }
+
+    public void editReservationStatus(View view) {
+        if (getActivity() instanceof DetailReservationActivity) {
+            ((DetailReservationActivity) getActivity()).showBottomSheet();
         }
     }
 }

@@ -35,7 +35,7 @@ public class ReservationFragmentVM extends FragmentVM {
         adapter = new BindingRecyclerViewAdapter<Reservation>() {
             @Override
             protected int selectViewLayoutType(Reservation data) {
-                return R.layout.item_task;
+                return R.layout.item_reservation;
             }
 
             @Override

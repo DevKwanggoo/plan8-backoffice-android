@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:taskViewAdapter="http://schemas.android.com/tools">
+    xmlns:reservationViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -21,7 +21,7 @@
             android:id="@+id/taskRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/taskToolbar"
+            android:layout_below="@+id/reservationToolbar"
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}"
             android:overScrollMode="never" />
@@ -29,7 +29,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/taskToolbar"
+            android:layout_below="@+id/reservationToolbar"
             android:clickable="true"
             android:visibility="gone">
             <!--android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}"-->
@@ -43,7 +43,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/taskToolbar"
+            android:layout_below="@+id/reservationToolbar"
             android:clickable="true"
             android:visibility="gone">
             <!--android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}"-->
@@ -60,29 +60,29 @@
         <io.plan8.backoffice.view.BlurView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/taskToolbar"
+            android:layout_below="@+id/reservationToolbar"
             android:background="#80000000"
             android:clickable="true"
             android:onClick="@{vm::changeDate}"
             android:orientation="vertical"
-            taskViewAdapter:fadeout="@{vm.openedCalendar}" />
+            reservationViewAdapter:fadeout="@{vm.openedCalendar}" />
 
-        <io.plan8.backoffice.view.Plan8TaskCalendarView
-            android:id="@+id/taskCalendarView"
+        <io.plan8.backoffice.view.Plan8ReservationCalendarView
+            android:id="@+id/reservationCalendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/taskToolbar"
+            android:layout_below="@+id/reservationToolbar"
             android:background="#ffffff"
             app:mcv_arrowColor="#6D848F"
             app:mcv_leftArrowMask="@drawable/ic_line_chevron_left"
             app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
             app:mcv_selectionColor="@color/colorPrimary"
             app:mcv_showOtherDates="all"
-            taskViewAdapter:displayCalendar="@{vm.openedCalendar}"
-            taskViewAdapter:initCalendar="@{vm.openedCalendar}" />
+            reservationViewAdapter:displayCalendar="@{vm.openedCalendar}"
+            reservationViewAdapter:initCalendar="@{vm.openedCalendar}" />
 
         <RelativeLayout
-            android:id="@+id/taskToolbar"
+            android:id="@+id/reservationToolbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/colorPrimary">

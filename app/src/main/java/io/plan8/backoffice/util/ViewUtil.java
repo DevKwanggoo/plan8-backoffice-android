@@ -7,6 +7,9 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import io.plan8.backoffice.Constants;
+import io.plan8.backoffice.model.api.Reservation;
+
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
@@ -29,7 +32,7 @@ public class ViewUtil {
     }
 
     public int pxToDp(double px) {
-        return (int) (px/Resources.getSystem().getDisplayMetrics().density);
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
     public DisplayMetrics getDisplayMetrics(Activity activity) {
@@ -46,5 +49,18 @@ public class ViewUtil {
     public void showKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, 0);
+    }
+
+    public String getStatusText(Reservation reservation) {
+        if (null == reservation || null == reservation.getStatus()) {
+            return "대기";
+        }
+        if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
+            return "완료";
+        } else if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
+            return "대기";
+        } else {
+            return "미완료";
+        }
     }
 }
