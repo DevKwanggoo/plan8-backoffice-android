@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
+                android:fontFamily="sans-serif"
                 android:text="@{vm.moreTitle}"
                 android:textColor="@color/grayColor"
                 android:textSize="12dp" />

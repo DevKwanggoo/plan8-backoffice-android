@@ -18,6 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -42,7 +43,7 @@ public interface ApiService {
     Call<List<Upload>> postUpload(@Header("authorization") String auth, @Part MultipartBody.Part files);
 
     @FormUrlEncoded
-    @POST("1/users/me")
+    @PUT("1/users/me")
     Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
     @GET("1/teams/{id}/reservations")

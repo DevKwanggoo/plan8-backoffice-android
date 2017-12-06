@@ -33,8 +33,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="15dp"
                         android:text="다음"
+                        android:fontFamily="sans-serif"
                         android:textColor="@color/blueColor"
                         android:textSize="16dp" />
                 </RelativeLayout>
@@ -52,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
                 android:text="새 계정 만들기 또는 로그인"
                 android:textColor="@color/defaultDarkColor"
                 android:textSize="16dp" />
@@ -62,45 +64,59 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="72dp"
+                android:fontFamily="sans-serif"
                 android:text="휴대전화 번호"
                 android:textColor="@color/grayColor"
                 android:textSize="12dp" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
-
-                <EditText
-                    android:id="@+id/loginPhoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="@null"
-                    android:hint="전화번호를 입력해주세요. (-제외)"
-                    android:inputType="number"
-                    android:textColor="@color/defaultDarkColor"
-                    android:textSize="20dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/deleteNumberBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true">
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                    <EditText
+                        android:id="@+id/loginPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:src="@drawable/ic_line_close"
-                        android:tint="@color/grayColor" />
+                        android:background="@null"
+                        android:fontFamily="sans-serif"
+                        android:hint="전화번호를 입력해주세요. (-제외)"
+                        android:inputType="number"
+                        android:textColor="@color/defaultDarkColor"
+                        android:textSize="20dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/deleteNumberBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="20dp"
+                            android:src="@drawable/ic_line_close"
+                            android:tint="@color/grayColor" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
-
-            </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/lineViewColor"/>
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout

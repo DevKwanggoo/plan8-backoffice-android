@@ -26,7 +26,9 @@
                 android:layout_height="32dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:background="#ff0f"
+                android:background="@color/roundedBorderColor"
+                app:riv_border_width="1dp"
+                app:riv_border_color="@color/roundedBorderColor"
                 app:riv_mutate_background="true"
                 app:riv_oval="true" />
 
@@ -72,6 +74,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:text="@{vm.fileName}"
+                        android:fontFamily="sans-serif"
                         android:textColor="@color/defaultDarkColor"
                         android:textSize="14dp" />
                 </LinearLayout>
@@ -100,7 +103,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="37dp"
-                    android:background="#ff0f"
+                    android:background="@color/roundedBorderColor"
+                    app:riv_border_width="1dp"
+                    app:riv_border_color="@color/roundedBorderColor"
                     app:riv_corner_radius="16dp"
                     app:riv_mutate_background="true" />
             </RelativeLayout>
@@ -115,6 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{vm.createdDate}"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/grayColor"
                 android:textSize="12dp"
                 />

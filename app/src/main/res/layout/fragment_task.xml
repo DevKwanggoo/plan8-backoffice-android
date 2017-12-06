@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="이 날짜에 해당하는 예약 없음"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/grayTextColor"
                 android:textSize="20dp" />
         </RelativeLayout>
@@ -100,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@{vm.toolbarTitle}"
+                    android:textStyle="bold"
                     android:textColor="#ffffff"
                     android:textSize="16dp" />
 

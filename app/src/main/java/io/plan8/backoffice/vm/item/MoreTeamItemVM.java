@@ -1,12 +1,16 @@
 package io.plan8.backoffice.vm.item;
 
+import android.content.Intent;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Toast;
 
-import io.plan8.backoffice.BR;
-import io.plan8.backoffice.model.item.MoreTeamItem;
+import io.plan8.backoffice.ApplicationManager;
+import io.plan8.backoffice.R;
+import io.plan8.backoffice.activity.MainActivity;
+import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.vm.FragmentVM;
 
 /**
@@ -14,47 +18,51 @@ import io.plan8.backoffice.vm.FragmentVM;
  */
 
 public class MoreTeamItemVM extends FragmentVM {
-    private MoreTeamItem moreTeamItem;
-    private boolean clickFlag;
-    public MoreTeamItemVM(Fragment fragment, Bundle savedInstanceState, MoreTeamItem moreTeamItem) {
+    private Team team;
+
+    public MoreTeamItemVM(Fragment fragment, Bundle savedInstanceState, Team team) {
         super(fragment, savedInstanceState);
-        this.moreTeamItem = moreTeamItem;
+        this.team = team;
     }
 
     @Bindable
     public String getTeamName() {
-        if (null == moreTeamItem) {
+        if (null == team) {
             return "";
         }
-        return moreTeamItem.getName();
+        return team.getName();
     }
 
     @Bindable
     public String getTeamDescription() {
-        if (null == moreTeamItem) {
+        if (null == team) {
             return "";
         }
-        return moreTeamItem.getDescription();
+        return team.getName();
     }
 
     @Bindable
     public boolean getSelectTeamFlag() {
-        return clickFlag;
-    }
-
-    public void setSelectTeamFlag(boolean flag) {
-        clickFlag = flag;
-        notifyPropertyChanged(BR.selectTeamFlag);
+        return ApplicationManager.getInstance().getCurrentTeam().getTeamId() == team.getTeamId();
     }
 
     public void selectTeam(View view) {
-        setSelectTeamFlag(!clickFlag);
+        if (ApplicationManager.getInstance().getCurrentTeam().getTeamId() == team.getTeamId()){
+            Toast.makeText(getFragment().getContext(), "현재 선택되어 있는 팀입니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            ApplicationManager.getInstance().setCurrentTeam(team);
+
+            Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
+            getFragment().getActivity().startActivity(mainIntent);
+            getFragment().getActivity().finish();
+            getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 
     @Bindable
     public String getTeamLogo(){
-        if (null != moreTeamItem.getLogo()){
-            return moreTeamItem.getLogo();
+        if (null != team.getLogo()){
+            return team.getLogo();
         }
         return "";
     }

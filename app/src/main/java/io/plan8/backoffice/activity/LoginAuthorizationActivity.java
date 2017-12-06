@@ -58,7 +58,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         authoTitle = binding.authorizationTitle;
-        authoTitle.setText("'" + phoneNumber + "' 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
+        authoTitle.setText("'" + phoneNumber + "' 번호로 발송된\n6자리 인증번호를 입력해주세요.");
         authoEditText = binding.authorizationCodeInputEditText;
         authoEditText.setOnEditorActionListener(this);
 

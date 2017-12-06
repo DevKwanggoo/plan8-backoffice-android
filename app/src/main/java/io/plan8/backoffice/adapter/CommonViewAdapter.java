@@ -35,7 +35,6 @@ public class CommonViewAdapter {
         if (url != null && !url.equals("")) {
             Glide.with(view.getContext())
                     .load(url)
-                    .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(view);
         }

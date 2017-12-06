@@ -23,13 +23,11 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
-import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Upload;
 import io.plan8.backoffice.model.item.EmptySpaceItem;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.model.item.MoreProfileItem;
-import io.plan8.backoffice.model.item.MoreTeamItem;
 import io.plan8.backoffice.vm.MoreFragmentVM;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -51,24 +49,17 @@ public class MoreFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         List<Object> testData = new ArrayList<>();
-        String userName;
-        String phoneNumber;
 
-        if (null == ApplicationManager.getInstance().getMe()) {
-            userName = "이름없음";
-            phoneNumber = "";
-        } else {
-            userName = ApplicationManager.getInstance().getMe().getName();
-            phoneNumber = ApplicationManager.getInstance().getMe().getMobileNumber();
-        }
         testData.add(new LabelItem("내 프로필"));
-        testData.add(new MoreProfileItem(userName, phoneNumber));
+        if (ApplicationManager.getInstance().getMe() != null){
+            testData.add(ApplicationManager.getInstance().getMe());
+        }
         testData.add(new LabelItem("팀 선택"));
 
         if (null != ApplicationManager.getInstance().getTeams()) {
             if (ApplicationManager.getInstance().getTeams().size() > 0) {
                 for (int i = 0; i < ApplicationManager.getInstance().getTeams().size(); i++) {
-                    testData.add(new MoreTeamItem(ApplicationManager.getInstance().getTeams().get(i).getName(), ApplicationManager.getInstance().getTeams().get(i).getName(), ApplicationManager.getInstance().getTeams().get(i).getLogo()));
+                    testData.add(ApplicationManager.getInstance().getTeams().get(i));
                 }
             }
         }
