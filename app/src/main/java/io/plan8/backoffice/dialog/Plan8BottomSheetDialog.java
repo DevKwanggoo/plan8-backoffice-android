@@ -26,6 +26,7 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
     private RelativeLayout secondItem;
     private AppCompatImageView secondIcon;
     private TextView secondTitle;
+    private RelativeLayout thirdItemContainer;
     private RelativeLayout thirdItem;
     private AppCompatImageView thirdIcon;
     private TextView thirdTitle;
@@ -56,6 +57,7 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         secondIcon = findViewById(R.id.bottomSheetSecondIcon);
         secondTitle = findViewById(R.id.bottomSheetSecondTitle);
 
+        thirdItemContainer = findViewById(R.id.bottomSheetThirdItemContainer);
         thirdItem = findViewById(R.id.bottomSheetThirdItem);
         thirdIcon = findViewById(R.id.bottomSheetThirdIcon);
         thirdTitle = findViewById(R.id.bottomSheetThirdTitle);
@@ -101,6 +103,7 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
     }
 
     public void setThirdItem(String title) {
+        thirdItemContainer.setVisibility(View.VISIBLE);
         thirdIcon.setVisibility(View.GONE);
         thirdTitle.setText(title);
     }
