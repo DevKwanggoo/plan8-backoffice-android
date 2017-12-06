@@ -59,14 +59,14 @@ public class MainActivity extends BaseActivity {
         getTeams.enqueue(new Callback<List<Team>>() {
             @Override
             public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                if (response.body() != null) {
-                    List<Team> teams = response.body();
-                    ApplicationManager.getInstance().setTeams(teams);
-                    if (null == teams || teams.size()==0) {
-                        vm.setEmptyTeamFlag(true);
-                    } else {
-                        vm.setEmptyTeamFlag(false);
-                    }
+                List<Team> teams = response.body();
+                ApplicationManager.getInstance().setTeams(teams);
+                if (null == teams || teams.size() == 0) {
+                    vm.setEmptyTeamFlag(true);
+                } else {
+                    ApplicationManager.getInstance().setCurrentTeam(teams.get(0));
+                    vm.setEmptyTeamFlag(false);
+                    initTabAndViewPager();
                 }
             }
 
@@ -75,8 +75,6 @@ public class MainActivity extends BaseActivity {
                 Log.e("api : ", "failure");
             }
         });
-
-        initTabAndViewPager();
     }
 
     private void initTabAndViewPager() {
@@ -147,16 +145,16 @@ public class MainActivity extends BaseActivity {
                 currentTabPosition = tab.getPosition();
                 binding.mainViewPager.setCurrentItem(tab.getPosition());
                 if (tab.getCustomView() != null) {
-                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
-                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 if (tab != null) {
-                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
-                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
                 }
             }
 
@@ -199,7 +197,7 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    public void setEmptyFlag(boolean flag){
+    public void setEmptyFlag(boolean flag) {
         vm.setEmptyTeamFlag(flag);
     }
 }

@@ -3,7 +3,6 @@ package io.plan8.backoffice;
 import java.util.List;
 
 import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
 
 /**
@@ -14,7 +13,7 @@ public class ApplicationManager {
     private static volatile ApplicationManager instance = null;
     private Me me;
     private List<Team> teams;
-    private List<Reservation> reservations;
+    private Team currentTeam;
 
     public static ApplicationManager getInstance() {
         if (null == instance) {
@@ -43,5 +42,13 @@ public class ApplicationManager {
 
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+
+    public Team getCurrentTeam() {
+        return currentTeam;
+    }
+
+    public void setCurrentTeam(Team currentTeam) {
+        this.currentTeam = currentTeam;
     }
 }

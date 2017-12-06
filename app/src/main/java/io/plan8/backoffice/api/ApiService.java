@@ -19,6 +19,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 /**
  * Created by SSozi on 2017. 11. 28..
@@ -44,8 +45,8 @@ public interface ApiService {
     @POST("1/users/me")
     Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
-    @GET("1/users/me/reservations")
-    Call<List<Reservation>> getReservations(@Header("authorization") String auth);
+    @GET("1/teams/{id}/reservations")
+    Call<List<Reservation>> getReservations(@Header("authorization") String auth, @Path("id") int teamId);
 
     @GET("1/users/me/teams")
     Call<List<Team>> getTeams(@Header("authorization") String auth);
