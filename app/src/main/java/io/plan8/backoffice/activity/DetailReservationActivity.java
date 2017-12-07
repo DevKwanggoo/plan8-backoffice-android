@@ -8,7 +8,6 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -41,11 +40,11 @@ import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.api.Upload;
+import io.plan8.backoffice.model.api.User;
+import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
-import io.plan8.backoffice.model.item.Comment;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.DetailReservationActivityVM;
@@ -81,25 +80,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
-        List<BaseModel> testData = new ArrayList<>();
-        testData.add(reservation);
-        testData.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
-        testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
-        testData.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
-        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
-        testData.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
 
-        testData.add(new CommentFile("일주석", "zip", "3일 전", "filefilefile"));
-        testData.add(new CommentFile("이주석", "7z", "2일 전", "file"));
-        testData.add(new CommentFile("삼주석", "image", "2일 전", "file"));
-        testData.add(new CommentReplaceItem("삼주석", "작업일자", "2분 전"));
-        testData.add(new CommentFile("사주석", "doc", "1일 전", "filefilefilefilefile"));
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
-        vm = new DetailReservationActivityVM(this, savedInstanceState, testData);
-        binding.setVariable(BR.vm, vm);
-        binding.executePendingBindings();
-
+        //TODO : 팀원 조회 api 호출
         List<User> testUserList = new ArrayList<>();
         testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
         testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
@@ -142,6 +125,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 return false;
             }
         });
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
+        vm = new DetailReservationActivityVM(this, savedInstanceState);
+        binding.setVariable(BR.vm, vm);
+        binding.executePendingBindings();
+
+        refreshDetailReservation(reservation.getId());
     }
 
     @Override
@@ -330,5 +320,37 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         isAlreadyReplaceMention = true;
         vm.replaceToMention(user);
         isAlreadyReplaceMention = false;
+    }
+
+    public void refreshDetailReservation(int reservationId) {
+        Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation(SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
+        reservationCall.enqueue(new Callback<Reservation>() {
+            @Override
+            public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                Reservation r = response.body();
+                if (null != r) {
+                    List<BaseModel> result = new ArrayList<>();
+                    result.add(r);
+
+                    result.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
+                    result.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
+                    result.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
+                    result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
+                    result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
+
+                    result.add(new CommentFile("일주석", "zip", "3일 전", "filefilefile"));
+                    result.add(new CommentFile("이주석", "7z", "2일 전", "file"));
+                    result.add(new CommentFile("삼주석", "image", "2일 전", "file"));
+                    result.add(new CommentReplaceItem("삼주석", "작업일자", "2분 전"));
+                    result.add(new CommentFile("사주석", "doc", "1일 전", "filefilefilefilefile"));
+                    vm.setData(result);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reservation> call, Throwable t) {
+
+            }
+        });
     }
 }

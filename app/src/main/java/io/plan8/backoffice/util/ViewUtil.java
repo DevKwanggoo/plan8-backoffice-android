@@ -63,4 +63,8 @@ public class ViewUtil {
             return "미완료";
         }
     }
+
+    public String getCommaFormat(int num) {
+        return String.format("%,d", num);
+    }
 }

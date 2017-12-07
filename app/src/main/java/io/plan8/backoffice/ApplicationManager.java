@@ -1,6 +1,9 @@
 package io.plan8.backoffice;
 
+import android.content.Context;
+
 import java.util.List;
+import java.util.Locale;
 
 import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Team;
@@ -10,6 +13,7 @@ import io.plan8.backoffice.model.api.Team;
  */
 
 public class ApplicationManager {
+    private Context context;
     private static volatile ApplicationManager instance = null;
     private Me me;
     private List<Team> teams;
@@ -22,6 +26,18 @@ public class ApplicationManager {
             }
         }
         return instance;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Locale getCurrentLocale() {
+        return context.getResources().getConfiguration().getLocales().get(0);
     }
 
     public String getServerUrl() {

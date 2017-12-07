@@ -23,6 +23,7 @@ public class Reservation implements BaseModel {
     @SerializedName("email") String email;
     @SerializedName("address") Address address;
     @SerializedName("products") List<Product> products;
+    @SerializedName("workers") List<Worker> workers;
     @SerializedName("user") User user;
     @SerializedName("userId") int userId;
 
@@ -123,6 +124,14 @@ public class Reservation implements BaseModel {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public List<Worker> getWorkers() {
+        return workers;
+    }
+
+    public void setWorkers(List<Worker> workers) {
+        this.workers = workers;
     }
 
     public User getUser() {

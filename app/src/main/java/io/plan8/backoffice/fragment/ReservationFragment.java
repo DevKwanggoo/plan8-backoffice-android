@@ -13,6 +13,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
@@ -22,6 +23,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentReservationBinding;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ReservationFragmentVM;
 import retrofit2.Call;
@@ -77,7 +79,23 @@ public class ReservationFragment extends BaseFragment {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 List<Reservation> reservations = response.body();
-                vm.setDatas(reservations);
+                List<Reservation> result = new ArrayList<>();
+                if (null != reservations) {
+                    for (Reservation r : reservations) {
+                        if (null != r.getWorkers()) {
+                            for (Worker w : r.getWorkers()) {
+                                if (null != w
+                                        && null != ApplicationManager.getInstance().getMe()
+//                                        && w.getId() == ApplicationManager.getInstance().getMe().getId()) {
+                                        && w.getId() == 1) {
+                                    result.add(r);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                vm.setDatas(result);
             }
 
             @Override

@@ -41,8 +41,8 @@ public class User implements BaseModel, Mentionable {
     public User() {
     }
 
-    public User(String userName, String avatar) {
-        this.userName = userName;
+    public User(String name, String avatar) {
+        this.userName = name;
         this.avatar = avatar;
     }
 
@@ -117,13 +117,15 @@ public class User implements BaseModel, Mentionable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userName);
+        dest.writeString(name);
         dest.writeString(avatar);
+        dest.writeString(userName);
     }
 
     public User(Parcel in) {
-        userName = in.readString();
+        name = in.readString();
         avatar = in.readString();
+        userName = in.readString();
     }
 
     public static final Parcelable.Creator<User> CREATOR

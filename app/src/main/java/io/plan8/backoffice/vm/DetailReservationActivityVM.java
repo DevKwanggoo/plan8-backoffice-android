@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -45,7 +40,6 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private BindingRecyclerViewAdapter<User> mentionAdapter;
-    private List<BaseModel> datas;
     private List<User> userList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private boolean isActiveSendBtn;
@@ -54,9 +48,8 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     private int currentTextIndex;
     private boolean isEmptyMentionList;
 
-    public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState, List<BaseModel> datas) {
+    public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState) {
         super(activity, savedInstanceState);
-        this.datas = datas;
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
             protected int selectViewLayoutType(BaseModel data) {
@@ -88,8 +81,6 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 }
             }
         };
-
-        setData(datas);
 
         mentionAdapter = new BindingRecyclerViewAdapter<User>() {
             @Override
@@ -135,7 +126,6 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void setData(List<BaseModel> datas) {
-        this.datas = datas;
         adapter.setData(datas);
     }
 

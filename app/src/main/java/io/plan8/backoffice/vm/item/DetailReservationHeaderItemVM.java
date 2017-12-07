@@ -8,6 +8,7 @@ import android.view.View;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.ActivityVM;
 
@@ -28,7 +29,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         if (null == reservation || null == reservation.getUser()) {
             return "";
         }
-        return reservation.getUser().getUserName();
+        return reservation.getUser().getName();
     }
 
     @Bindable
@@ -52,7 +53,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         if (null == reservation) {
             return "";
         }
-        return reservation.getStart();
+        return DateUtil.getInstance().getReservationDate(reservation.getStart());
     }
 
     @Bindable
@@ -60,7 +61,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         if (null == reservation) {
             return "";
         }
-        return reservation.getStart();
+        return DateUtil.getInstance().getReservationTime(reservation.getStart());
     }
 
     @Bindable
@@ -68,15 +69,18 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         if (null == reservation) {
             return "";
         }
-        return reservation.getEnd();
+        return DateUtil.getInstance().getReservationTime(reservation.getEnd());
     }
 
     @Bindable
-    public String getProductionName() {
-        if (null == reservation) {
+    public String getProductName() {
+        if (null == reservation
+                || null == reservation.getProducts()
+                || null == reservation.getProducts().get(0)) {
             return "";
         }
-        return "" + reservation.getTotalPrice();
+
+        return "" + reservation.getProducts().get(0).getName() + " (" + ViewUtil.getInstance().getCommaFormat(reservation.getTotalPrice()) + "원)";
     }
 
     @Bindable

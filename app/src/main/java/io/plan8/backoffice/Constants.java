@@ -6,7 +6,7 @@ package io.plan8.backoffice;
 
 public class Constants {
     //reservation status
-    public static final String RESERVATION_STATUS_COMPLETE = "complete";
+    public static final String RESERVATION_STATUS_COMPLETE = "completed";
     public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
     public static final String RESERVATION_STATUS_CANCELED = "canceled";
 

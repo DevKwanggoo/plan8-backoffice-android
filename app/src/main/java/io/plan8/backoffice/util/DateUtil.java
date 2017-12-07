@@ -1,9 +1,11 @@
 package io.plan8.backoffice.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+
+import io.plan8.backoffice.ApplicationManager;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -23,24 +25,40 @@ public class DateUtil {
     }
 
     public String getCurrentDate() {
-        return getFilteredDate(Calendar.getInstance().getTimeInMillis(), YYYYMD_FORMAT, null);
+        return getFilteredDateMiliseconds(Calendar.getInstance().getTimeInMillis(), YYYYMD_FORMAT);
     }
 
     public String dateToYYYYMd(Date date) {
-        return new SimpleDateFormat(YYYYMD_FORMAT).format(date);
+        return new SimpleDateFormat(YYYYMD_FORMAT, ApplicationManager.getInstance().getCurrentLocale()).format(date);
     }
 
-    private String getFilteredDate(Long milliSeconds, String format, Locale locale) {
+    public String getReservationTime(String stringDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", ApplicationManager.getInstance().getCurrentLocale());
+        try {
+            return new SimpleDateFormat("aa h:mm", ApplicationManager.getInstance().getCurrentLocale()).format(simpleDateFormat.parse(stringDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
+    }
+
+    public String getReservationDate(String stringDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", ApplicationManager.getInstance().getCurrentLocale());
+        try {
+            return new SimpleDateFormat("yyyy년 M월 d일", ApplicationManager.getInstance().getCurrentLocale()).format(simpleDateFormat.parse(stringDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
+    }
+
+    private String getFilteredDateMiliseconds(Long milliSeconds, String format) {
         if (null == milliSeconds || milliSeconds.intValue() == 0) {
             return "";
         }
 
         SimpleDateFormat formatter = null;
-        if (null != locale) {
-            formatter = new SimpleDateFormat(format, locale);
-        } else {
-            formatter = new SimpleDateFormat(format);
-        }
+        formatter = new SimpleDateFormat(format, ApplicationManager.getInstance().getCurrentLocale());
         Date date = new Date();
         return formatter.format(date);
     }

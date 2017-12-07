@@ -11,7 +11,7 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Me implements BaseModel {
-    @SerializedName("id") String id;
+    @SerializedName("id") int id;
     @SerializedName("created") String created;
     @SerializedName("updated") String updated;
     @SerializedName("mobileNumber") String mobileNumber;
@@ -23,7 +23,7 @@ public class Me implements BaseModel {
     public Me() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
