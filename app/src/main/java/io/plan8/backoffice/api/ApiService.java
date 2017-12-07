@@ -22,6 +22,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by SSozi on 2017. 11. 28..
@@ -48,7 +49,13 @@ public interface ApiService {
     Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
     @GET("1/teams/{id}/reservations")
-    Call<List<Reservation>> getReservations(@Header("authorization") String auth, @Path("id") int teamId);
+    Call<List<Reservation>> getReservations(@Header("authorization") String auth,
+                                            @Path("id") int teamId,
+                                            @Query("after") String after,
+                                            @Query("before") String before,
+                                            @Query("worker") int workerId,
+                                            @Query("take") int take,
+                                            @Query("skip") int skip);
 
     @GET("1/reservations/{id}")
     Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
@@ -62,4 +69,7 @@ public interface ApiService {
 
     @GET("1/teams/{id}/members")
     Call<List<Member>> getMembers(@Header("authorization") String auth, @Path("id") int teamId);
+
+    @GET("1/users/me/members")
+    Call<List<Member>> getTeamMembers(@Header("authorization") String auth);
 }

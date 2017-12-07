@@ -9,18 +9,30 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Worker implements BaseModel {
-    @SerializedName("id") int id;
-    @SerializedName("created") String created;
-    @SerializedName("updated") String updated;
-    @SerializedName("configuration") Configuration configuration;
-    @SerializedName("name") String name;
-    @SerializedName("avatar") String avatar;
-    @SerializedName("username") String username;
-    @SerializedName("mobileNumber") String mobileNumber;
-    @SerializedName("email") String email;
-    @SerializedName("owner") boolean owner;
-    @SerializedName("admin") boolean admin;
-    @SerializedName("deactivated") boolean deactivated;
+    @SerializedName("id")
+    int id;
+    @SerializedName("created")
+    String created;
+    @SerializedName("updated")
+    String updated;
+    @SerializedName("configuration")
+    Configuration configuration;
+    @SerializedName("name")
+    String name;
+    @SerializedName("avatar")
+    String avatar;
+    @SerializedName("username")
+    String username;
+    @SerializedName("mobileNumber")
+    String mobileNumber;
+    @SerializedName("email")
+    String email;
+    @SerializedName("owner")
+    boolean owner;
+    @SerializedName("admin")
+    boolean admin;
+    @SerializedName("deactivated")
+    boolean deactivated;
 
     public Worker() {
     }

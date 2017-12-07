@@ -35,50 +35,6 @@ public class Member implements BaseModel, Mentionable {
 
     public Member() {}
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isOwner() {
-        return owner;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public List<DayOff> getDaysOff() {
-        return daysOff;
-    }
-
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
-    public boolean isDeactivated() {
-        return deactivated;
-    }
-
     @NonNull
     @Override
     public String getTextForDisplayMode(Mentionable.MentionDisplayMode mode) {
@@ -139,6 +95,50 @@ public class Member implements BaseModel, Mentionable {
             return new Member[size];
         }
     };
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public List<DayOff> getDaysOff() {
+        return daysOff;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public boolean isDeactivated() {
+        return deactivated;
+    }
 
     // --------------------------------------------------
     // CityLoader Class (loads cities from JSON file)
