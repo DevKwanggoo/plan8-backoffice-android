@@ -41,6 +41,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Upload;
 import io.plan8.backoffice.model.api.User;
@@ -65,7 +66,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Reservation reservation;
     private int reservationId;
     private MentionsEditText mentionsEditText;
-    private User.UserLoader user;
+    private Member.MemberLoader member;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
@@ -104,37 +105,41 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             reservationId = reservation.getId();
         }
 
-        //TODO : 팀원 조회 api 호출
-        List<User> testUserList = new ArrayList<>();
-        testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조광환1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조광환2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규2", "http://i.imgur.com/DvpvklR.png"));
-        user = new User.UserLoader(testUserList);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
         vm = new DetailReservationActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
+        getMembers();
+        refreshDetailReservation(reservationId);
+    }
+
+    private void getMembers() {
+        Call<List<Member>> getMembers = RestfulAdapter.getInstance().getServiceApi().getMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), ApplicationManager.getInstance().getCurrentTeam().getTeamId());
+        getMembers.enqueue(new Callback<List<Member>>() {
+            @Override
+            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                if (response.body() != null){
+                    setMentionEditText(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Member>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "팀원 목록을 받아오는데 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setMentionEditText(List<Member> memberList){
+        member = new Member.MemberLoader(memberList);
         mentionsEditText = findViewById(R.id.mentionEditText);
         mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
         mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 List<String> buckets = Arrays.asList(BUCKET);
-                List<User> suggestions = user.getSuggestions(queryToken);
+                List<Member> suggestions = member.getSuggestions(queryToken);
                 SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
                 // Have suggestions, now call the listener (which is this activity)
                 onReceiveSuggestionsResult(result, BUCKET);
@@ -152,8 +157,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 return false;
             }
         });
-
-        refreshDetailReservation(reservationId);
     }
 
     @Override
@@ -161,7 +164,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (isAlreadyReplaceMention) {
             return;
         }
-        List<User> userList = (List<User>) result.getSuggestions();
+        List<Member> userList = (List<Member>) result.getSuggestions();
         vm.setAutoCompleteMentionData(userList);
     }
 
@@ -343,9 +346,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         Toast.makeText(getApplicationContext(), "이전 내용 보기", Toast.LENGTH_SHORT).show();
     }
 
-    public void replaceToMention(User user) {
+    public void replaceToMention(Member member) {
         isAlreadyReplaceMention = true;
-        vm.replaceToMention(user);
+        vm.replaceToMention(member);
         isAlreadyReplaceMention = false;
     }
 

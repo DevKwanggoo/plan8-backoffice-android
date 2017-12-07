@@ -6,6 +6,7 @@ import java.util.List;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.Upload;
@@ -58,4 +59,7 @@ public interface ApiService {
     @FormUrlEncoded
     @PUT("1/reservations/{id}")
     Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId,  @FieldMap HashMap<String, String> putReservationMap);
+
+    @GET("1/teams/{id}/members")
+    Call<List<Member>> getMembers(@Header("authorization") String auth, @Path("id") int teamId);
 }

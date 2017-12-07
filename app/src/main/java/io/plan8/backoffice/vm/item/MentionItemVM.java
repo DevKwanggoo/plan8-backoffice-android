@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.ActivityVM;
 
@@ -14,32 +15,40 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class MentionItemVM extends ActivityVM {
-    private User user;
+    private Member member;
 
-    public MentionItemVM(Activity activity, Bundle savedInstanceState, User user) {
+    public MentionItemVM(Activity activity, Bundle savedInstanceState, Member member) {
         super(activity, savedInstanceState);
-        this.user = user;
+        this.member = member;
     }
 
     @Bindable
     public String getName() {
-        if (null == user) {
-            return "";
+        if (member != null && member.getName() != null){
+            return member.getName();
         }
-        return user.getName();
+        return "이름없음";
+    }
+
+    @Bindable
+    public String getUserName(){
+        if (member != null && member.getUsername() != null){
+            return "@" + member.getUsername();
+        }
+        return "비어있음";
     }
 
     @Bindable
     public String getAvatar() {
-        if (null == user) {
+        if (null == member) {
             return "";
         }
-        return user.getAvatar();
+        return member.getAvatar();
     }
 
     public void clickMention(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).replaceToMention(user);
+            ((DetailReservationActivity) getActivity()).replaceToMention(member);
         }
     }
 }

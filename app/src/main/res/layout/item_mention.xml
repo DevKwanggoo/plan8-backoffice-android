@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="직급이나메일"
+                android:text="@{vm.userName}"
                 android:textColor="#8492a6"
                 android:textSize="12dp" />
 

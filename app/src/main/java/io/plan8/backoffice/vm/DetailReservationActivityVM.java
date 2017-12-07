@@ -21,6 +21,7 @@ import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.Comment;
@@ -40,14 +41,15 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
-    private BindingRecyclerViewAdapter<User> mentionAdapter;
-    private List<User> userList;
+    private BindingRecyclerViewAdapter<Member> mentionAdapter;
+    private List<Member> memberList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
     private String currentText = "";
     private int currentTextIndex;
     private boolean isEmptyMentionList;
+    private boolean loadingFlag = false;
 
     public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState) {
         super(activity, savedInstanceState);
@@ -83,14 +85,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             }
         };
 
-        mentionAdapter = new BindingRecyclerViewAdapter<User>() {
+        mentionAdapter = new BindingRecyclerViewAdapter<Member>() {
             @Override
-            protected int selectViewLayoutType(User data) {
+            protected int selectViewLayoutType(Member data) {
                 return R.layout.item_mention;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, User data) {
+            protected void bindVariables(ViewDataBinding binding, Member data) {
                 binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
             }
         };
@@ -142,7 +144,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         return adapter;
     }
 
-    public BindingRecyclerViewAdapter<User> getMentionAdapter() {
+    public BindingRecyclerViewAdapter<Member> getMentionAdapter() {
         return mentionAdapter;
     }
 
@@ -158,13 +160,13 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         Toast.makeText(getActivity().getApplicationContext(), "메시지 전송", Toast.LENGTH_SHORT).show();
     }
 
-    public void setAutoCompleteMentionData(List<User> userList) {
-        this.userList = userList;
-        if (null != userList) {
-            mentionAdapter.setData(userList);
+    public void setAutoCompleteMentionData(List<Member> memberList) {
+        this.memberList = memberList;
+        if (null != memberList) {
+            mentionAdapter.setData(memberList);
         }
-        if (null == userList
-                || userList.size() <= 0) {
+        if (null == memberList
+                || memberList.size() <= 0) {
             setEmptyMentionList(true);
         } else {
             setEmptyMentionList(false);
@@ -221,16 +223,16 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.currentText);
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public List<Member> getMemberList() {
+        return memberList;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
     }
 
-    public void replaceToMention(User user) {
-        setUserList(null);
+    public void replaceToMention(Member member) {
+        setMemberList(null);
         setEmptyMentionList(true);
 
         int index = 0;
@@ -241,7 +243,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + user.getUserName() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + member.getUsername() + " ");
         setSelection();
     }
 
@@ -264,5 +266,15 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         } else {
             ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_CANCELED);
         }
+    }
+
+    @Bindable
+    public boolean getLoadingFlag() {
+        return loadingFlag;
+    }
+
+    public void setLoadingFlag(boolean flag) {
+        loadingFlag = flag;
+        notifyPropertyChanged(BR.loadingFlag);
     }
 }

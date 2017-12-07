@@ -170,5 +170,23 @@
                     android:tint="@{vm.activeSendBtn ? @color/colorPrimary : @color/inActiveViewColor}" />
             </RelativeLayout>
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/detailReservationProgressBarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#97ffffff"
+            android:clickable="true"
+            android:visibility="@{vm.loadingFlag ? View.VISIBLE : View.GONE}">
+
+            <ProgressBar
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_in" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>
