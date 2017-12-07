@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 import java.util.Locale;
 
+import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Team;
 
@@ -18,6 +19,7 @@ public class ApplicationManager {
     private Me me;
     private List<Team> teams;
     private Team currentTeam;
+    private MainActivity mainActivity;
 
     public static ApplicationManager getInstance() {
         if (null == instance) {
@@ -66,5 +68,13 @@ public class ApplicationManager {
 
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
+    }
+
+    public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 }

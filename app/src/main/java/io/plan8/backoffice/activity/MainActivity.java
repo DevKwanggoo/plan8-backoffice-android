@@ -22,6 +22,7 @@ import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.BaseApplication;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -195,7 +196,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         binding.unbind();
+        ApplicationManager.getInstance().setMainActivity(null);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        ApplicationManager.getInstance().setMainActivity(this);
+        super.onResume();
     }
 
     public void setEmptyFlag(boolean flag) {

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
@@ -76,62 +77,83 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         return intent;
     }
 
+    public static Intent buildIntent(Context context, String openUrl) {
+        Intent intent = new Intent(context, DetailReservationActivity.class);
+        intent.putExtra("openUrl", openUrl);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
+        int reservationId;
+        final List<BaseModel> testData = new ArrayList<>();
 
+        if (getIntent().getSerializableExtra("reservation") != null) {
+            reservationId = reservation.getId();
+        } else {
+            Intent deepLinkData = getIntent();
 
-        //TODO : 팀원 조회 api 호출
-        List<User> testUserList = new ArrayList<>();
-        testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조광환1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규1", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조광환2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김철호2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("조영규2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("이해찬2", "http://i.imgur.com/DvpvklR.png"));
-        testUserList.add(new User("김형규2", "http://i.imgur.com/DvpvklR.png"));
-        user = new User.UserLoader(testUserList);
-
-        mentionsEditText = findViewById(R.id.mentionEditText);
-        mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
-        mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
-            @Override
-            public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-                List<String> buckets = Arrays.asList(BUCKET);
-                List<User> suggestions = user.getSuggestions(queryToken);
-                SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
-                // Have suggestions, now call the listener (which is this activity)
-                onReceiveSuggestionsResult(result, BUCKET);
-                return buckets;
-            }
-        });
-        mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
-            @Override
-            public void displaySuggestions(boolean display) {
-
+            if (getIntent().getData() != null) {
+                reservationId = Integer.parseInt(deepLinkData.getData().getPath().replace("/", "").trim());
+            } else {
+                Uri deepLinkUri = Uri.parse(deepLinkData.getStringExtra("openUrl"));
+                reservationId = Integer.parseInt(deepLinkUri.getPath().replace("/", "").trim());
             }
 
-            @Override
-            public boolean isDisplayingSuggestions() {
-                return false;
-            }
-        });
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
-        vm = new DetailReservationActivityVM(this, savedInstanceState);
-        binding.setVariable(BR.vm, vm);
-        binding.executePendingBindings();
+            //TODO : 팀원 조회 api 호출
+            List<User> testUserList = new ArrayList<>();
+            testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("조영규", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("이해찬", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김형규", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("조광환1", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김철호1", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("조영규1", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("이해찬1", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김형규1", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("조광환2", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김철호2", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("조영규2", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("이해찬2", "http://i.imgur.com/DvpvklR.png"));
+            testUserList.add(new User("김형규2", "http://i.imgur.com/DvpvklR.png"));
+            user = new User.UserLoader(testUserList);
 
-        refreshDetailReservation(reservation.getId());
+            mentionsEditText = findViewById(R.id.mentionEditText);
+            mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
+            mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+                @Override
+                public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+                    List<String> buckets = Arrays.asList(BUCKET);
+                    List<User> suggestions = user.getSuggestions(queryToken);
+                    SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
+                    // Have suggestions, now call the listener (which is this activity)
+                    onReceiveSuggestionsResult(result, BUCKET);
+                    return buckets;
+                }
+            });
+            mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
+                @Override
+                public void displaySuggestions(boolean display) {
+
+                }
+
+                @Override
+                public boolean isDisplayingSuggestions() {
+                    return false;
+                }
+            });
+
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
+            vm = new DetailReservationActivityVM(this, savedInstanceState);
+            binding.setVariable(BR.vm, vm);
+            binding.executePendingBindings();
+
+            refreshDetailReservation(reservationId);
+        }
     }
 
     @Override
@@ -151,11 +173,16 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     @Override
     public void onBackPressed() {
-        Intent mainIntent = MainActivity.buildIntent(getApplicationContext());
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainIntent);
-        finish();
-        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        if (ApplicationManager.getInstance().getMainActivity() != null) {
+            finish();
+            overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        } else {
+            Intent mainIntent = MainActivity.buildIntent(getApplicationContext());
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+            finish();
+            overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        }
     }
 
     public void showBottomSheet() {

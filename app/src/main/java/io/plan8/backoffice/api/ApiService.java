@@ -54,4 +54,7 @@ public interface ApiService {
 
     @GET("1/users/me/teams")
     Call<List<Team>> getTeams(@Header("authorization") String auth);
+
+    @GET("1/reservations/{id}")
+    Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
 }
