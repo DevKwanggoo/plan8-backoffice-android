@@ -65,7 +65,9 @@ public class MainActivity extends BaseActivity {
                 if (null == teams || teams.size() == 0) {
                     vm.setEmptyTeamFlag(true);
                 } else {
-                    ApplicationManager.getInstance().setCurrentTeam(teams.get(0));
+                    if (ApplicationManager.getInstance().getCurrentTeam() == null) {
+                        ApplicationManager.getInstance().setCurrentTeam(teams.get(0));
+                    }
                     vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
                 }

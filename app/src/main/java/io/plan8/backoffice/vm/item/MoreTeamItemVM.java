@@ -53,6 +53,7 @@ public class MoreTeamItemVM extends FragmentVM {
             ApplicationManager.getInstance().setCurrentTeam(team);
 
             Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             getFragment().getActivity().startActivity(mainIntent);
             getFragment().getActivity().finish();
             getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);

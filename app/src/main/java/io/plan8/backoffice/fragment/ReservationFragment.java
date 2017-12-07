@@ -13,6 +13,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentReservationBinding;
+import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ReservationFragmentVM;
@@ -37,6 +39,7 @@ public class ReservationFragment extends BaseFragment {
     private FragmentReservationBinding binding;
     private ReservationFragmentVM vm;
     private String currentDate;
+    private int skipIndex = 0;
 
     @Nullable
     @Override
@@ -45,6 +48,13 @@ public class ReservationFragment extends BaseFragment {
         vm = new ReservationFragmentVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
+
+        binding.reservationRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore(int currentPage) {
+                refreshReservationList();
+            }
+        });
         return binding.getRoot();
     }
 
@@ -62,6 +72,8 @@ public class ReservationFragment extends BaseFragment {
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 vm.setOpenedCalendar(false);
+                skipIndex = 0;
+                vm.setDatas(new ArrayList<Reservation>());
                 refreshReservationList();
             }
         });
@@ -75,6 +87,8 @@ public class ReservationFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        skipIndex = 0;
+        vm.setDatas(new ArrayList<Reservation>());
         refreshReservationList();
     }
 
@@ -88,19 +102,27 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
                 5,
-                0);
+                skipIndex);
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 List<Reservation> reservations = response.body();
                 if (null != reservations) {
-                    vm.setDatas(reservations);
+                    skipIndex = skipIndex + response.body().size();
+                    vm.addDatas(reservations);
+                }
+
+                if (reservations.size() == 0 && skipIndex == 0){
+                    vm.setEmptyFlag(true);
+                } else {
+                    vm.setEmptyFlag(false);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Reservation>> call, Throwable t) {
                 Log.e("api : ", "failure");
+                vm.setEmptyFlag(true);
             }
         });
     }

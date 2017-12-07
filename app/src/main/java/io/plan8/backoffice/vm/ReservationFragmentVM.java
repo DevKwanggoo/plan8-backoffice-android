@@ -27,7 +27,6 @@ public class ReservationFragmentVM extends FragmentVM {
     private String toolbarTitle;
     private BindingRecyclerViewAdapter<Reservation> adapter;
     private boolean emptyFlag = true;
-    private List<Reservation> reservations;
 
     public ReservationFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -51,13 +50,11 @@ public class ReservationFragmentVM extends FragmentVM {
     }
 
     public void setDatas(List<Reservation> reservations) {
-        this.reservations = reservations;
-        if (null == reservations || reservations.size() == 0) {
-            setEmptyFlag(true);
-        } else {
-            setEmptyFlag(false);
-        }
         adapter.setData(reservations);
+    }
+
+    public void addDatas(List<Reservation> reservations){
+        adapter.addData(reservations);
     }
 
     @Bindable
