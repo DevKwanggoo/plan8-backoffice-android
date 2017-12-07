@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
@@ -77,12 +78,47 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         return intent;
     }
 
+    public static Intent buildIntent(Context context, String openUrl) {
+        Intent intent = new Intent(context, DetailReservationActivity.class);
+        intent.putExtra("openUrl", openUrl);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
-        List<BaseModel> testData = new ArrayList<>();
-        testData.add(reservation);
+        final List<BaseModel> testData = new ArrayList<>();
+
+        if (getIntent().getSerializableExtra("reservation") != null ) {
+            this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
+            testData.add(reservation);
+        } else {
+            Intent deepLinkData = getIntent();
+            int reservationId;
+
+            if (getIntent().getData() != null) {
+                reservationId = Integer.parseInt(deepLinkData.getData().getPath().replace("/", "").trim());
+            } else {
+                Uri deepLinkUri = Uri.parse(deepLinkData.getStringExtra("openUrl"));
+                reservationId = Integer.parseInt(deepLinkUri.getPath().replace("/", "").trim());
+            }
+
+            Call<Reservation> getReservation = RestfulAdapter.getInstance().getServiceApi().getReservation("Bearer "+SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
+            getReservation.enqueue(new Callback<Reservation>() {
+                @Override
+                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                    if (response.body() != null) {
+                        testData.add(0, response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Reservation> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "예약정보를 가져오는데 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         testData.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
         testData.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
         testData.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
@@ -161,11 +197,16 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     @Override
     public void onBackPressed() {
-        Intent mainIntent = MainActivity.buildIntent(getApplicationContext());
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainIntent);
-        finish();
-        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        if (ApplicationManager.getInstance().getMainActivity() != null) {
+            finish();
+            overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        } else {
+            Intent mainIntent = MainActivity.buildIntent(getApplicationContext());
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+            finish();
+            overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        }
     }
 
     public void showBottomSheet() {
