@@ -14,6 +14,7 @@ import io.plan8.backoffice.ApplicationManager;
 public class DateUtil {
     private static volatile DateUtil instance = null;
     private String YYYYMD_FORMAT = "yyyy년 M월 d일";
+    private String YYYYMD_API_FORMAT = "yyyy-MM-dd";
 
     public static DateUtil getInstance() {
         if (null == instance) {
@@ -26,6 +27,10 @@ public class DateUtil {
 
     public String getCurrentDate() {
         return getFilteredDateMiliseconds(Calendar.getInstance().getTimeInMillis(), YYYYMD_FORMAT);
+    }
+
+    public String getCurrnetDateAPIFormat(Date date) {
+        return new SimpleDateFormat(YYYYMD_API_FORMAT, ApplicationManager.getInstance().getCurrentLocale()).format(date);
     }
 
     public String dateToYYYYMd(Date date) {

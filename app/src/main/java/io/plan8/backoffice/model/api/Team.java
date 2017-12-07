@@ -9,14 +9,22 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Team implements BaseModel {
-    @SerializedName("id") int teamId;
-    @SerializedName("publicId") String publicId;
-    @SerializedName("name") String name;
-    @SerializedName("logo") String logo;
-    @SerializedName("configuration") Configuration configuration;
-    @SerializedName("ownerId") String ownerId;
-    @SerializedName("deactivated") boolean deactivated;
-    @SerializedName("front") Front front;
+    @SerializedName("id")
+    int teamId;
+    @SerializedName("publicId")
+    String publicId;
+    @SerializedName("name")
+    String name;
+    @SerializedName("logo")
+    String logo;
+    @SerializedName("configuration")
+    Configuration configuration;
+    @SerializedName("ownerId")
+    String ownerId;
+    @SerializedName("deactivated")
+    boolean deactivated;
+    @SerializedName("front")
+    Front front;
 
     public Team() {
     }
@@ -28,6 +36,7 @@ public class Team implements BaseModel {
     public String getPublicId() {
         return publicId;
     }
+
     public String getName() {
         return name;
     }

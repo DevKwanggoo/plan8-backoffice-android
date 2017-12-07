@@ -5,18 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import io.plan8.backoffice.model.BaseModel;
 
 /**
- * Created by chokwanghwan on 2017. 12. 6..
+ * Created by chokwanghwan on 2017. 12. 7..
  */
 
-public class Worker implements BaseModel {
+public class Member implements BaseModel {
     @SerializedName("id")
     int id;
-    @SerializedName("created")
-    String created;
-    @SerializedName("updated")
-    String updated;
-    @SerializedName("configuration")
-    Configuration configuration;
     @SerializedName("name")
     String name;
     @SerializedName("avatar")
@@ -31,10 +25,14 @@ public class Worker implements BaseModel {
     boolean owner;
     @SerializedName("admin")
     boolean admin;
+    @SerializedName("daysOff")
+    DaysOff daysOff;
+    @SerializedName("configuration")
+    Configuration configuration;
     @SerializedName("deactivated")
     boolean deactivated;
 
-    public Worker() {
+    public Member() {
     }
 
     public int getId() {
@@ -43,30 +41,6 @@ public class Worker implements BaseModel {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(String updated) {
-        this.updated = updated;
-    }
-
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
     }
 
     public String getName() {
@@ -123,6 +97,22 @@ public class Worker implements BaseModel {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public DaysOff getDaysOff() {
+        return daysOff;
+    }
+
+    public void setDaysOff(DaysOff daysOff) {
+        this.daysOff = daysOff;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public boolean isDeactivated() {

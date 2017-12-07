@@ -6,6 +6,7 @@ import java.util.List;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.Upload;
@@ -21,6 +22,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by SSozi on 2017. 11. 28..
@@ -47,7 +49,13 @@ public interface ApiService {
     Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
     @GET("1/teams/{id}/reservations")
-    Call<List<Reservation>> getReservations(@Header("authorization") String auth, @Path("id") int teamId);
+    Call<List<Reservation>> getReservations(@Header("authorization") String auth,
+                                            @Path("id") int teamId,
+                                            @Query("after") String after,
+                                            @Query("before") String before,
+                                            @Query("worker") int workerId,
+                                            @Query("take") int take,
+                                            @Query("skip") int skip);
 
     @GET("1/reservations/{id}")
     Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
@@ -55,6 +63,6 @@ public interface ApiService {
     @GET("1/users/me/teams")
     Call<List<Team>> getTeams(@Header("authorization") String auth);
 
-    @GET("1/reservations/{id}")
-    Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
+    @GET("1/users/me/members")
+    Call<List<Member>> getTeamMembers(@Header("authorization") String auth);
 }

@@ -13,7 +13,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
@@ -23,7 +23,6 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentReservationBinding;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ReservationFragmentVM;
 import retrofit2.Call;
@@ -37,6 +36,7 @@ import retrofit2.Response;
 public class ReservationFragment extends BaseFragment {
     private FragmentReservationBinding binding;
     private ReservationFragmentVM vm;
+    private String currentDate;
 
     @Nullable
     @Override
@@ -60,6 +60,7 @@ public class ReservationFragment extends BaseFragment {
                     return;
                 }
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
+                currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 vm.setOpenedCalendar(false);
                 refreshReservationList();
             }
@@ -74,28 +75,23 @@ public class ReservationFragment extends BaseFragment {
     }
 
     private void refreshReservationList() {
-        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), ApplicationManager.getInstance().getCurrentTeam().getTeamId());
+        if (null == currentDate || currentDate.equals("")) {
+            currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(Calendar.getInstance().getTime());
+        }
+        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()),
+                ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
+                currentDate,
+                currentDate,
+                ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
+                5,
+                0);
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 List<Reservation> reservations = response.body();
-                List<Reservation> result = new ArrayList<>();
                 if (null != reservations) {
-                    for (Reservation r : reservations) {
-                        if (null != r.getWorkers()) {
-                            for (Worker w : r.getWorkers()) {
-                                if (null != w
-                                        && null != ApplicationManager.getInstance().getMe()
-//                                        && w.getId() == ApplicationManager.getInstance().getMe().getId()) {
-                                        && w.getId() == 1) {
-                                    result.add(r);
-                                }
-                            }
-                        }
-                    }
+                    vm.setDatas(reservations);
                 }
-
-                vm.setDatas(result);
             }
 
             @Override

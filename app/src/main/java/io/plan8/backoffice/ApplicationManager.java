@@ -2,6 +2,7 @@ package io.plan8.backoffice;
 
 import android.content.Context;
 
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Locale;
 
@@ -18,6 +19,7 @@ public class ApplicationManager {
     private static volatile ApplicationManager instance = null;
     private Me me;
     private List<Team> teams;
+    private List<Member> members;
     private Team currentTeam;
     private MainActivity mainActivity;
 
@@ -76,5 +78,13 @@ public class ApplicationManager {
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }

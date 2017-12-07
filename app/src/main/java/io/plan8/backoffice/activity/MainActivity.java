@@ -22,7 +22,6 @@ import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
-import io.plan8.backoffice.BaseApplication;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -77,6 +76,19 @@ public class MainActivity extends BaseActivity {
                 Log.e("api : ", "failure");
             }
         });
+
+//        Call<List<Member>> memberCall = RestfulAdapter.getInstance().getServiceApi().getTeamMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+//        memberCall.enqueue(new Callback<List<Member>>() {
+//            @Override
+//            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+//                Log.e("test", "test");
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Member>> call, Throwable t) {
+//                Log.e("test", "test");
+//            }
+//        });
     }
 
     private void initTabAndViewPager() {
