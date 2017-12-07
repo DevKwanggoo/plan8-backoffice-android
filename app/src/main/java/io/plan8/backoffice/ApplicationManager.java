@@ -1,6 +1,7 @@
 package io.plan8.backoffice;
 
 import android.content.Context;
+import android.os.Build;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,11 @@ public class ApplicationManager {
     }
 
     public Locale getCurrentLocale() {
-        return context.getResources().getConfiguration().getLocales().get(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
     }
 
     public String getServerUrl() {

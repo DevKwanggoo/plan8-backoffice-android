@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
@@ -103,9 +104,9 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         plan8BottomSheetDialog = new Plan8BottomSheetDialog(getActivity());
         plan8BottomSheetDialog.setFirstItem("완료");
         plan8BottomSheetDialog.getFirstItem().setOnClickListener(this);
-        plan8BottomSheetDialog.setSecondItem("미완료");
+        plan8BottomSheetDialog.setSecondItem("대기");
         plan8BottomSheetDialog.getSecondItem().setOnClickListener(this);
-        plan8BottomSheetDialog.setThirdItem("대기");
+        plan8BottomSheetDialog.setThirdItem("취소됨");
         plan8BottomSheetDialog.getThirdItem().setOnClickListener(this);
     }
 
@@ -255,12 +256,13 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
     @Override
     public void onClick(View view) {
+        plan8BottomSheetDialog.hide();
         if (view.getId() == R.id.bottomSheetFirstItem){
-            Toast.makeText(getActivity(), "완료", Toast.LENGTH_SHORT).show();
+            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_COMPLETE);
         } else if (view.getId() == R.id.bottomSheetSecondItem) {
-            Toast.makeText(getActivity(), "미완료", Toast.LENGTH_SHORT).show();
+            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_INCOMPLETE);
         } else {
-            Toast.makeText(getActivity(), "대기", Toast.LENGTH_SHORT).show();
+            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_CANCELED);
         }
     }
 }

@@ -64,13 +64,17 @@ public class ReservationFragment extends BaseFragment {
                 refreshReservationList();
             }
         });
-
-        refreshReservationList();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshReservationList();
     }
 
     private void refreshReservationList() {

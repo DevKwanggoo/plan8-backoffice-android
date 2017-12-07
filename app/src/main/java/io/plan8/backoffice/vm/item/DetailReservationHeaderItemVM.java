@@ -85,18 +85,10 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
 
     @Bindable
     public String getCustomerRequest() {
-        if (null == reservation) {
-            return "";
+        if (reservation != null && reservation.getAddtionalRequest() != null){
+            return reservation.getAddtionalRequest();
         }
-        return reservation.getAddtionalRequest();
-    }
-
-    @Bindable
-    public String getProductionDescription() {
-        if (null == reservation) {
-            return "";
-        }
-        return "";
+        return "추가 요청 사항 없음";
     }
 
     @Bindable

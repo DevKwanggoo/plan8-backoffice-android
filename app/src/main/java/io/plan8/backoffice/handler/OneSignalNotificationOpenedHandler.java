@@ -49,7 +49,7 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
             Log.e("OneSignalExample", "Button pressed with id: " + result.action.actionID);
 
         if (openUrl != null) {
-            Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, openUrl.toString());
+            Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, openUrl.toString(), true);
             detailTaskIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(detailTaskIntent);
         }

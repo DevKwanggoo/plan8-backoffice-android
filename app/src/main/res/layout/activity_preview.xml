@@ -22,7 +22,9 @@
             <RelativeLayout
                 android:id="@+id/previewClose"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:onClick="@{vm::closePreview}">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="24dp"

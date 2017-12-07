@@ -30,6 +30,7 @@ import com.linkedin.android.spyglass.ui.MentionsEditText;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
@@ -62,6 +63,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Uri captureImageUri;
     private long fileLength;
     private Reservation reservation;
+    private int reservationId;
     private MentionsEditText mentionsEditText;
     private User.UserLoader user;
     private static final String BUCKET = "user";
@@ -77,9 +79,10 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         return intent;
     }
 
-    public static Intent buildIntent(Context context, String openUrl) {
+    public static Intent buildIntent(Context context, String openUrl, boolean deepLinkFlag) {
         Intent intent = new Intent(context, DetailReservationActivity.class);
         intent.putExtra("openUrl", openUrl);
+        intent.putExtra("deepLinkFlag", deepLinkFlag);
         return intent;
     }
 
@@ -87,12 +90,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
-        int reservationId;
-        final List<BaseModel> testData = new ArrayList<>();
 
-        if (getIntent().getSerializableExtra("reservation") != null) {
-            reservationId = reservation.getId();
-        } else {
+        if (getIntent().getBooleanExtra("deepLinkFlag", false)) {
             Intent deepLinkData = getIntent();
 
             if (getIntent().getData() != null) {
@@ -101,59 +100,60 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 Uri deepLinkUri = Uri.parse(deepLinkData.getStringExtra("openUrl"));
                 reservationId = Integer.parseInt(deepLinkUri.getPath().replace("/", "").trim());
             }
-
-
-            //TODO : 팀원 조회 api 호출
-            List<User> testUserList = new ArrayList<>();
-            testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("조영규", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("이해찬", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김형규", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("조광환1", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김철호1", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("조영규1", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("이해찬1", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김형규1", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("조광환2", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김철호2", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("조영규2", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("이해찬2", "http://i.imgur.com/DvpvklR.png"));
-            testUserList.add(new User("김형규2", "http://i.imgur.com/DvpvklR.png"));
-            user = new User.UserLoader(testUserList);
-
-            mentionsEditText = findViewById(R.id.mentionEditText);
-            mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
-            mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
-                @Override
-                public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-                    List<String> buckets = Arrays.asList(BUCKET);
-                    List<User> suggestions = user.getSuggestions(queryToken);
-                    SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
-                    // Have suggestions, now call the listener (which is this activity)
-                    onReceiveSuggestionsResult(result, BUCKET);
-                    return buckets;
-                }
-            });
-            mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
-                @Override
-                public void displaySuggestions(boolean display) {
-
-                }
-
-                @Override
-                public boolean isDisplayingSuggestions() {
-                    return false;
-                }
-            });
-
-            binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
-            vm = new DetailReservationActivityVM(this, savedInstanceState);
-            binding.setVariable(BR.vm, vm);
-            binding.executePendingBindings();
-
-            refreshDetailReservation(reservationId);
+        } else {
+            reservationId = reservation.getId();
         }
+
+        //TODO : 팀원 조회 api 호출
+        List<User> testUserList = new ArrayList<>();
+        testUserList.add(new User("조광환", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김철호", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("조영규", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("이해찬", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김형규", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("조광환1", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김철호1", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("조영규1", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("이해찬1", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김형규1", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("조광환2", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김철호2", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("조영규2", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("이해찬2", "http://i.imgur.com/DvpvklR.png"));
+        testUserList.add(new User("김형규2", "http://i.imgur.com/DvpvklR.png"));
+        user = new User.UserLoader(testUserList);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
+        vm = new DetailReservationActivityVM(this, savedInstanceState);
+        binding.setVariable(BR.vm, vm);
+        binding.executePendingBindings();
+
+        mentionsEditText = findViewById(R.id.mentionEditText);
+        mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
+        mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+            @Override
+            public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+                List<String> buckets = Arrays.asList(BUCKET);
+                List<User> suggestions = user.getSuggestions(queryToken);
+                SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
+                // Have suggestions, now call the listener (which is this activity)
+                onReceiveSuggestionsResult(result, BUCKET);
+                return buckets;
+            }
+        });
+        mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
+            @Override
+            public void displaySuggestions(boolean display) {
+
+            }
+
+            @Override
+            public boolean isDisplayingSuggestions() {
+                return false;
+            }
+        });
+
+        refreshDetailReservation(reservationId);
     }
 
     @Override
@@ -365,11 +365,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
                     result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
 
-                    result.add(new CommentFile("일주석", "zip", "3일 전", "filefilefile"));
-                    result.add(new CommentFile("이주석", "7z", "2일 전", "file"));
-                    result.add(new CommentFile("삼주석", "image", "2일 전", "file"));
+                    result.add(new CommentFile("일주석", "http://i.imgur.com/DvpvklR.png", "zip", "3일 전", "filefilefile", ""));
+                    result.add(new CommentFile("이주석", "http://i.imgur.com/DvpvklR.png", "7z", "2일 전", "file", ""));
+                    result.add(new CommentFile("삼주석", "http://i.imgur.com/DvpvklR.png", "image", "2일 전", "file", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1_5kAr08XCz5xBjRzVKrXUwLHxVD9kou1lSmASRVd2NFodXqK1A"));
                     result.add(new CommentReplaceItem("삼주석", "작업일자", "2분 전"));
-                    result.add(new CommentFile("사주석", "doc", "1일 전", "filefilefilefilefile"));
+                    result.add(new CommentFile("사주석", "http://i.imgur.com/DvpvklR.png", "doc", "1일 전", "filefilefilefilefile", ""));
                     vm.setData(result);
                 }
             }
@@ -377,6 +377,25 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public void editReservationStatus(String status) {
+        HashMap<String, String> statusMap = new HashMap<>();
+        statusMap.put("status", status);
+        Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getServiceApi().putReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, statusMap);
+        putReservationStatus.enqueue(new Callback<Reservation>() {
+            @Override
+            public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                if (response.body() != null){
+                    refreshDetailReservation(response.body().getId());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reservation> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "예약상태 수정에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }

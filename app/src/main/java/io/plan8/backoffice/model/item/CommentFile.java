@@ -11,12 +11,16 @@ public class CommentFile implements BaseModel {
     private String mimeType;
     private String createdDate;
     private String fileName;
+    private String imageUrl;
+    private String authAvatar;
 
-    public CommentFile(String name, String mimeType, String createdDate, String fileName) {
+    public CommentFile(String name, String authAvatar, String mimeType, String createdDate, String fileName, String imageUrl) {
         this.name = name;
+        this.authAvatar = authAvatar;
         this.mimeType = mimeType;
         this.createdDate = createdDate;
         this.fileName = fileName;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -25,6 +29,14 @@ public class CommentFile implements BaseModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAuthAvatar() {
+        return authAvatar;
+    }
+
+    public void setAuthAvatar(String authAvatar) {
+        this.authAvatar = authAvatar;
     }
 
     public String getMimeType() {
@@ -49,5 +61,13 @@ public class CommentFile implements BaseModel {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

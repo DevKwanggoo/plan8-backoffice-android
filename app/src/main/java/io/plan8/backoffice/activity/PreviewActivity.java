@@ -1,5 +1,7 @@
 package io.plan8.backoffice.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +21,22 @@ import io.plan8.backoffice.vm.PreviewActivityVM;
 public class PreviewActivity extends AppCompatActivity {
     private ActivityPreviewBinding binding;
     private PreviewActivityVM vm;
+    private String imageUrl;
+
+    public static Intent buildIntent(Context context, String imageUrl) {
+        Intent intent = new Intent(context, PreviewActivity.class);
+        intent.putExtra("imageUrl", imageUrl);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        imageUrl = getIntent().getStringExtra("imageUrl");
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_preview);
-        vm = new PreviewActivityVM(this, savedInstanceState);
+        vm = new PreviewActivityVM(this, savedInstanceState, imageUrl);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
@@ -34,6 +46,12 @@ public class PreviewActivity extends AppCompatActivity {
                 fileDownload();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 
     private void fileDownload() {
