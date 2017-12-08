@@ -76,6 +76,7 @@ public class ReservationFragment extends BaseFragment {
                 refreshReservationList();
             }
         });
+        refreshReservationList();
     }
 
     @Override
@@ -96,14 +97,17 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 5,
                 reservations.size());
+        Log.e("wtf", "first = " + reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 List<Reservation> result = response.body();
 
                 if (null != result) {
-                    reservations.addAll(result);
-                    vm.addDatas(reservations);
+                    if (reservations.size() + result.size() > reservations.size()) {
+                        reservations.addAll(result);
+                        vm.addDatas(reservations);
+                    }
 
                     if (reservations.size() == 0) {
                         vm.setEmptyFlag(true);
@@ -111,6 +115,7 @@ public class ReservationFragment extends BaseFragment {
                         vm.setEmptyFlag(false);
                     }
                 }
+                Log.e("wtf", "complete = " + reservations.size());
             }
 
             @Override
