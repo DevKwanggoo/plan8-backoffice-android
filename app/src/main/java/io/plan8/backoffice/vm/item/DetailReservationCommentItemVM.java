@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 
-import io.plan8.backoffice.model.item.Comment;
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -26,10 +26,10 @@ public class DetailReservationCommentItemVM extends ActivityVM {
 
     @Bindable
     public String getAuthor() {
-        if (null == comment) {
+        if (null == comment || null == comment.getCreator()) {
             return "";
         }
-        return comment.getAuthor();
+        return comment.getCreator().getName();
     }
 
     @Bindable
@@ -37,7 +37,7 @@ public class DetailReservationCommentItemVM extends ActivityVM {
         if (null == comment) {
             return "";
         }
-        return comment.getComment();
+        return comment.getText();
     }
 
 

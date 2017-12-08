@@ -21,12 +21,9 @@ import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
-import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.User;
-import io.plan8.backoffice.model.item.Comment;
-import io.plan8.backoffice.model.item.CommentFile;
-import io.plan8.backoffice.model.item.CommentReplaceItem;
+import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.vm.item.DetailReservationCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationCommentItemVM;
@@ -41,8 +38,8 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
-    private BindingRecyclerViewAdapter<Member> mentionAdapter;
-    private List<Member> memberList;
+    private BindingRecyclerViewAdapter<Worker> mentionAdapter;
+    private List<Worker> workerList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
@@ -58,14 +55,16 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof Reservation) {
                     return R.layout.item_detail_reservation_header;
-                } else if (data instanceof CommentFile) {
-                    return R.layout.item_detail_reservation_comment_file;
-                } else if (data instanceof CommentReplaceItem) {
-                    return R.layout.item_detail_reservation_comment_replace;
-                } else if (data instanceof DetailReservationMoreButtonItem) {
-                    return R.layout.item_detail_reservation_more_button;
+                } else if (data instanceof Comment) {
+                    if (((Comment) data).getType().equals("commentAdded")) {
+                        return R.layout.item_detail_reservation_comment;
+                    } else if (((Comment) data).getType().equals("attachmentAdded")) {
+                        return R.layout.item_detail_reservation_comment_file;
+                    } else {
+                        return R.layout.item_detail_reservation_comment_replace;
+                    }
                 } else {
-                    return R.layout.item_detail_reservation_comment;
+                    return R.layout.item_detail_reservation_more_button;
                 }
             }
 
@@ -73,26 +72,28 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof Reservation) {
                     binding.setVariable(BR.vm, new DetailReservationHeaderItemVM(getActivity(), savedInstanceState, (Reservation) data));
-                } else if (data instanceof CommentFile) {
-                    binding.setVariable(BR.vm, new DetailReservationCommentFileItemVM(getActivity(), savedInstanceState, (CommentFile) data));
-                } else if (data instanceof CommentReplaceItem) {
-                    binding.setVariable(BR.vm, new DetailReservationCommentReplaceItemVM(getActivity(), savedInstanceState, (CommentReplaceItem) data));
-                } else if (data instanceof DetailReservationMoreButtonItem) {
-                    binding.setVariable(BR.vm, new DetailReservationMoreButtonItemVM(getActivity(), savedInstanceState, (DetailReservationMoreButtonItem) data));
+                } else if (data instanceof Comment) {
+                    if (((Comment) data).getType().equals("commentAdded")) {
+                        binding.setVariable(BR.vm, new DetailReservationCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    } else if (((Comment) data).getType().equals("attachmentAdded")) {
+                        binding.setVariable(BR.vm, new DetailReservationCommentFileItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    } else {
+                        binding.setVariable(BR.vm, new DetailReservationCommentReplaceItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    }
                 } else {
-                    binding.setVariable(BR.vm, new DetailReservationCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    binding.setVariable(BR.vm, new DetailReservationMoreButtonItemVM(getActivity(), savedInstanceState, (DetailReservationMoreButtonItem) data));
                 }
             }
         };
 
-        mentionAdapter = new BindingRecyclerViewAdapter<Member>() {
+        mentionAdapter = new BindingRecyclerViewAdapter<Worker>() {
             @Override
-            protected int selectViewLayoutType(Member data) {
+            protected int selectViewLayoutType(Worker data) {
                 return R.layout.item_mention;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Member data) {
+            protected void bindVariables(ViewDataBinding binding, Worker data) {
                 binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
             }
         };
@@ -123,9 +124,8 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void finish(View view) {
-//        getActivity().onBackPressed();
-//        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-        ((DetailReservationActivity) getActivity()).pickImageForCamera();
+        getActivity().onBackPressed();
+        getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
     }
 
     public void setData(List<BaseModel> datas) {
@@ -144,7 +144,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         return adapter;
     }
 
-    public BindingRecyclerViewAdapter<Member> getMentionAdapter() {
+    public BindingRecyclerViewAdapter<Worker> getMentionAdapter() {
         return mentionAdapter;
     }
 
@@ -153,20 +153,22 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void uploadFile(View view) {
-        Toast.makeText(getActivity().getApplicationContext(), "파일 업로드", Toast.LENGTH_SHORT).show();
+        ((DetailReservationActivity) getActivity()).pickImageForCamera();
     }
 
     public void sendComment(View view) {
-        Toast.makeText(getActivity().getApplicationContext(), "메시지 전송", Toast.LENGTH_SHORT).show();
+        if (getActivity() instanceof DetailReservationActivity) {
+            ((DetailReservationActivity) getActivity()).sendComment(currentText);
+        }
     }
 
-    public void setAutoCompleteMentionData(List<Member> memberList) {
-        this.memberList = memberList;
-        if (null != memberList) {
-            mentionAdapter.setData(memberList);
+    public void setAutoCompleteMentionData(List<Worker> workerList) {
+        this.workerList = workerList;
+        if (null != workerList) {
+            mentionAdapter.setData(workerList);
         }
-        if (null == memberList
-                || memberList.size() <= 0) {
+        if (null == workerList
+                || workerList.size() <= 0) {
             setEmptyMentionList(true);
         } else {
             setEmptyMentionList(false);
@@ -223,16 +225,16 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.currentText);
     }
 
-    public List<Member> getMemberList() {
-        return memberList;
+    public List<Worker> getWorkerList() {
+        return workerList;
     }
 
-    public void setMemberList(List<Member> memberList) {
-        this.memberList = memberList;
+    public void setWorkerList(List<Worker> workerList) {
+        this.workerList = workerList;
     }
 
-    public void replaceToMention(Member member) {
-        setMemberList(null);
+    public void replaceToMention(Worker worker) {
+        setWorkerList(null);
         setEmptyMentionList(true);
 
         int index = 0;
@@ -243,7 +245,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + member.getUsername() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + worker.getUsername() + " ");
         setSelection();
     }
 
@@ -259,7 +261,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     @Override
     public void onClick(View view) {
         plan8BottomSheetDialog.hide();
-        if (view.getId() == R.id.bottomSheetFirstItem){
+        if (view.getId() == R.id.bottomSheetFirstItem) {
             ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_COMPLETE);
         } else if (view.getId() == R.id.bottomSheetSecondItem) {
             ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_INCOMPLETE);

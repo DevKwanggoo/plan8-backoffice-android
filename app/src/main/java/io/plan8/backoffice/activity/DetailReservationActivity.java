@@ -41,13 +41,10 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
-import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Upload;
-import io.plan8.backoffice.model.api.User;
-import io.plan8.backoffice.model.item.Comment;
-import io.plan8.backoffice.model.item.CommentFile;
-import io.plan8.backoffice.model.item.CommentReplaceItem;
+import io.plan8.backoffice.model.api.Attachment;
+import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.DetailReservationActivityVM;
@@ -66,9 +63,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Reservation reservation;
     private int reservationId;
     private MentionsEditText mentionsEditText;
-    private Member.MemberLoader member;
+    private Worker.MemberLoader member;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
+    private List<Comment> comments;
+    private List<BaseModel> detailReservations;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
@@ -110,36 +109,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        getMembers();
-        refreshDetailReservation(reservationId);
+        setMentionEditText(ApplicationManager.getInstance().getCurrentTeamWorkers());
+        refreshReservation();
     }
 
-    private void getMembers() {
-        Call<List<Member>> getMembers = RestfulAdapter.getInstance().getServiceApi().getMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), ApplicationManager.getInstance().getCurrentTeam().getTeamId());
-        getMembers.enqueue(new Callback<List<Member>>() {
-            @Override
-            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-                if (response.body() != null){
-                    setMentionEditText(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Member>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "팀원 목록을 받아오는데 실패하였습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void setMentionEditText(List<Member> memberList){
-        member = new Member.MemberLoader(memberList);
+    private void setMentionEditText(List<Worker> workerList) {
+        member = new Worker.MemberLoader(workerList);
         mentionsEditText = findViewById(R.id.mentionEditText);
         mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
         mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 List<String> buckets = Arrays.asList(BUCKET);
-                List<Member> suggestions = member.getSuggestions(queryToken);
+                List<Worker> suggestions = member.getSuggestions(queryToken);
                 SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
                 // Have suggestions, now call the listener (which is this activity)
                 onReceiveSuggestionsResult(result, BUCKET);
@@ -164,7 +146,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (isAlreadyReplaceMention) {
             return;
         }
-        List<Member> userList = (List<Member>) result.getSuggestions();
+        List<Worker> userList = (List<Worker>) result.getSuggestions();
         vm.setAutoCompleteMentionData(userList);
     }
 
@@ -241,15 +223,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("multipart/form-data", file.getName(), requestBody);
 
-            Call<List<Upload>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
-            uploadCall.enqueue(new Callback<List<Upload>>() {
+            Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
+            uploadCall.enqueue(new Callback<List<Attachment>>() {
                 @Override
-                public void onResponse(Call<List<Upload>> call, Response<List<Upload>> response) {
-                    Log.e("responese : ", response.body().get(0).getUrl());
+                public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
+                    List<Attachment> attachments = response.body();
+                    if (null != attachments) {
+                        Attachment attachment = attachments.get(0);
+                        sendAttachment(attachment);
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<List<Upload>> call, Throwable t) {
+                public void onFailure(Call<List<Attachment>> call, Throwable t) {
                     Log.e("failure : ", t.getMessage());
                 }
             });
@@ -341,44 +327,62 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         dialog.show();
     }
 
-    public void callMoreComment() {
-        //TODO : 이전 내용 보기
-        Toast.makeText(getApplicationContext(), "이전 내용 보기", Toast.LENGTH_SHORT).show();
-    }
-
-    public void replaceToMention(Member member) {
+    public void replaceToMention(Worker worker) {
         isAlreadyReplaceMention = true;
-        vm.replaceToMention(member);
+        vm.replaceToMention(worker);
         isAlreadyReplaceMention = false;
     }
 
-    public void refreshDetailReservation(int reservationId) {
-        Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation(SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
+    public void refreshReservation() {
+        if (null == detailReservations) {
+            detailReservations = new ArrayList<>();
+        }
+        Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
         reservationCall.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 Reservation r = response.body();
                 if (null != r) {
-                    List<BaseModel> result = new ArrayList<>();
-                    result.add(r);
-
-                    result.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
-                    result.add(new Comment("김주석", "댓글입니당\n댓글요\n그래요 댓글", "2일 전"));
-                    result.add(new Comment("이주석", "@조광환 댓글입니당동해물과백두산이\n댓글요댓 @김형규 글입니당동해물과백두산이\n그래요 댓글입니 @웅엉랑링 당동해물과백두산이댓글", "3일 전"));
-                    result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
-                    result.add(new Comment("이주석", "댓글입니당동해물과백두산이\n댓글요댓글입니당동해물과백두산이\n그래요 댓글입니당동해물과백두산이댓글", "3일 전"));
-
-                    result.add(new CommentFile("일주석", "http://i.imgur.com/DvpvklR.png", "zip", "3일 전", "filefilefile", ""));
-                    result.add(new CommentFile("이주석", "http://i.imgur.com/DvpvklR.png", "7z", "2일 전", "file", ""));
-                    result.add(new CommentFile("삼주석", "http://i.imgur.com/DvpvklR.png", "image", "2일 전", "file", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1_5kAr08XCz5xBjRzVKrXUwLHxVD9kou1lSmASRVd2NFodXqK1A"));
-                    result.add(new CommentReplaceItem("삼주석", "작업일자", "2분 전"));
-                    result.add(new CommentFile("사주석", "http://i.imgur.com/DvpvklR.png", "doc", "1일 전", "filefilefilefilefile", ""));
-                    vm.setData(result);
+                    detailReservations = new ArrayList<>();
+                    detailReservations.add(0, r);
+                    vm.setData(detailReservations);
+                    refreshCommentData();
                 }
             }
 
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void refreshCommentData() {
+        if (null == comments) {
+            comments = new ArrayList<>();
+        }
+        Call<List<Comment>> commentCall = RestfulAdapter.getInstance().getServiceApi().getComments("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
+                reservationId,
+                5,
+                comments.size());
+        commentCall.enqueue(new Callback<List<Comment>>() {
+            @Override
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                if (null != detailReservations && detailReservations.size() <= 1) {
+                    detailReservations.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
+                }
+                List<Comment> result = response.body();
+                if (null != result) {
+                    if (comments.size() + result.size() > comments.size()) {
+                        detailReservations.addAll(result);
+                        comments.addAll(result);
+                        vm.setData(detailReservations);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
 
             }
         });
@@ -391,14 +395,49 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         putReservationStatus.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                if (response.body() != null){
-                    refreshDetailReservation(response.body().getId());
+                Reservation reservation = response.body();
+                if (reservation != null) {
+                    refreshReservation();
                 }
             }
 
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "예약상태 수정에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void sendComment(String text) {
+        Call<Comment> createCommentCall = RestfulAdapter.getInstance().getServiceApi().createComment("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, text);
+        createCommentCall.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                Comment result = response.body();
+                detailReservations.add(result);
+                vm.setData(detailReservations);
+                vm.setCurrentText("");
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
+            }
+        });
+    }
+
+    public void sendAttachment(Attachment attachment) {
+        Call<Comment> createCommentCall = RestfulAdapter.getInstance().getServiceApi().createComment("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachment);
+        createCommentCall.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                Comment result = response.body();
+                detailReservations.add(result);
+                vm.setData(detailReservations);
+                vm.setCurrentText("");
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
             }
         });
     }

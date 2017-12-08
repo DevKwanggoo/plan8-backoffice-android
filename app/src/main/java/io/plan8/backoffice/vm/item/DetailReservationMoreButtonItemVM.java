@@ -13,8 +13,9 @@ import io.plan8.backoffice.vm.ActivityVM;
  * Created by chokwanghwan on 2017. 11. 29..
  */
 
-public class DetailReservationMoreButtonItemVM extends ActivityVM{
+public class DetailReservationMoreButtonItemVM extends ActivityVM {
     private DetailReservationMoreButtonItem detailReservationMoreButtonItem;
+
     public DetailReservationMoreButtonItemVM(Activity activity, Bundle savedInstanceState, DetailReservationMoreButtonItem detailReservationMoreButtonItem) {
         super(activity, savedInstanceState);
         this.detailReservationMoreButtonItem = detailReservationMoreButtonItem;
@@ -30,7 +31,7 @@ public class DetailReservationMoreButtonItemVM extends ActivityVM{
 
     public void callMoreComment(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).callMoreComment();
+            ((DetailReservationActivity) getActivity()).refreshCommentData();
         }
     }
 }

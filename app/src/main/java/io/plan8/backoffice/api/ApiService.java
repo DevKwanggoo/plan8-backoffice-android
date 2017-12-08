@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.plan8.backoffice.model.api.Auth;
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
-import io.plan8.backoffice.model.api.Upload;
+import io.plan8.backoffice.model.api.Attachment;
+import io.plan8.backoffice.model.api.Worker;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -42,7 +43,7 @@ public interface ApiService {
 
     @Multipart
     @POST("1/upload")
-    Call<List<Upload>> postUpload(@Header("authorization") String auth, @Part MultipartBody.Part files);
+    Call<List<Attachment>> postUpload(@Header("authorization") String auth, @Part MultipartBody.Part files);
 
     @FormUrlEncoded
     @PUT("1/users/me")
@@ -73,11 +74,25 @@ public interface ApiService {
 
     @FormUrlEncoded
     @PUT("1/reservations/{id}")
-    Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId,  @FieldMap HashMap<String, String> putReservationMap);
-
-    @GET("1/teams/{id}/members")
-    Call<List<Member>> getMembers(@Header("authorization") String auth, @Path("id") int teamId);
+    Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId, @FieldMap HashMap<String, String> putReservationMap);
 
     @GET("1/users/me/members")
-    Call<List<Member>> getTeamMembers(@Header("authorization") String auth);
+    Call<List<Worker>> getTeamMembers(@Header("authorization") String auth);
+
+    @GET("1/teams/{id}/members")
+    Call<List<Worker>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);
+
+    @FormUrlEncoded
+    @POST("1/reservations/{id}/comments")
+    Call<Comment> createComment(@Header("authorization") String auth, @Path("id") int reservationId, @Field("text") String text);
+
+    @FormUrlEncoded
+    @POST("1/reservations/{id}/comments")
+    Call<Comment> createComment(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
+
+    @GET("1/reservations/{id}/comments")
+    Call<List<Comment>> getComments(@Header("authorization") String auth,
+                                    @Path("id") int reservationId,
+                                    @Query("take") int take,
+                                    @Query("skip") int skip);
 }

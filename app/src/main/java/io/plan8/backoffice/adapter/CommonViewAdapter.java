@@ -55,6 +55,9 @@ public class CommonViewAdapter {
 
     @BindingAdapter("commonViewAdapter:mention")
     public static void mention(TextView view, String text) {
+        if (null == text) {
+            return;
+        }
         Pattern p = Pattern.compile("\\@([0-9a-zA-Z가-힣]*)");
         Matcher m = p.matcher(text);
         List<String> mentions = new ArrayList<>();

@@ -82,8 +82,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:adapter="@{vm.mentionAdapter}"
+                    android:clipToPadding="false"
                     android:layoutManager="@{vm.horizontalLayoutManager}"
-                    android:overScrollMode="never" />
+                    android:overScrollMode="never"
+                    android:paddingRight="10dp" />
 
                 <View
                     android:layout_width="match_parent"

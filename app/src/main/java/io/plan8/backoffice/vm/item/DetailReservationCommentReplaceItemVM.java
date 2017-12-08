@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.item.CommentReplaceItem;
 import io.plan8.backoffice.vm.ActivityVM;
 
@@ -14,7 +15,7 @@ import io.plan8.backoffice.vm.ActivityVM;
 public class DetailReservationCommentReplaceItemVM extends ActivityVM {
     private CommentReplaceItem replaceItem;
 
-    public DetailReservationCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, CommentReplaceItem replaceItem) {
+    public DetailReservationCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
         super(activity, savedInstanceState);
         this.replaceItem = replaceItem;
     }

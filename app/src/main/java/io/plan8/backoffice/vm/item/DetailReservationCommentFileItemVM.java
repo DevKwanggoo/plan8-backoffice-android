@@ -8,9 +8,9 @@ import android.view.View;
 
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.PreviewActivity;
+import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.item.CommentFile;
 import io.plan8.backoffice.vm.ActivityVM;
-import io.plan8.backoffice.vm.BaseVM;
 
 /**
  * Created by SSozi on 2017. 11. 29..
@@ -19,7 +19,7 @@ import io.plan8.backoffice.vm.BaseVM;
 public class DetailReservationCommentFileItemVM extends ActivityVM {
     private CommentFile commentFile;
 
-    public DetailReservationCommentFileItemVM(Activity activity, Bundle savedInstanceState, CommentFile commentFile) {
+    public DetailReservationCommentFileItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
         super(activity, savedInstanceState);
         this.commentFile = commentFile;
     }

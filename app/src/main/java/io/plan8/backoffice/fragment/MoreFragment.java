@@ -24,10 +24,9 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.api.Upload;
+import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.item.EmptySpaceItem;
 import io.plan8.backoffice.model.item.LabelItem;
-import io.plan8.backoffice.model.item.MoreProfileItem;
 import io.plan8.backoffice.vm.MoreFragmentVM;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -95,10 +94,10 @@ public class MoreFragment extends BaseFragment {
         File files = new File(absolutePath);
         RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(uri)), files);
         MultipartBody.Part multipart = MultipartBody.Part.createFormData("files", files.getName(), requestFile);
-        Call<List<Upload>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), multipart);
-        uploadCall.enqueue(new Callback<List<Upload>>() {
+        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), multipart);
+        uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
-            public void onResponse(Call<List<Upload>> call, Response<List<Upload>> response) {
+            public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
                 if (response.body() != null){
                     HashMap<String, String> putMeImage = new HashMap<String, String>();
                     putMeImage.put("avatar", response.body().get(0).getUrl());
@@ -120,7 +119,7 @@ public class MoreFragment extends BaseFragment {
             }
 
             @Override
-            public void onFailure(Call<List<Upload>> call, Throwable t) {
+            public void onFailure(Call<List<Attachment>> call, Throwable t) {
                 Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             }
         });

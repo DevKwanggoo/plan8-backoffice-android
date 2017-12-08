@@ -3,13 +3,17 @@ package io.plan8.backoffice;
 import android.content.Context;
 import android.os.Build;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Locale;
 
 import io.plan8.backoffice.activity.MainActivity;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.api.Team;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -20,7 +24,7 @@ public class ApplicationManager {
     private static volatile ApplicationManager instance = null;
     private Me me;
     private List<Team> teams;
-    private List<Member> members;
+    private List<Worker> currentTeamWorkers;
     private Team currentTeam;
     private MainActivity mainActivity;
 
@@ -75,6 +79,21 @@ public class ApplicationManager {
 
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
+        if (null != currentTeam) {
+            final Call<List<Worker>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
+            currentWorkersCall.enqueue(new Callback<List<Worker>>() {
+                @Override
+                public void onResponse(Call<List<Worker>> call, Response<List<Worker>> response) {
+                    currentTeamWorkers = response.body();
+                }
+
+                @Override
+                public void onFailure(Call<List<Worker>> call, Throwable t) {
+
+                }
+            });
+
+        }
     }
 
     public MainActivity getMainActivity() {
@@ -85,11 +104,11 @@ public class ApplicationManager {
         this.mainActivity = mainActivity;
     }
 
-    public List<Member> getMembers() {
-        return members;
+    public List<Worker> getCurrentTeamWorkers() {
+        return currentTeamWorkers;
     }
 
-    public void setMembers(List<Member> members) {
-        this.members = members;
+    public void setCurrentTeamWorkers(List<Worker> currentTeamWorkers) {
+        this.currentTeamWorkers = currentTeamWorkers;
     }
 }

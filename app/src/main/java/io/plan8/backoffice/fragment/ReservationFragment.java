@@ -48,6 +48,12 @@ public class ReservationFragment extends BaseFragment {
         vm = new ReservationFragmentVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         binding.reservationRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -55,12 +61,7 @@ public class ReservationFragment extends BaseFragment {
                 refreshReservationList();
             }
         });
-        return binding.getRoot();
-    }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         binding.reservationCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -71,8 +72,9 @@ public class ReservationFragment extends BaseFragment {
                 }
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
+                reservations.clear();
                 vm.setOpenedCalendar(false);
-                vm.setDatas(new ArrayList<Reservation>());
+                vm.setDatas(reservations);
                 refreshReservationList();
             }
         });
@@ -97,7 +99,6 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 5,
                 reservations.size());
-        Log.e("wtf", "first = " + reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
@@ -106,7 +107,7 @@ public class ReservationFragment extends BaseFragment {
                 if (null != result) {
                     if (reservations.size() + result.size() > reservations.size()) {
                         reservations.addAll(result);
-                        vm.addDatas(reservations);
+                        vm.setDatas(reservations);
                     }
 
                     if (reservations.size() == 0) {
@@ -115,7 +116,6 @@ public class ReservationFragment extends BaseFragment {
                         vm.setEmptyFlag(false);
                     }
                 }
-                Log.e("wtf", "complete = " + reservations.size());
             }
 
             @Override

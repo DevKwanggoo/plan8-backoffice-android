@@ -79,15 +79,15 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-//        Call<List<Member>> memberCall = RestfulAdapter.getInstance().getServiceApi().getTeamMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-//        memberCall.enqueue(new Callback<List<Member>>() {
+//        Call<List<Worker>> memberCall = RestfulAdapter.getInstance().getServiceApi().getTeamMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+//        memberCall.enqueue(new Callback<List<Worker>>() {
 //            @Override
-//            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+//            public void onResponse(Call<List<Worker>> call, Response<List<Worker>> response) {
 //                Log.e("test", "test");
 //            }
 //
 //            @Override
-//            public void onFailure(Call<List<Member>> call, Throwable t) {
+//            public void onFailure(Call<List<Worker>> call, Throwable t) {
 //                Log.e("test", "test");
 //            }
 //        });
