@@ -1,5 +1,6 @@
 package io.plan8.backoffice.activity;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -69,6 +70,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Member.MemberLoader member;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
+    private boolean editFlag = false;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
@@ -119,7 +121,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         getMembers.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     setMentionEditText(response.body());
                 }
             }
@@ -131,7 +133,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    private void setMentionEditText(List<Member> memberList){
+    private void setMentionEditText(List<Member> memberList) {
         member = new Member.MemberLoader(memberList);
         mentionsEditText = findViewById(R.id.mentionEditText);
         mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
@@ -177,6 +179,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     public void onBackPressed() {
         if (ApplicationManager.getInstance().getMainActivity() != null) {
+            Intent returnIntent = new Intent();
+            if (editFlag){
+                returnIntent.putExtra("reservation", reservation);
+            }
+            setResult(Constants.REFRESH_RESERVATION_FRAGMENT, returnIntent);
             finish();
             overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
         } else {
@@ -384,15 +391,17 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    public void editReservationStatus(String status) {
+    public void editReservationStatus(final String status) {
         HashMap<String, String> statusMap = new HashMap<>();
         statusMap.put("status", status);
         Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getServiceApi().putReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, statusMap);
         putReservationStatus.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     refreshDetailReservation(response.body().getId());
+                    reservation.setStatus(status);
+                    editFlag = true;
                 }
             }
 

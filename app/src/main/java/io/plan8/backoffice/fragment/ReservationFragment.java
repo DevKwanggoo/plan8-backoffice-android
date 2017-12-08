@@ -40,6 +40,8 @@ public class ReservationFragment extends BaseFragment {
     private ReservationFragmentVM vm;
     private String currentDate;
     private List<Reservation> reservations;
+    private boolean editFlag = false;
+    private Reservation editItem;
 
     @Nullable
     @Override
@@ -124,5 +126,30 @@ public class ReservationFragment extends BaseFragment {
                 vm.setEmptyFlag(true);
             }
         });
+    }
+
+    public void setEditFlag(boolean flag){
+        editFlag = flag;
+    }
+
+    public void editItem(Reservation reservation){
+        editItem = reservation;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (editFlag) {
+            editFlag = false;
+            if (editItem != null) {
+                for (int i = 0; i < reservations.size(); i++) {
+                    if (reservations.get(i).getId() == editItem.getId()){
+                        reservations.set(i, editItem);
+                    }
+                }
+            }
+            vm.setDatas(reservations);
+        }
     }
 }
