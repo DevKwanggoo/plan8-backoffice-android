@@ -10,6 +10,7 @@ import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.Upload;
+import io.plan8.backoffice.model.item.NotificationItem;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -80,4 +81,7 @@ public interface ApiService {
 
     @GET("1/users/me/members")
     Call<List<Member>> getTeamMembers(@Header("authorization") String auth);
+
+    @GET("1/teams/{id}/notification")
+    Call<List<NotificationItem>> getNotifications(@Header("authorization") String auth, @Path("id") int teamId);
 }
