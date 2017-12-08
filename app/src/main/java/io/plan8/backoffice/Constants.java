@@ -14,4 +14,7 @@ public class Constants {
     public static final int SELECT_IMAGE_CODE = 2000;
     public static final int PICK_IMAGE_CODE = 2001;
     public static final int SELECT_FILE_CODE = 2002;
+
+    //activity Refresh code
+    public static final int REFRESH_RESERVATION_FRAGMENT = 3000;
 }

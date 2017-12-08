@@ -1,5 +1,6 @@
 package io.plan8.backoffice.activity;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -68,6 +69,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private boolean isAlreadyReplaceMention;
     private List<Comment> comments;
     private List<BaseModel> detailReservations;
+    private boolean editFlag = false;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
@@ -159,6 +161,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     public void onBackPressed() {
         if (ApplicationManager.getInstance().getMainActivity() != null) {
+            Intent returnIntent = new Intent();
+            if (editFlag) {
+                returnIntent.putExtra("reservation", reservation);
+            }
+            setResult(Constants.REFRESH_RESERVATION_FRAGMENT, returnIntent);
             finish();
             overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
         } else {
@@ -388,7 +395,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    public void editReservationStatus(String status) {
+    public void editReservationStatus(final String status) {
         HashMap<String, String> statusMap = new HashMap<>();
         statusMap.put("status", status);
         Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getServiceApi().putReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, statusMap);
@@ -398,6 +405,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 Reservation reservation = response.body();
                 if (reservation != null) {
                     refreshReservation();
+                    reservation.setStatus(status);
+                    editFlag = true;
                 }
             }
 
@@ -438,6 +447,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Comment> call, Throwable t) {
+                Log.e("test", "test");
             }
         });
     }

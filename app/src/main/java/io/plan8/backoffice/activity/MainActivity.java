@@ -22,6 +22,7 @@ import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -29,6 +30,7 @@ import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.fragment.NotificationFragment;
 import io.plan8.backoffice.fragment.ReservationFragment;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.vm.MainActivityVM;
 import retrofit2.Call;
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity {
     private int currentTabPosition = 0;
     private List<Fragment> fragments = new ArrayList<>();
     private List<Team> teams;
+    private ReservationFragment reservationFragment;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -109,7 +112,7 @@ public class MainActivity extends BaseActivity {
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                     tabItemTitle.setText("예약");
 
-                    ReservationFragment reservationFragment = new ReservationFragment();
+                    reservationFragment = new ReservationFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
                     reservationFragment.setArguments(bundle);
@@ -186,15 +189,22 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK:
-                if (data.getAction() == null) {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
-                        ((MoreFragment) fragments.get(1)).uploadImage(data.getData());
-                    }
-                } else {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
-                        ((MoreFragment) fragments.get(1)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
+                if (requestCode == Constants.SELECT_FILE_CODE || requestCode == Constants.PICK_IMAGE_CODE || requestCode == Constants.SELECT_IMAGE_CODE) {
+                    if (data.getAction() == null) {
+                        if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                            ((MoreFragment) fragments.get(2)).uploadImage(data.getData());
+                        }
+                    } else {
+                        if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                            ((MoreFragment) fragments.get(2)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
+                        }
                     }
                 }
+                break;
+            case Constants.REFRESH_RESERVATION_FRAGMENT:
+                reservationFragment.setEditFlag(true);
+                reservationFragment.editItem((Reservation)data.getSerializableExtra("reservation"));
+                break;
             default:
                 break;
         }

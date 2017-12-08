@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
@@ -75,7 +76,8 @@ public class ReservationItemVM extends FragmentVM {
     }
 
     public void showDetailReservation(View view) {
-        getFragment().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation));
+//        getFragment().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation));
+        getFragment().startActivityForResult(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation), Constants.REFRESH_RESERVATION_FRAGMENT);
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 }
