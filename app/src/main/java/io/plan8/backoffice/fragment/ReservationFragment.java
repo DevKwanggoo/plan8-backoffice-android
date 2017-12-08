@@ -39,7 +39,7 @@ public class ReservationFragment extends BaseFragment {
     private FragmentReservationBinding binding;
     private ReservationFragmentVM vm;
     private String currentDate;
-    private int skipIndex = 0;
+    private List<Reservation> reservations;
 
     @Nullable
     @Override
@@ -72,7 +72,6 @@ public class ReservationFragment extends BaseFragment {
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 vm.setOpenedCalendar(false);
-                skipIndex = 0;
                 vm.setDatas(new ArrayList<Reservation>());
                 refreshReservationList();
             }
@@ -84,15 +83,10 @@ public class ReservationFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        skipIndex = 0;
-        vm.setDatas(new ArrayList<Reservation>());
-        refreshReservationList();
-    }
-
     private void refreshReservationList() {
+        if (null == reservations) {
+            reservations = new ArrayList<>();
+        }
         if (null == currentDate || currentDate.equals("")) {
             currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(Calendar.getInstance().getTime());
         }
@@ -100,22 +94,22 @@ public class ReservationFragment extends BaseFragment {
                 ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
                 currentDate,
                 currentDate,
-                ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
                 5,
-                skipIndex);
+                reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
-                List<Reservation> reservations = response.body();
-                if (null != reservations) {
-                    skipIndex = skipIndex + response.body().size();
-                    vm.addDatas(reservations);
-                }
+                List<Reservation> result = response.body();
 
-                if (reservations.size() == 0 && skipIndex == 0){
-                    vm.setEmptyFlag(true);
-                } else {
-                    vm.setEmptyFlag(false);
+                if (null != result) {
+                    reservations.addAll(result);
+                    vm.addDatas(reservations);
+
+                    if (reservations.size() == 0) {
+                        vm.setEmptyFlag(true);
+                    } else {
+                        vm.setEmptyFlag(false);
+                    }
                 }
             }
 

@@ -57,6 +57,14 @@ public interface ApiService {
                                             @Query("take") int take,
                                             @Query("skip") int skip);
 
+    @GET("1/teams/{id}/reservations")
+    Call<List<Reservation>> getReservations(@Header("authorization") String auth,
+                                            @Path("id") int teamId,
+                                            @Query("after") String after,
+                                            @Query("before") String before,
+                                            @Query("take") int take,
+                                            @Query("skip") int skip);
+
     @GET("1/reservations/{id}")
     Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
 
