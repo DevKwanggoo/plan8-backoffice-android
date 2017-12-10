@@ -47,6 +47,16 @@ public class DateUtil {
         return stringDate;
     }
 
+    public String getChatTime(String stringDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", ApplicationManager.getInstance().getCurrentLocale());
+        try {
+            return new SimpleDateFormat("HH시 mm분 ss초", ApplicationManager.getInstance().getCurrentLocale()).format(simpleDateFormat.parse(stringDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
+    }
+
     public String getReservationDate(String stringDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", ApplicationManager.getInstance().getCurrentLocale());
         try {

@@ -53,9 +53,9 @@ public class ReservationFragmentVM extends FragmentVM {
         adapter.setData(reservations);
     }
 
-    public void addDatas(List<Reservation> reservations){
-        adapter.addData(reservations);
-    }
+//    public void addDatas(List<Reservation> reservations){
+//        adapter.addData(reservations, );
+//    }
 
     @Bindable
     public Boolean getOpenedCalendar() {

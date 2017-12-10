@@ -1,6 +1,5 @@
 package io.plan8.backoffice.activity;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +30,7 @@ import com.linkedin.android.spyglass.ui.MentionsEditText;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,9 +42,9 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
@@ -69,6 +69,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private boolean isAlreadyReplaceMention;
     private List<Comment> comments;
     private List<BaseModel> detailReservations;
+    private List<BaseModel> tempList;
     private boolean editFlag = false;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
@@ -344,15 +345,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (null == detailReservations) {
             detailReservations = new ArrayList<>();
         }
+        Log.e("test", "detailReservation test");
+//        else {
+//            detailReservations.clear();
+//        }
         Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
         reservationCall.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 Reservation r = response.body();
                 if (null != r) {
-                    detailReservations = new ArrayList<>();
-                    detailReservations.add(0, r);
-                    vm.setData(detailReservations);
+                    if (detailReservations.size() <= 0) {
+                        detailReservations.add(0, r);
+                    }
                     refreshCommentData();
                 }
             }
@@ -375,15 +380,18 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         commentCall.enqueue(new Callback<List<Comment>>() {
             @Override
             public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                if (null != detailReservations && detailReservations.size() <= 1) {
-                    detailReservations.add(new DetailReservationMoreButtonItem("이전 내용 보기"));
+                if (detailReservations.size() <= 1) {
+                    detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
+                    vm.setData(detailReservations);
                 }
                 List<Comment> result = response.body();
                 if (null != result) {
                     if (comments.size() + result.size() > comments.size()) {
-                        detailReservations.addAll(result);
+                        Collections.reverse(result);
                         comments.addAll(result);
-                        vm.setData(detailReservations);
+                        List<BaseModel> tempList = new ArrayList<BaseModel>();
+                        tempList.addAll(result);
+                        vm.addData(tempList, 2, result.size());
                     }
                 }
             }
@@ -422,9 +430,15 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         createCommentCall.enqueue(new Callback<Comment>() {
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {
+//                Comment result = response.body();
+//                detailReservations.add(result);
+//                vm.setData(detailReservations);
+//                vm.setCurrentText("");
                 Comment result = response.body();
-                detailReservations.add(result);
-                vm.setData(detailReservations);
+                if (null != result) {
+                    comments.add(0, result);
+                    vm.addData(result, 2);
+                }
                 vm.setCurrentText("");
             }
 
@@ -440,8 +454,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {
                 Comment result = response.body();
-                detailReservations.add(result);
-                vm.setData(detailReservations);
+                comments.add(0, result);
+                vm.addData(detailReservations, 2, 1);
                 vm.setCurrentText("");
             }
 

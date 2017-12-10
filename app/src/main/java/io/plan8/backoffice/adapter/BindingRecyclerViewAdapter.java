@@ -3,6 +3,7 @@ package io.plan8.backoffice.adapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +37,16 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
-    public void addData(List<T> data){
-        if (data != null) this.data.addAll(data);
+    public void addData(List<T> data, int startIndex, int dataSize){
+        if (data != null) this.data.addAll(startIndex, data);
         else this.data = new ArrayList<>();
-        notifyDataSetChanged();
+            notifyItemRangeChanged(startIndex, dataSize);
+    }
+
+    public void addData(T data, int startIndex){
+        if (data != null) this.data.add(startIndex, data);
+        else this.data = new ArrayList<>();
+        notifyItemRangeChanged(startIndex, 1);
     }
 
     @Override

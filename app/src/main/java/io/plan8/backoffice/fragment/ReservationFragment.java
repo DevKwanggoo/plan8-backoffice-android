@@ -76,7 +76,6 @@ public class ReservationFragment extends BaseFragment {
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 reservations.clear();
                 vm.setOpenedCalendar(false);
-                vm.setDatas(reservations);
                 refreshReservationList();
             }
         });

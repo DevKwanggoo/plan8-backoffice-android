@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -132,6 +131,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         adapter.setData(datas);
     }
 
+    public void addData(List<BaseModel> data, int startIndex, int dataSize) {
+        adapter.addData(data, startIndex, dataSize);
+    }
+
+    public void addData(BaseModel data, int startIndex) {
+        adapter.addData(data, startIndex);
+    }
+
     public RecyclerView.LayoutManager getVerticalLayoutManager() {
         return new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL, false);
     }
@@ -245,7 +252,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + worker.getUsername() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + worker.getName() + " ");
         setSelection();
     }
 

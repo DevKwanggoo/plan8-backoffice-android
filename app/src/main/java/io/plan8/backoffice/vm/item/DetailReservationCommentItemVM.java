@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 
 import io.plan8.backoffice.model.api.Comment;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -46,6 +47,6 @@ public class DetailReservationCommentItemVM extends ActivityVM {
         if (null == comment) {
             return "";
         }
-        return comment.getCreated();
+        return DateUtil.getInstance().getChatTime(comment.getCreated());
     }
 }

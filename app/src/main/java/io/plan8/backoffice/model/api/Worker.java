@@ -186,7 +186,6 @@ public class Worker implements BaseModel, Mentionable {
                     String suggestionUserName = suggestion.getUsername().toLowerCase();
                     String suggestionName = suggestion.getName().toLowerCase();
 
-
                     if (suggestionName.contains(namePrefixes[0]) || suggestionUserName.contains(namePrefixes[0])) {
                         suggestions.add(suggestion);
                     }

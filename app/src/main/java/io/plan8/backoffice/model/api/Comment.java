@@ -87,8 +87,6 @@ public class Comment implements BaseModel {
         return data;
     }
 
-
-
     public String getCreated() {
         return created;
     }
