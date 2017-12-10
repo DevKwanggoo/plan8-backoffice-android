@@ -189,21 +189,19 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK:
-                if (requestCode == Constants.SELECT_FILE_CODE || requestCode == Constants.PICK_IMAGE_CODE || requestCode == Constants.SELECT_IMAGE_CODE) {
-                    if (data.getAction() == null) {
-                        if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
-                            ((MoreFragment) fragments.get(2)).uploadImage(data.getData());
-                        }
-                    } else {
-                        if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
-                            ((MoreFragment) fragments.get(2)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
-                        }
+                if (data.getAction() == null) {
+                    if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(2)).uploadImage(data.getData());
+                    }
+                } else {
+                    if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(2)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
                     }
                 }
                 break;
             case Constants.REFRESH_RESERVATION_FRAGMENT:
                 reservationFragment.setEditFlag(true);
-                reservationFragment.editItem((Reservation)data.getSerializableExtra("reservation"));
+                reservationFragment.editItem((Reservation) data.getSerializableExtra("reservation"));
                 break;
             default:
                 break;

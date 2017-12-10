@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -13,12 +14,15 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.linkedin.android.spyglass.suggestions.SuggestionsResult;
 import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsResultListener;
 import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsVisibilityManager;
@@ -186,7 +190,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     public void pickImageForCamera() {
         Intent i = new Intent();
         i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        captureImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDate() + ".jpg"));
+        captureImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
         i.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
         startActivityForResult(i, Constants.PICK_IMAGE_CODE);
     }
@@ -210,6 +214,32 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         }
     }
 
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED
+                || ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            PermissionListener permissionListener = new PermissionListener() {
+                @Override
+                public void onPermissionGranted() {
+                    pickImageForCamera();
+                }
+
+                @Override
+                public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+
+                }
+            };
+
+            TedPermission.with(getApplicationContext())
+                    .setPermissionListener(permissionListener)
+                    .setRationaleMessage("파일 업로드를 정상적으로 사용하기 위해서는 내부저장소 접근권한이 필요합니다.")
+                    .setDeniedMessage("접근권한을 거부하셨습니다. \n[설정] > [권한] 에서 권한을 허용할 수 있습니다.")
+                    .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .check();
+        } else {
+            pickImageForCamera();
+        }
+    }
+
     public void callFileUpload(Uri data) {
         String absolutePath = getRealPathFromURI(getApplicationContext(), data);
 
@@ -228,7 +258,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             fileLength = file.length();
 
-            MultipartBody.Part body = MultipartBody.Part.createFormData("multipart/form-data", file.getName(), requestBody);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
 
             Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
             uploadCall.enqueue(new Callback<List<Attachment>>() {
@@ -402,8 +432,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         putReservationStatus.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                Reservation reservation = response.body();
-                if (reservation != null) {
+                if (response.body() != null) {
                     refreshReservation();
                     reservation.setStatus(status);
                     editFlag = true;
@@ -440,8 +469,10 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {
                 Comment result = response.body();
-                detailReservations.add(result);
-                vm.setData(detailReservations);
+                if (result != null) {
+                    detailReservations.add(result);
+                    vm.setData(detailReservations);
+                }
                 vm.setCurrentText("");
             }
 

@@ -106,6 +106,7 @@ public class MoreFragment extends BaseFragment {
                         @Override
                         public void onResponse(Call<Me> call, Response<Me> response) {
                             if (response.body() != null){
+                                ApplicationManager.getInstance().setMe(response.body());
                                 refreshFragment();
                             }
                         }

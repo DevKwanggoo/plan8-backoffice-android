@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "io.plan8.backoffice"
-        manifestPlaceholders = [onesignal_app_id: "c92387e5-7bed-482c-9df7-08415ae72abe",
+        manifestPlaceholders = [onesignal_app_id: "758f6bdb-aa6f-4d98-93ad-49215de66ecc",
                                 // Project number pulled from dashboard, local value is ignored.
                                 onesignal_google_project_number: "REMOTE"]
         minSdkVersion 19

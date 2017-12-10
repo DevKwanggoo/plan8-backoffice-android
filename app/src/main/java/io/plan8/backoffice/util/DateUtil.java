@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import io.plan8.backoffice.ApplicationManager;
 
@@ -27,6 +29,10 @@ public class DateUtil {
 
     public String getCurrentDate() {
         return getFilteredDateMiliseconds(Calendar.getInstance().getTimeInMillis(), YYYYMD_FORMAT);
+    }
+
+    public String getCurrentDateAPIFormpat() {
+        return new SimpleDateFormat(YYYYMD_API_FORMAT, ApplicationManager.getInstance().getCurrentLocale()).format(Calendar.getInstance().getTimeInMillis());
     }
 
     public String getCurrnetDateAPIFormat(Date date) {
@@ -67,4 +73,45 @@ public class DateUtil {
         Date date = new Date();
         return formatter.format(date);
     }
+
+    public Long getTZFormatToMiliseconds(String tzDate) {
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA);
+        originalFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Long convertDate = null;
+        try {
+            Date date = originalFormat.parse(tzDate);
+            convertDate = date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return convertDate;
+    }
+
+    public Long getCurrentDateLongFormat() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTimeInMillis();
+    }
+
+    /*
+    if (comment != null && comment.getCreatedDate() != null) {
+            int minute = (int) ((new DateUtils().getCurrentDate() - new DateUtils().getTZFormatToMiliseconds(comment.getCreatedDate())) / 60000.0f);
+
+            if (minute < 60) {
+                if (minute <= 0) {
+                    return "지금";
+                } else {
+                    return minute + "분 전";
+                }
+            } else if (minute >= 60 && minute < 1440) {
+                return minute / 60 + "시간 전";
+            } else {
+                if (minute < 2880) {
+                    return "어제";
+                } else {
+                    return new DateUtils().getStringTZFormatToDotDate(comment.getCreatedDate());
+                }
+            }
+        }
+        return "";
+    */
 }
