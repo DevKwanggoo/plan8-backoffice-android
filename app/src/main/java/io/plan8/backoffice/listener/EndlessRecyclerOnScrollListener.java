@@ -39,6 +39,11 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             loading = true;
         }
     }
+
+    public void initPrevItemCount() {
+        previousTotal = 0;
+    }
+
     //Start loading
     public abstract void onLoadMore(int currentPage);
 }

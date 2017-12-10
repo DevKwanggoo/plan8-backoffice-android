@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,8 @@ public class ReservationFragment extends BaseFragment {
     private List<Reservation> reservations;
     private boolean editFlag = false;
     private Reservation editItem;
+    private RecyclerView recyclerView;
+    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @Nullable
     @Override
@@ -56,13 +59,14 @@ public class ReservationFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        binding.reservationRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
                 refreshReservationList();
             }
-        });
+        };
+
+        binding.reservationRecyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
         binding.reservationCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -75,6 +79,7 @@ public class ReservationFragment extends BaseFragment {
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 reservations.clear();
+                endlessRecyclerOnScrollListener.initPrevItemCount();
                 vm.setOpenedCalendar(false);
                 refreshReservationList();
             }
@@ -109,6 +114,7 @@ public class ReservationFragment extends BaseFragment {
                     if (reservations.size() + result.size() > reservations.size()) {
                         reservations.addAll(result);
                         vm.setDatas(reservations);
+                        binding.reservationRecyclerView.scrollTo(0,0);
                     }
 
                     if (reservations.size() == 0) {
@@ -143,6 +149,7 @@ public class ReservationFragment extends BaseFragment {
             editFlag = false;
             if (editItem != null) {
                 for (int i = 0; i < reservations.size(); i++) {
+
                     if (reservations.get(i).getId() == editItem.getId()){
                         reservations.set(i, editItem);
                     }
