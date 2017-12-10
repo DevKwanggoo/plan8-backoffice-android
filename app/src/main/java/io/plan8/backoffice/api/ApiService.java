@@ -91,7 +91,11 @@ public interface ApiService {
     @POST("1/reservations/{id}/comments")
     Call<Comment> createComment(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
 
-    @GET("1/reservations/{id}/comments")
+    @FormUrlEncoded
+    @POST("1/reservations/{id}/comments")
+    Call<Comment> createActivity(@Header("authorization") String auth, @Path("id") int reservationId, @Field("type") String type);
+
+    @GET("1/reservations/{id}/activities")
     Call<List<Comment>> getComments(@Header("authorization") String auth,
                                     @Path("id") int reservationId,
                                     @Query("take") int take,

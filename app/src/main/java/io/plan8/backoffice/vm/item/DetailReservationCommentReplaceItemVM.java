@@ -5,7 +5,8 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 
 import io.plan8.backoffice.model.api.Comment;
-import io.plan8.backoffice.model.item.CommentReplaceItem;
+import io.plan8.backoffice.util.DateUtil;
+import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -13,26 +14,23 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class DetailReservationCommentReplaceItemVM extends ActivityVM {
-    private CommentReplaceItem replaceItem;
+    private Comment comment;
 
     public DetailReservationCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
         super(activity, savedInstanceState);
-        this.replaceItem = replaceItem;
+        this.comment = comment;
     }
 
     @Bindable
     public String getReplaceTitle(){
-        if (replaceItem != null && replaceItem.getReplacePoint() != null){
-            return replaceItem.getUserName() + "님이" + replaceItem.getReplacePoint() + "를 수정하였습니다.";
-        }
-        return "";
+        return ViewUtil.getInstance().getActivityItemText(comment);
     }
 
     @Bindable
     public String getCreatedDate(){
-        if (replaceItem != null && replaceItem.getCreatedDate() != null){
-            return replaceItem.getCreatedDate();
+        if (null == comment) {
+            return "";
         }
-        return "";
+        return DateUtil.getInstance().getChatTime(comment.getCreated());
     }
 }
