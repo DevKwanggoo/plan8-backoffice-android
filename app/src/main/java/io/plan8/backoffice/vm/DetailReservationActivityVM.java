@@ -160,7 +160,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void uploadFile(View view) {
-        ((DetailReservationActivity) getActivity()).pickImageForCamera();
+        ((DetailReservationActivity)getActivity()).checkPermission();
     }
 
     public void sendComment(View view) {

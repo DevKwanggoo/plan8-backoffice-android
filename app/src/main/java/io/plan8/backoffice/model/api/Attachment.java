@@ -9,10 +9,10 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Attachment implements BaseModel {
-    @SerializedName("name") String name;
-    @SerializedName("mimetype") String mimetype;
-    @SerializedName("url") String url;
-    @SerializedName("bytes") long bytes;
+    @SerializedName("name") private String name;
+    @SerializedName("mimetype") private String mimetype;
+    @SerializedName("url") private String url;
+    @SerializedName("bytes") private long bytes;
 
     public Attachment() {
     }

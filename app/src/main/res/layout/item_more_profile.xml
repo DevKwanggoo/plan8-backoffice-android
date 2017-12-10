@@ -27,6 +27,7 @@
                 android:layout_height="36dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
+                android:scaleType="centerCrop"
                 commonViewAdapter:glide="@{vm.avatar}"
                 app:riv_mutate_background="true"
                 app:riv_border_color="#26000000"
