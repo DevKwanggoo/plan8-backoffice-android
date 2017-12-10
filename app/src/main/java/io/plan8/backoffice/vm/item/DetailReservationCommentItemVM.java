@@ -22,7 +22,10 @@ public class DetailReservationCommentItemVM extends ActivityVM {
 
     @Bindable
     public String getImageUrl() {
-        return "http://i.imgur.com/DvpvklR.png";
+        if (null == comment || null == comment.getCreator()) {
+            return "";
+        }
+        return comment.getCreator().getAvatar();
     }
 
     @Bindable

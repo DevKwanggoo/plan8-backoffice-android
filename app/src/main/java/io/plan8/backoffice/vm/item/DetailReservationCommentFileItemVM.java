@@ -9,7 +9,7 @@ import android.view.View;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.PreviewActivity;
 import io.plan8.backoffice.model.api.Comment;
-import io.plan8.backoffice.model.item.CommentFile;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -17,60 +17,67 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class DetailReservationCommentFileItemVM extends ActivityVM {
-    private CommentFile commentFile;
+    private Comment comment;
 
     public DetailReservationCommentFileItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
         super(activity, savedInstanceState);
-        this.commentFile = commentFile;
+        this.comment = comment;
     }
 
     @Bindable
     public boolean isImage(){
-        return commentFile.getMimeType().contains("image");
+        if (null == comment || null == comment.getAttachment()) {
+            return false;
+        }
+        return comment.getAttachment().getMimetype().contains("image");
     }
 
     @Bindable
     public String getAuthName(){
-        if (commentFile != null && commentFile.getName() != null){
-            return commentFile.getName();
+        if (null == comment || null == comment.getCreator()) {
+            return "";
         }
-        return "";
+
+        return comment.getCreator().getName();
     }
 
     @Bindable
     public String getAuthAvatar() {
-        if (commentFile != null && commentFile.getAuthAvatar() != null){
-            return commentFile.getAuthAvatar();
+        if (null == comment || null == comment.getCreator()) {
+            return "";
         }
-        return "";
+        return comment.getCreator().getAvatar();
     }
 
     @Bindable
     public String getFileName(){
-        if (commentFile != null && commentFile.getFileName() != null){
-            return commentFile.getFileName() + "." +commentFile.getMimeType();
+        if (null == comment || null == comment.getAttachment()) {
+            return "";
         }
-        return "";
+        return comment.getAttachment().getName()+"."+comment.getAttachment().getMimetype();
     }
 
     @Bindable
     public String getCreatedDate(){
-        if (commentFile != null && commentFile.getCreatedDate() != null){
-            return commentFile.getCreatedDate();
+        if (null == comment) {
+            return "";
         }
-        return "";
+        return DateUtil.getInstance().getChatTime(comment.getCreated());
     }
 
     @Bindable
     public String getImageUrl() {
-        if (commentFile != null && commentFile.getImageUrl() != null){
-            return commentFile.getImageUrl();
+        if (null == comment || null == comment.getAttachment()) {
+            return "";
         }
-        return "";
+        return comment.getAttachment().getUrl();
     }
 
     public void previewImage(View view){
-        Intent previewIntent = PreviewActivity.buildIntent(getActivity(), commentFile.getImageUrl());
+        if (null == comment || null == comment.getAttachment()) {
+            return;
+        }
+        Intent previewIntent = PreviewActivity.buildIntent(getActivity(), comment.getAttachment().getUrl());
         getActivity().startActivity(previewIntent);
         getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }

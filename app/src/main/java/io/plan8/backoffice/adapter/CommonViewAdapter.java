@@ -30,7 +30,7 @@ import io.plan8.backoffice.R;
 public class CommonViewAdapter {
     @BindingAdapter("commonViewAdapter:glide")
     public static void glide(ImageView view, String imageUrl) {
-        Glide.with(view.getContext()).load("http://i.imgur.com/DvpvklR.png").into(view);
+        Glide.with(view.getContext()).load(imageUrl).into(view);
     }
 
     @BindingAdapter("commonViewAdapter:glide")
