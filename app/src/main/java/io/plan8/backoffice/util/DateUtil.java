@@ -54,13 +54,24 @@ public class DateUtil {
     }
 
     public String getChatTime(String stringDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", ApplicationManager.getInstance().getCurrentLocale());
-        try {
-            return new SimpleDateFormat("HH시 mm분 ss초", ApplicationManager.getInstance().getCurrentLocale()).format(simpleDateFormat.parse(stringDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+        int minute = (int) ((getCurrentDateLongFormat() - getTZFormatToMiliseconds(stringDate)) / 60000.0f);
+
+        if (minute < 60) {
+            if (minute <= 0) {
+                return "지금";
+            } else {
+                return minute + "분 전";
+            }
+        } else if (minute >= 60 && minute < 1440) {
+            return minute / 60 + "시간 전";
+        } else {
+            if (minute < 2880) {
+                return "어제";
+            } else {
+                return getReservationDate(stringDate);
+            }
         }
-        return stringDate;
     }
 
     public String getReservationDate(String stringDate) {
@@ -101,27 +112,4 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTimeInMillis();
     }
-
-    /*
-    if (comment != null && comment.getCreatedDate() != null) {
-            int minute = (int) ((new DateUtils().getCurrentDate() - new DateUtils().getTZFormatToMiliseconds(comment.getCreatedDate())) / 60000.0f);
-
-            if (minute < 60) {
-                if (minute <= 0) {
-                    return "지금";
-                } else {
-                    return minute + "분 전";
-                }
-            } else if (minute >= 60 && minute < 1440) {
-                return minute / 60 + "시간 전";
-            } else {
-                if (minute < 2880) {
-                    return "어제";
-                } else {
-                    return new DateUtils().getStringTZFormatToDotDate(comment.getCreatedDate());
-                }
-            }
-        }
-        return "";
-    */
 }
