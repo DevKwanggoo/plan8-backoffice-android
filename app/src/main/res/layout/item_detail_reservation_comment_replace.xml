@@ -12,25 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:orientation="horizontal">
-        <TextView
-            android:id="@+id/replaceTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{vm.replaceTitle}"
-            android:textColor="@color/defaultDarkColor"
-            android:fontFamily="sans-serif"
-            android:layout_centerInParent="true"
-            android:textSize="12dp" />
 
-        <TextView
-            android:layout_toRightOf="@+id/replaceTitle"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{vm.createdDate}"
-            android:layout_centerVertical="true"
-            android:fontFamily="sans-serif"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/grayColor"
-            android:textSize="12dp" />
+            android:layout_centerInParent="true">
+
+            <TextView
+                android:id="@+id/replaceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@{vm.replaceTitle}"
+                android:textColor="@color/defaultDarkColor"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/replaceTitle"
+                android:fontFamily="sans-serif"
+                android:text="@{vm.createdDate}"
+                android:textColor="@color/grayColor"
+                android:textSize="12dp" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>
