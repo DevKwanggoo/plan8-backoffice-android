@@ -207,19 +207,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String imageFileName = "JPEG_" + new DateUtil().getCurrentDateAPIFormpat() + "_";
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Camera");
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        return image;
-    }
-
     public void pickFileForFileManager() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
