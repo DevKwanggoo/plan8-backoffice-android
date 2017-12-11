@@ -14,6 +14,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -32,14 +33,18 @@ import com.linkedin.android.spyglass.tokenization.interfaces.QueryTokenReceiver;
 import com.linkedin.android.spyglass.ui.MentionsEditText;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.BuildConfig;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
@@ -191,16 +196,15 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     public void pickImageForCamera() {
         Intent i = new Intent();
         i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        captureImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
-        i.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
-
-//        if (Build.VERSION.SDK_INT > 21) { //use this if Lollipop_Mr1 (API 22) or above
-//            i.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getApplicationContext(), getPackageName()+".fileprovider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg")));
-//        } else {
-//            i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg")));
-//        }
-
-        startActivityForResult(i, Constants.PICK_IMAGE_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri photoURI = FileProvider.getUriForFile(DetailReservationActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
+            i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(i, Constants.PICK_IMAGE_CODE);
+        } else {
+            captureImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
+            i.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
+            startActivityForResult(i, Constants.PICK_IMAGE_CODE);
+        }
     }
 
     public void pickFileForFileManager() {
@@ -228,7 +232,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             PermissionListener permissionListener = new PermissionListener() {
                 @Override
                 public void onPermissionGranted() {
-                    pickImageForCamera();
+                    vm.showFileBottomSheet();
                 }
 
                 @Override
@@ -244,7 +248,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .check();
         } else {
-            pickImageForCamera();
+            vm.showFileBottomSheet();
         }
     }
 
@@ -390,8 +394,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 if (null != r) {
                     if (detailReservations.size() <= 0) {
                         detailReservations.add(0, r);
+                        refreshCommentData();
+                    } else {
+                        detailReservations.set(0, r);
+                        vm.setData(detailReservations);
                     }
-                    refreshCommentData();
                 }
             }
 
