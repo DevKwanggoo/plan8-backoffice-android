@@ -68,5 +68,6 @@ dependencies {
     compile 'com.onesignal:OneSignal:[3.6.5, 3.99.99]'
     compile 'com.google.firebase:firebase-messaging:11.4.2'
     compile 'com.twitter:twitter-text:1.6.1'
+    compile 'com.twitter.penguin:korean-text:4.4'
 }
 apply plugin: 'com.google.gms.google-services'

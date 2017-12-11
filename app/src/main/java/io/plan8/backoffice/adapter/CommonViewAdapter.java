@@ -14,11 +14,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.twitter.Extractor;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
@@ -58,19 +56,12 @@ public class CommonViewAdapter {
         if (null == text) {
             return;
         }
-        Pattern p = Pattern.compile("\\@([0-9a-zA-Z가-힣]*)");
-        Matcher m = p.matcher(text);
-        List<String> mentions = new ArrayList<>();
-        while (m.find()) {
-            mentions.add(m.group());
-        }
+
+        List<Extractor.Entity> mentionList = new Extractor().extractMentionsOrListsWithIndices(text);
 
         final SpannableStringBuilder sb = new SpannableStringBuilder(text);
-        for (String s : mentions) {
-            int startIndex = text.indexOf(s);
-            int endIndex = startIndex+s.length();
-
-            sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(view.getContext(), R.color.colorPrimary)), startIndex, endIndex, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        for (Extractor.Entity e : mentionList) {
+            sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(view.getContext(), R.color.colorPrimary)), e.getStart(), e.getEnd(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
         view.setText(sb);
     }

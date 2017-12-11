@@ -33,12 +33,9 @@ import com.linkedin.android.spyglass.tokenization.interfaces.QueryTokenReceiver;
 import com.linkedin.android.spyglass.ui.MentionsEditText;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,6 +77,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private List<BaseModel> detailReservations;
     private List<BaseModel> tempList;
     private boolean editFlag = false;
+    private Uri photoURI;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
@@ -197,7 +195,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         Intent i = new Intent();
         i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri photoURI = FileProvider.getUriForFile(DetailReservationActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
+            photoURI = FileProvider.getUriForFile(DetailReservationActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
             i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(i, Constants.PICK_IMAGE_CODE);
         } else {
@@ -219,7 +217,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Constants.PICK_IMAGE_CODE) {
-                callFileUpload(captureImageUri);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                    callFileUpload(photoURI);
+                } else {
+                    callFileUpload(captureImageUri);
+                }
             } else if (requestCode == Constants.SELECT_FILE_CODE) {
                 callFileUpload(data.getData());
             }

@@ -144,7 +144,6 @@ public class ReservationFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
         if (editFlag) {
             editFlag = false;
             if (editItem != null) {
