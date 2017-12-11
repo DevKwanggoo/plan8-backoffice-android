@@ -221,7 +221,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             PermissionListener permissionListener = new PermissionListener() {
                 @Override
                 public void onPermissionGranted() {
-                    pickImageForCamera();
+                    vm.showFileBottomSheet();
                 }
 
                 @Override
@@ -237,7 +237,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .check();
         } else {
-            pickImageForCamera();
+            vm.showFileBottomSheet();
         }
     }
 
@@ -381,10 +381,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 Reservation r = response.body();
                 if (null != r) {
-                    if (detailReservations.size() <= 0) {
+                    if (detailReservations.size() <= 0){
                         detailReservations.add(0, r);
+                        refreshCommentData();
+                    } else {
+                        detailReservations.set(0, r);
+                        vm.setData(detailReservations);
                     }
-                    refreshCommentData();
                 }
             }
 

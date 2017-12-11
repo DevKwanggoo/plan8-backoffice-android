@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     private BindingRecyclerViewAdapter<Worker> mentionAdapter;
     private List<Worker> workerList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
+    private Plan8BottomSheetDialog fileUploadBottomSheet;
     private boolean isActiveSendBtn;
     private OnTextChangeListener onTextChangeListener;
     private String currentText = "";
@@ -110,6 +112,24 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         plan8BottomSheetDialog.getSecondItem().setOnClickListener(this);
         plan8BottomSheetDialog.setThirdItem("취소됨");
         plan8BottomSheetDialog.getThirdItem().setOnClickListener(this);
+
+        fileUploadBottomSheet = new Plan8BottomSheetDialog(getActivity());
+        fileUploadBottomSheet.setFirstItem(R.drawable.ic_line_camera, "카메라에서 가져오기");
+        fileUploadBottomSheet.getFirstItem().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileUploadBottomSheet.hide();
+                ((DetailReservationActivity)getActivity()).pickImageForCamera();
+            }
+        });
+        fileUploadBottomSheet.setSecondItem(R.drawable.ic_line_file, "파일매니저에서 가져오기");
+        fileUploadBottomSheet.getSecondItem().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileUploadBottomSheet.hide();
+                ((DetailReservationActivity)getActivity()).pickFileForFileManager();
+            }
+        });
     }
 
     @Bindable
@@ -157,6 +177,10 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
     public void showBottomSheet() {
         plan8BottomSheetDialog.show();
+    }
+
+    public void showFileBottomSheet() {
+        fileUploadBottomSheet.show();
     }
 
     public void uploadFile(View view) {
