@@ -20,6 +20,7 @@ import io.plan8.backoffice.activity.DetailReservationActivity;
 
 public class OneSignalNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
     private Context context;
+
     public OneSignalNotificationOpenedHandler(Context context) {
         this.context = context;
     }
@@ -39,11 +40,9 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
 
         String customKey;
 
-        if (data != null) {
-            customKey = data.optString("customkey", null);
-            if (customKey != null)
-                Log.e("OneSignalExample", "customkey set with value: " + customKey);
-        }
+        customKey = data.optString("customkey", null);
+        if (customKey != null)
+            Log.e("OneSignalExample", "customkey set with value: " + customKey);
 
         if (actionType == OSNotificationAction.ActionType.ActionTaken)
             Log.e("OneSignalExample", "Button pressed with id: " + result.action.actionID);

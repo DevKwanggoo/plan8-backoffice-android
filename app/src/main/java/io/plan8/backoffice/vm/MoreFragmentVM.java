@@ -21,7 +21,7 @@ import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.item.LabelItem;
-import io.plan8.backoffice.model.item.MoreProfileItem;
+import io.plan8.backoffice.util.PushManager;
 import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
 import io.plan8.backoffice.vm.item.LabelItemVM;
 import io.plan8.backoffice.vm.item.MoreProfileItemVM;
@@ -91,5 +91,6 @@ public class MoreFragmentVM extends FragmentVM {
         getFragment().getActivity().startActivity(loginIntent);
         getFragment().getActivity().finish();
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        new PushManager().clearTag();
     }
 }

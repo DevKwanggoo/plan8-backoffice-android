@@ -11,16 +11,36 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Me implements BaseModel {
-    @SerializedName("id") int id;
-    @SerializedName("created") String created;
-    @SerializedName("updated") String updated;
-    @SerializedName("mobileNumber") String mobileNumber;
-    @SerializedName("name") String name;
-    @SerializedName("username") String username;
-    @SerializedName("avatar") String avatar;
-    @SerializedName("memberships") List<Team> teams;
+    @SerializedName("id")
+    int id;
+    @SerializedName("created")
+    String created;
+    @SerializedName("updated")
+    String updated;
+    @SerializedName("mobileNumber")
+    String mobileNumber;
+    @SerializedName("name")
+    String name;
+    @SerializedName("username")
+    String username;
+    @SerializedName("avatar")
+    String avatar;
+    @SerializedName("publicId")
+    String publicId;
+    @SerializedName("verified")
+    boolean verified;
+    @SerializedName("hasPassword")
+    boolean hasPassword;
+    @SerializedName("hasName")
+    boolean hasName;
+    @SerializedName("memberships")
+    List<Team> teams;
 
     public Me() {
+    }
+
+    public String getPublicId() {
+        return publicId;
     }
 
     public int getId() {

@@ -274,6 +274,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         public void onResponse(Call<Me> call, Response<Me> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setMe(response.body());
+
+                                //TODO : 푸시 매니저에
                                 nextActivity();
                             }
                         }

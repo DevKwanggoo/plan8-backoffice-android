@@ -11,6 +11,7 @@ import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.util.PushManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +64,7 @@ public class ApplicationManager {
 
     public void setMe(Me me) {
         this.me = me;
+        new PushManager().setPublicIdTag(me);
     }
 
     public List<Team> getTeams() {
