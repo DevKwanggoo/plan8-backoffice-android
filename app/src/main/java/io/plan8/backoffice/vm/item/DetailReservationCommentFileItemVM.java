@@ -25,15 +25,15 @@ public class DetailReservationCommentFileItemVM extends ActivityVM {
     }
 
     @Bindable
-    public boolean isImage(){
-        if (null == comment || null == comment.getAttachment()) {
+    public boolean isImage() {
+        if (null == comment || null == comment.getAttachment() || null == comment.getAttachment().getMimetype()) {
             return false;
         }
         return comment.getAttachment().getMimetype().contains("image");
     }
 
     @Bindable
-    public String getAuthName(){
+    public String getAuthName() {
         if (null == comment || null == comment.getCreator()) {
             return "";
         }
@@ -50,15 +50,15 @@ public class DetailReservationCommentFileItemVM extends ActivityVM {
     }
 
     @Bindable
-    public String getFileName(){
+    public String getFileName() {
         if (null == comment || null == comment.getAttachment()) {
             return "";
         }
-        return comment.getAttachment().getName()+"."+comment.getAttachment().getMimetype();
+        return comment.getAttachment().getName() + "." + comment.getAttachment().getMimetype();
     }
 
     @Bindable
-    public String getCreatedDate(){
+    public String getCreatedDate() {
         if (null == comment) {
             return "";
         }
@@ -73,7 +73,7 @@ public class DetailReservationCommentFileItemVM extends ActivityVM {
         return comment.getAttachment().getUrl();
     }
 
-    public void previewImage(View view){
+    public void previewImage(View view) {
         if (null == comment || null == comment.getAttachment()) {
             return;
         }

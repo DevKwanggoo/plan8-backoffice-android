@@ -6,7 +6,6 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -55,12 +54,17 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 if (data instanceof Reservation) {
                     return R.layout.item_detail_reservation_header;
                 } else if (data instanceof Comment) {
-                    if (((Comment) data).getType().equals("commentAdded")) {
+                    if (null != ((Comment) data).getText()) {
                         return R.layout.item_detail_reservation_comment;
-                    } else if (((Comment) data).getType().equals("attachmentAdded")) {
+                    } else if (null != ((Comment) data).getData()
+                            && null != ((Comment) data).getData().getBefore()
+                            && null != ((Comment) data).getData().getAfter()) {
+                        return R.layout.item_detail_reservation_comment_replace;
+                    } else if (null != ((Comment) data).getAttachment()
+                            || null != ((Comment) data).getAttachment().getUrl()) {
                         return R.layout.item_detail_reservation_comment_file;
                     } else {
-                        return R.layout.item_detail_reservation_comment_replace;
+                        return R.layout.item_detail_reservation_empty;
                     }
                 } else {
                     return R.layout.item_detail_reservation_more_button;
@@ -72,12 +76,15 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 if (data instanceof Reservation) {
                     binding.setVariable(BR.vm, new DetailReservationHeaderItemVM(getActivity(), savedInstanceState, (Reservation) data));
                 } else if (data instanceof Comment) {
-                    if (((Comment) data).getType().equals("commentAdded")) {
+                    if (null != ((Comment) data).getText()) {
                         binding.setVariable(BR.vm, new DetailReservationCommentItemVM(getActivity(), savedInstanceState, (Comment) data));
-                    } else if (((Comment) data).getType().equals("attachmentAdded")) {
-                        binding.setVariable(BR.vm, new DetailReservationCommentFileItemVM(getActivity(), savedInstanceState, (Comment) data));
-                    } else {
+                    } else if (null != ((Comment) data).getData()
+                            && null != ((Comment) data).getData().getBefore()
+                            && null != ((Comment) data).getData().getAfter()) {
                         binding.setVariable(BR.vm, new DetailReservationCommentReplaceItemVM(getActivity(), savedInstanceState, (Comment) data));
+                    } else if (null != ((Comment) data).getAttachment()
+                            || null != ((Comment) data).getAttachment().getUrl()) {
+                        binding.setVariable(BR.vm, new DetailReservationCommentFileItemVM(getActivity(), savedInstanceState, (Comment) data));
                     }
                 } else {
                     binding.setVariable(BR.vm, new DetailReservationMoreButtonItemVM(getActivity(), savedInstanceState, (DetailReservationMoreButtonItem) data));
@@ -160,12 +167,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void uploadFile(View view) {
-        ((DetailReservationActivity)getActivity()).checkPermission();
+        ((DetailReservationActivity) getActivity()).checkPermission();
     }
 
     public void sendComment(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).sendComment(currentText);
+            if (null != currentText && currentText.length() > 0) {
+                ((DetailReservationActivity) getActivity()).sendComment(currentText);
+            }
         }
     }
 
@@ -246,13 +255,12 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
         int index = 0;
         for (int i = currentTextIndex; i >= 0; i--) {
-            Log.e("test", "" + index);
             if (currentText.charAt(i) == '@') {
                 index = i;
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + worker.getName() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + worker.getUsername() + " ");
         setSelection();
     }
 

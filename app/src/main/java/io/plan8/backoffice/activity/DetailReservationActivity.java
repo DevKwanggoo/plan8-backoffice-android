@@ -193,6 +193,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         captureImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
         i.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
+
+//        if (Build.VERSION.SDK_INT > 21) { //use this if Lollipop_Mr1 (API 22) or above
+//            i.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getApplicationContext(), getPackageName()+".fileprovider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg")));
+//        } else {
+//            i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg")));
+//        }
+
         startActivityForResult(i, Constants.PICK_IMAGE_CODE);
     }
 
@@ -401,7 +408,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         }
         Call<List<Comment>> commentCall = RestfulAdapter.getInstance().getServiceApi().getComments("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
                 reservationId,
-                5,
+                15,
                 comments.size());
         commentCall.enqueue(new Callback<List<Comment>>() {
             @Override
