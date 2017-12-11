@@ -80,6 +80,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private List<BaseModel> detailReservations;
     private List<BaseModel> tempList;
     private boolean editFlag = false;
+    private Uri photoURI;
+    private String nougatAbsoluteUri;
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
@@ -197,7 +199,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         Intent i = new Intent();
         i.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri photoURI = FileProvider.getUriForFile(DetailReservationActivity.this, BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory(), "task_" + new DateUtil().getCurrentDateAPIFormpat() + ".jpg"));
+            File image = new File(Environment.getExternalStorageDirectory(), "plan8_" + new DateUtil().getCurrentDateLongFormat() + ".jpg");
+            photoURI = FileProvider.getUriForFile(DetailReservationActivity.this, BuildConfig.APPLICATION_ID + ".provider", image);
+            nougatAbsoluteUri = "file:" + image.getAbsolutePath();
             i.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(i, Constants.PICK_IMAGE_CODE);
         } else {
@@ -218,12 +222,47 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Constants.PICK_IMAGE_CODE) {
-                callFileUpload(captureImageUri);
-            } else if (requestCode == Constants.SELECT_FILE_CODE) {
-                callFileUpload(data.getData());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri imageUri = Uri.parse(nougatAbsoluteUri);
+                callNougatFileUpload(imageUri);
+            } else {
+                if (requestCode == Constants.PICK_IMAGE_CODE) {
+                    callFileUpload(captureImageUri);
+                } else if (requestCode == Constants.SELECT_FILE_CODE) {
+                    callFileUpload(data.getData());
+                }
             }
         }
+    }
+
+    private void callNougatFileUpload(Uri imageUri) {
+        File file = new File(imageUri.getPath());
+        MimeTypeMap type = MimeTypeMap.getSingleton();
+        String extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
+        String mime = type.getMimeTypeFromExtension(extension);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse(mime), file);
+
+        fileLength = file.length();
+
+        MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
+
+        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
+        uploadCall.enqueue(new Callback<List<Attachment>>() {
+            @Override
+            public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
+                List<Attachment> attachments = response.body();
+                if (null != attachments) {
+                    Attachment attachment = attachments.get(0);
+                    sendAttachment(attachment);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Attachment>> call, Throwable t) {
+                Log.e("failure : ", t.getMessage());
+            }
+        });
     }
 
     public void checkPermission() {
