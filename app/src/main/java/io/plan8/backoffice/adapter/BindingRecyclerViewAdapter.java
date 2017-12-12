@@ -40,7 +40,7 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         if (data != null) this.data.addAll(startIndex, data);
         else this.data = new ArrayList<>();
         notifyDataSetChanged();
-//            notifyItemRangeChanged(startIndex, dataSize);
+//        notifyItemRangeChanged(startIndex, dataSize);
     }
 
     public void addData(T data, int startIndex, int dataSize){
@@ -48,6 +48,7 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         else this.data = new ArrayList<>();
         notifyDataSetChanged();
 //        notifyItemRangeChanged(startIndex, 1, dataSize);
+//        notifyItemRangeChanged(startIndex, dataSize);
     }
 
     @Override
