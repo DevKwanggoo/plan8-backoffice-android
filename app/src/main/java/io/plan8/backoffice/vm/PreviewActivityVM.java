@@ -6,25 +6,34 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.plan8.backoffice.activity.PreviewActivity;
+import io.plan8.backoffice.model.api.Attachment;
 
 /**
  * Created by SSozi on 2017. 11. 30..
  */
 
 public class PreviewActivityVM extends ActivityVM {
-    private String imageUrl;
+    private Attachment attachment;
 
-    public PreviewActivityVM(Activity activity, Bundle savedInstanceState, String imageUrl) {
+    public PreviewActivityVM(Activity activity, Bundle savedInstanceState, Attachment attachment) {
         super(activity, savedInstanceState);
-        this.imageUrl = imageUrl;
+        this.attachment = attachment;
     }
 
     @Bindable
     public String getPreviewUrl(){
-        if (imageUrl != null && !imageUrl.equals("")){
-            return imageUrl;
+        if (attachment != null && attachment.getUrl() != null){
+            return attachment.getUrl();
         }
-        return "http://www.city.kr/files/attach/images/1326/622/387/004/cb59682631ac9d64a0a188c7833fc359.jpg";
+        return "";
+    }
+
+    @Bindable
+    public String getPrevTitle() {
+        if (attachment != null && attachment.getName() != null){
+            return attachment.getName();
+        }
+        return "이름 없음";
     }
 
     public void closePreview(View view){

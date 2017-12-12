@@ -15,17 +15,18 @@ import java.io.OutputStream;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.databinding.ActivityPreviewBinding;
+import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.util.FileDownloader;
 import io.plan8.backoffice.vm.PreviewActivityVM;
 
 public class PreviewActivity extends AppCompatActivity {
     private ActivityPreviewBinding binding;
     private PreviewActivityVM vm;
-    private String imageUrl;
+    private Attachment attachment;
 
-    public static Intent buildIntent(Context context, String imageUrl) {
+    public static Intent buildIntent(Context context, Attachment attachment) {
         Intent intent = new Intent(context, PreviewActivity.class);
-        intent.putExtra("imageUrl", imageUrl);
+        intent.putExtra("attachment", attachment);
         return intent;
     }
 
@@ -33,10 +34,10 @@ public class PreviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        imageUrl = getIntent().getStringExtra("imageUrl");
+        attachment = (Attachment) getIntent().getSerializableExtra("attachment");
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_preview);
-        vm = new PreviewActivityVM(this, savedInstanceState, imageUrl);
+        vm = new PreviewActivityVM(this, savedInstanceState, attachment);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
@@ -55,9 +56,7 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     private void fileDownload() {
-        Toast.makeText(getApplicationContext(), "다운로드 로직만구현해놈", Toast.LENGTH_SHORT).show();
-//        new FileDownloader(this, "jpg").execute("http://www.city.kr/files/attach/images/1326/622/387/004/cb59682631ac9d64a0a188c7833fc359.jpg");
-
+        new FileDownloader(this, "jpg").execute(attachment.getUrl());
 //        new FileDownloader(this, "pdf").execute("http://javacan.tistory.com/attachment/cfile1.uf@246A424C57222FCB1F9229.pdf");
     }
 
