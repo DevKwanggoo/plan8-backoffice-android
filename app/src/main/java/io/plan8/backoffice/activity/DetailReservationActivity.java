@@ -50,8 +50,8 @@ import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Comment;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.DetailReservationActivityVM;
@@ -70,7 +70,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Reservation reservation;
     private int reservationId;
     private MentionsEditText mentionsEditText;
-    private Worker.MemberLoader member;
+    private Member.MemberLoader member;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
     private List<Comment> comments;
@@ -119,19 +119,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        setMentionEditText(ApplicationManager.getInstance().getCurrentTeamWorkers());
+        setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
         refreshReservation();
     }
 
-    private void setMentionEditText(List<Worker> workerList) {
-        member = new Worker.MemberLoader(workerList);
+    private void setMentionEditText(List<Member> memberList) {
+        member = new Member.MemberLoader(memberList);
         mentionsEditText = findViewById(R.id.mentionEditText);
         mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
         mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 List<String> buckets = Arrays.asList(BUCKET);
-                List<Worker> suggestions = member.getSuggestions(queryToken);
+                List<Member> suggestions = member.getSuggestions(queryToken);
                 SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
                 // Have suggestions, now call the listener (which is this activity)
                 onReceiveSuggestionsResult(result, BUCKET);
@@ -156,7 +156,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (isAlreadyReplaceMention) {
             return;
         }
-        List<Worker> userList = (List<Worker>) result.getSuggestions();
+        List<Member> userList = (List<Member>) result.getSuggestions();
         vm.setAutoCompleteMentionData(userList);
     }
 
@@ -378,9 +378,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         dialog.show();
     }
 
-    public void replaceToMention(Worker worker) {
+    public void replaceToMention(Member member) {
         isAlreadyReplaceMention = true;
-        vm.replaceToMention(worker);
+        vm.replaceToMention(member);
         isAlreadyReplaceMention = false;
     }
 

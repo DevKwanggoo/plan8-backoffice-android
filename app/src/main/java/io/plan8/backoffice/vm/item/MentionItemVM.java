@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.plan8.backoffice.activity.DetailReservationActivity;
-import io.plan8.backoffice.model.api.Worker;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -14,40 +14,40 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class MentionItemVM extends ActivityVM {
-    private Worker worker;
+    private Member member;
 
-    public MentionItemVM(Activity activity, Bundle savedInstanceState, Worker worker) {
+    public MentionItemVM(Activity activity, Bundle savedInstanceState, Member member) {
         super(activity, savedInstanceState);
-        this.worker = worker;
+        this.member = member;
     }
 
     @Bindable
     public String getName() {
-        if (worker != null && worker.getName() != null){
-            return worker.getName();
+        if (member != null && member.getName() != null){
+            return member.getName();
         }
         return "이름없음";
     }
 
     @Bindable
     public String getUserName(){
-        if (worker != null && worker.getUsername() != null){
-            return "@" + worker.getUsername();
+        if (member != null && member.getUsername() != null){
+            return "@" + member.getUsername();
         }
         return "비어있음";
     }
 
     @Bindable
     public String getAvatar() {
-        if (null == worker) {
+        if (null == member) {
             return "";
         }
-        return worker.getAvatar();
+        return member.getAvatar();
     }
 
     public void clickMention(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).replaceToMention(worker);
+            ((DetailReservationActivity) getActivity()).replaceToMention(member);
         }
     }
 }

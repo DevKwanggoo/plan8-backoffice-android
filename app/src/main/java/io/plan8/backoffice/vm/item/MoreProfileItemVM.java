@@ -6,15 +6,10 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -25,14 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.plan8.backoffice.ApplicationManager;
-import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
-import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.item.MoreProfileItem;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.FragmentVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,12 +37,12 @@ import retrofit2.Response;
 
 public class MoreProfileItemVM extends FragmentVM implements View.OnClickListener {
     private String url;
-    private Me me;
+    private User user;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
 
-    public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, Me me) {
+    public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, User user) {
         super(fragment, savedInstanceState);
-        this.me = me;
+        this.user = user;
         initBottomSheet();
     }
 
@@ -71,24 +64,24 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
 
     @Bindable
     public String getAvatar() {
-        if (null != ApplicationManager.getInstance().getMe()) {
-            return ApplicationManager.getInstance().getMe().getAvatar();
+        if (null != ApplicationManager.getInstance().getUser()) {
+            return ApplicationManager.getInstance().getUser().getAvatar();
         }
         return "";
     }
 
     @Bindable
     public String getProfileName() {
-        if (null == me.getName()) {
+        if (null == user.getName()) {
             return "이름 없음";
         }
-        return me.getName();
+        return user.getName();
     }
 
     @Bindable
     public String getProfileUserName() {
-        if (me != null && me.getUsername() != null){
-            return "@" + me.getUsername();
+        if (user != null && user.getUsername() != null){
+            return "@" + user.getUsername();
         }
         return "";
     }
@@ -106,22 +99,22 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                     .inputType(InputType.TYPE_CLASS_TEXT)
                     .positiveText("완료")
                     .negativeText("취소")
-                    .input("다른 사람에게 표시될 프로필명을 입력하세요.", me.getName(), new MaterialDialog.InputCallback() {
+                    .input("다른 사람에게 표시될 프로필명을 입력하세요.", user.getName(), new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                             if (!input.equals("")) {
                                 HashMap<String, String> putMap = new HashMap<String, String>();
                                 putMap.put("name", input.toString());
-                                Call<Me> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
-                                putMeCall.enqueue(new Callback<Me>() {
+                                Call<User> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
+                                putMeCall.enqueue(new Callback<User>() {
                                     @Override
-                                    public void onResponse(Call<Me> call, Response<Me> response) {
-                                        ApplicationManager.getInstance().setMe(response.body());
+                                    public void onResponse(Call<User> call, Response<User> response) {
+                                        ApplicationManager.getInstance().setUser(response.body());
                                         refreshFragment();
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Me> call, Throwable t) {
+                                    public void onFailure(Call<User> call, Throwable t) {
                                         Toast.makeText(getFragment().getContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                     }
                                 });

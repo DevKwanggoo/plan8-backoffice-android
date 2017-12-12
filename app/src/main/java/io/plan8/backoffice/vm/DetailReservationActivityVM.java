@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,8 +20,8 @@ import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Comment;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Worker;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.vm.item.DetailReservationCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationCommentItemVM;
@@ -37,8 +36,8 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
-    private BindingRecyclerViewAdapter<Worker> mentionAdapter;
-    private List<Worker> workerList;
+    private BindingRecyclerViewAdapter<Member> mentionAdapter;
+    private List<Member> memberList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private Plan8BottomSheetDialog fileUploadBottomSheet;
     private boolean isActiveSendBtn;
@@ -94,14 +93,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             }
         };
 
-        mentionAdapter = new BindingRecyclerViewAdapter<Worker>() {
+        mentionAdapter = new BindingRecyclerViewAdapter<Member>() {
             @Override
-            protected int selectViewLayoutType(Worker data) {
+            protected int selectViewLayoutType(Member data) {
                 return R.layout.item_mention;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Worker data) {
+            protected void bindVariables(ViewDataBinding binding, Member data) {
                 binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
             }
         };
@@ -178,7 +177,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         return adapter;
     }
 
-    public BindingRecyclerViewAdapter<Worker> getMentionAdapter() {
+    public BindingRecyclerViewAdapter<Member> getMentionAdapter() {
         return mentionAdapter;
     }
 
@@ -202,13 +201,13 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         }
     }
 
-    public void setAutoCompleteMentionData(List<Worker> workerList) {
-        this.workerList = workerList;
-        if (null != workerList) {
-            mentionAdapter.setData(workerList);
+    public void setAutoCompleteMentionData(List<Member> memberList) {
+        this.memberList = memberList;
+        if (null != memberList) {
+            mentionAdapter.setData(memberList);
         }
-        if (null == workerList
-                || workerList.size() <= 0) {
+        if (null == memberList
+                || memberList.size() <= 0) {
             setEmptyMentionList(true);
         } else {
             setEmptyMentionList(false);
@@ -265,16 +264,16 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.currentText);
     }
 
-    public List<Worker> getWorkerList() {
-        return workerList;
+    public List<Member> getMemberList() {
+        return memberList;
     }
 
-    public void setWorkerList(List<Worker> workerList) {
-        this.workerList = workerList;
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
     }
 
-    public void replaceToMention(Worker worker) {
-        setWorkerList(null);
+    public void replaceToMention(Member member) {
+        setMemberList(null);
         setEmptyMentionList(true);
 
         int index = 0;
@@ -284,7 +283,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + worker.getUsername() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + member.getUsername() + " ");
         setSelection();
     }
 

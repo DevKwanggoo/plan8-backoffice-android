@@ -24,7 +24,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
 import io.plan8.backoffice.model.api.Auth;
-import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
 import retrofit2.Call;
@@ -268,12 +268,12 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                 if (response.body() != null) {
                     SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), response.body().getToken());
 
-                    Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-                    meCall.enqueue(new Callback<Me>() {
+                    Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+                    meCall.enqueue(new Callback<User>() {
                         @Override
-                        public void onResponse(Call<Me> call, Response<Me> response) {
+                        public void onResponse(Call<User> call, Response<User> response) {
                             if (response.body() != null) {
-                                ApplicationManager.getInstance().setMe(response.body());
+                                ApplicationManager.getInstance().setUser(response.body());
 
                                 //TODO : 푸시 매니저에
                                 nextActivity();
@@ -281,7 +281,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         }
 
                         @Override
-                        public void onFailure(Call<Me> call, Throwable t) {
+                        public void onFailure(Call<User> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
                     });

@@ -3,14 +3,13 @@ package io.plan8.backoffice.api;
 import java.util.HashMap;
 import java.util.List;
 
+import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Login;
-import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Team;
-import io.plan8.backoffice.model.api.Attachment;
-import io.plan8.backoffice.model.api.Worker;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.NotificationItem;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -40,7 +39,7 @@ public interface ApiService {
     Call<Auth> getAuthIfo(@Field("code") String code, @Field("pinCode") String pinCode);
 
     @GET("1/users/me")
-    Call<Me> getMe(@Header("authorization") String auth);
+    Call<User> getMe(@Header("authorization") String auth);
 
     @Multipart
     @POST("1/upload")
@@ -48,7 +47,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @PUT("1/users/me")
-    Call<Me> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
+    Call<User> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
     @GET("1/teams/{id}/reservations")
     Call<List<Reservation>> getReservations(@Header("authorization") String auth,
@@ -70,18 +69,15 @@ public interface ApiService {
     @GET("1/reservations/{id}")
     Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
 
-    @GET("1/users/me/teams")
-    Call<List<Team>> getTeams(@Header("authorization") String auth);
-
     @FormUrlEncoded
     @PUT("1/reservations/{id}")
     Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId, @FieldMap HashMap<String, String> putReservationMap);
 
     @GET("1/users/me/members")
-    Call<List<Worker>> getTeamMembers(@Header("authorization") String auth);
+    Call<List<Member>> getUserMembers(@Header("authorization") String auth);
 
     @GET("1/teams/{id}/members")
-    Call<List<Worker>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);
+    Call<List<Member>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);
 
     @FormUrlEncoded
     @POST("1/reservations/{id}/comments")

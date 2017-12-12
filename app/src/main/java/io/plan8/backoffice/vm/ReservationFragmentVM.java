@@ -50,6 +50,11 @@ public class ReservationFragmentVM extends FragmentVM {
     }
 
     public void setDatas(List<Reservation> reservations) {
+        if (reservations.size() <= 0) {
+            setEmptyFlag(true);
+        } else {
+            setEmptyFlag(false);
+        }
         adapter.setData(reservations);
     }
 

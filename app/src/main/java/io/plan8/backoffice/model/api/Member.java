@@ -20,7 +20,7 @@ import io.plan8.backoffice.util.MentionsLoader;
  * Created by SSozi on 2017. 12. 7..
  */
 
-public class Worker implements BaseModel, Mentionable {
+public class Member implements BaseModel, Mentionable {
     @SerializedName("id")
     int id;
     @SerializedName("created")
@@ -29,6 +29,8 @@ public class Worker implements BaseModel, Mentionable {
     String updated;
     @SerializedName("configuration")
     Configuration configuration;
+    @SerializedName("user")
+    User user;
     @SerializedName("name")
     String name;
     @SerializedName("avatar")
@@ -43,11 +45,23 @@ public class Worker implements BaseModel, Mentionable {
     boolean owner;
     @SerializedName("admin")
     boolean admin;
+    @SerializedName("team")
+    Team team;
     @SerializedName("deactivated")
     boolean deactivated;
+    @SerializedName("daysOff")
+    List<DayOff> dayOffs;
 
+    public Member() {
+    }
 
-    public Worker() {}
+    public List<DayOff> getDayOffs() {
+        return dayOffs;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
 
     public int getId() {
         return id;
@@ -97,6 +111,12 @@ public class Worker implements BaseModel, Mentionable {
         return deactivated;
     }
 
+
+
+    public User getUser() {
+        return user;
+    }
+
     @NonNull
     @Override
     public String getTextForDisplayMode(Mentionable.MentionDisplayMode mode) {
@@ -141,20 +161,20 @@ public class Worker implements BaseModel, Mentionable {
         dest.writeString(username);
     }
 
-    public Worker(Parcel in) {
+    public Member(Parcel in) {
         name = in.readString();
         avatar = in.readString();
         username = in.readString();
     }
 
-    public static final Parcelable.Creator<Worker> CREATOR
-            = new Parcelable.Creator<Worker>() {
-        public Worker createFromParcel(Parcel in) {
-            return new Worker(in);
+    public static final Parcelable.Creator<Member> CREATOR
+            = new Parcelable.Creator<Member>() {
+        public Member createFromParcel(Parcel in) {
+            return new Member(in);
         }
 
-        public Worker[] newArray(int size) {
-            return new Worker[size];
+        public Member[] newArray(int size) {
+            return new Member[size];
         }
     };
 
@@ -162,32 +182,34 @@ public class Worker implements BaseModel, Mentionable {
     // CityLoader Class (loads cities from JSON file)
     // --------------------------------------------------
 
-    public static class MemberLoader extends MentionsLoader<Worker> {
-        private static final String TAG = Worker.MemberLoader.class.getSimpleName();
-        private List<Worker> teamList;
+    public static class MemberLoader extends MentionsLoader<Member> {
+        private static final String TAG = Member.MemberLoader.class.getSimpleName();
+        private List<Member> teamList;
 
-        public MemberLoader(List<Worker> teamList) {
+        public MemberLoader(List<Member> teamList) {
             super();
             this.teamList = teamList;
         }
 
         @Override
-        public Worker[] loadData(JSONArray arr) {
-            return teamList.toArray(new Worker[0]);
+        public Member[] loadData(JSONArray arr) {
+            return teamList.toArray(new Member[0]);
         }
 
         // Modified to return suggestions based on both first and last name
         @Override
-        public List<Worker> getSuggestions(QueryToken queryToken) {
+        public List<Member> getSuggestions(QueryToken queryToken) {
             String[] namePrefixes = queryToken.getKeywords().toLowerCase().split(" ");
-            List<Worker> suggestions = new ArrayList<>();
+            List<Member> suggestions = new ArrayList<>();
             if (teamList != null) {
-                for (Worker suggestion : teamList) {
-                    String suggestionUserName = suggestion.getUsername().toLowerCase();
-                    String suggestionName = suggestion.getName().toLowerCase();
+                for (Member suggestion : teamList) {
+                    if (null != suggestion.getUsername() && null != suggestion.getName()) {
+                        String suggestionUserName = suggestion.getUsername().toLowerCase();
+                        String suggestionName = suggestion.getName().toLowerCase();
 
-                    if (suggestionName.contains(namePrefixes[0]) || suggestionUserName.contains(namePrefixes[0])) {
-                        suggestions.add(suggestion);
+                        if (suggestionName.contains(namePrefixes[0]) || suggestionUserName.contains(namePrefixes[0])) {
+                            suggestions.add(suggestion);
+                        }
                     }
                 }
             }

@@ -5,18 +5,18 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.User;
 
 /**
  * Created by chokwanghwan on 2017. 12. 11..
  */
 
 public class PushManager {
-    public void setPublicIdTag(Me me) {
+    public void setPublicIdTag(User user) {
         JSONObject tags = new JSONObject();
         try {
-            if (null != me) {
-                String publicId = me.getPublicId();
+            if (null != user) {
+                String publicId = user.getPublicId();
                 tags.put("user", publicId);
                 OneSignal.sendTags(tags);
             }

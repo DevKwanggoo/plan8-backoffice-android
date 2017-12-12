@@ -18,8 +18,8 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
-import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.util.PushManager;
 import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
@@ -46,7 +46,7 @@ public class MoreFragmentVM extends FragmentVM {
             protected int selectViewLayoutType(Object data) {
                 if (data instanceof LabelItem) {
                     return R.layout.item_more_title;
-                } else if (data instanceof Me) {
+                } else if (data instanceof User) {
                     return R.layout.item_more_profile;
                 } else if (data instanceof Team) {
                     return R.layout.item_more_team;
@@ -60,8 +60,8 @@ public class MoreFragmentVM extends FragmentVM {
             protected void bindVariables(ViewDataBinding binding, Object data) {
                 if (data instanceof LabelItem) {
                     binding.setVariable(BR.vm, new LabelItemVM(getFragment(), savedInstanceState, (LabelItem) data));
-                } else if (data instanceof Me) {
-                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (Me) data));
+                } else if (data instanceof User) {
+                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (User) data));
                 } else if (data instanceof Team) {
                     binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (Team) data));
                 } else {

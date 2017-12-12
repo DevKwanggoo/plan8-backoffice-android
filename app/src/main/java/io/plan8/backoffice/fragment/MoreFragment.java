@@ -23,8 +23,10 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
-import io.plan8.backoffice.model.api.Me;
 import io.plan8.backoffice.model.api.Attachment;
+import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.EmptySpaceItem;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.vm.MoreFragmentVM;
@@ -50,16 +52,21 @@ public class MoreFragment extends BaseFragment {
         List<Object> testData = new ArrayList<>();
 
         testData.add(new LabelItem("내 프로필"));
-        if (ApplicationManager.getInstance().getMe() != null){
-            testData.add(ApplicationManager.getInstance().getMe());
+        if (ApplicationManager.getInstance().getUser() != null) {
+            testData.add(ApplicationManager.getInstance().getUser());
         }
         testData.add(new LabelItem("팀 선택"));
 
-        if (null != ApplicationManager.getInstance().getTeams()) {
-            if (ApplicationManager.getInstance().getTeams().size() > 0) {
-                for (int i = 0; i < ApplicationManager.getInstance().getTeams().size(); i++) {
-                    testData.add(ApplicationManager.getInstance().getTeams().get(i));
+        if (null != ApplicationManager.getInstance().getMembers()) {
+            List<Team> teams = new ArrayList<>();
+            for (Member m : ApplicationManager.getInstance().getMembers()) {
+                if (null != m) {
+                    teams.add(m.getTeam());
                 }
+            }
+
+            if (teams.size() > 0) {
+                testData.addAll(teams);
             }
         }
         testData.add(new EmptySpaceItem(0));
@@ -98,21 +105,21 @@ public class MoreFragment extends BaseFragment {
         uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
             public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
-                if (response.body() != null){
+                if (response.body() != null) {
                     HashMap<String, String> putMeImage = new HashMap<String, String>();
                     putMeImage.put("avatar", response.body().get(0).getUrl());
-                    Call<Me> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
-                    putMe.enqueue(new Callback<Me>() {
+                    Call<User> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
+                    putMe.enqueue(new Callback<User>() {
                         @Override
-                        public void onResponse(Call<Me> call, Response<Me> response) {
-                            if (response.body() != null){
-                                ApplicationManager.getInstance().setMe(response.body());
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.body() != null) {
+                                ApplicationManager.getInstance().setUser(response.body());
                                 refreshFragment();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Me> call, Throwable t) {
+                        public void onFailure(Call<User> call, Throwable t) {
                             Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
                     });

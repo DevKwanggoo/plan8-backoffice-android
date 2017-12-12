@@ -16,7 +16,7 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivitySplashBinding;
-import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.SplashActivityVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,13 +45,13 @@ public class SplashActivity extends BaseActivity {
             String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
             if (RestfulAdapter.getInstance().getServiceApi() != null) {
-                Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
-                meCall.enqueue(new Callback<Me>() {
+                Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                meCall.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<Me> call, Response<Me> response) {
-                        Me me = response.body();
-                        if (me != null) {
-                            ApplicationManager.getInstance().setMe(me);
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        User user = response.body();
+                        if (user != null) {
+                            ApplicationManager.getInstance().setUser(user);
                             hasTokenStep();
                         } else {
                             loginStep();
@@ -59,7 +59,7 @@ public class SplashActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Me> call, Throwable t) {
+                    public void onFailure(Call<User> call, Throwable t) {
                         MaterialDialog dialog = new MaterialDialog.Builder(self)
                                 .content("문제가 발생했어요.\n잠시 후 다시 시도해주세요.")
                                 .positiveText("닫기")

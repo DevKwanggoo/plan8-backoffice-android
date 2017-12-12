@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +24,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentReservationBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ReservationFragmentVM;
@@ -41,9 +41,9 @@ public class ReservationFragment extends BaseFragment {
     private ReservationFragmentVM vm;
     private String currentDate;
     private List<Reservation> reservations;
+    private List<Reservation> myReservations;
     private boolean editFlag = false;
     private Reservation editItem;
-    private RecyclerView recyclerView;
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @Nullable
@@ -79,6 +79,7 @@ public class ReservationFragment extends BaseFragment {
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 reservations.clear();
+                myReservations.clear();
                 endlessRecyclerOnScrollListener.initPrevItemCount();
                 vm.setOpenedCalendar(false);
                 refreshReservationList();
@@ -111,33 +112,48 @@ public class ReservationFragment extends BaseFragment {
                 List<Reservation> result = response.body();
 
                 if (null != result) {
-                    if (reservations.size() + result.size() > reservations.size()) {
-                        reservations.addAll(result);
-                        vm.setDatas(reservations);
-                        binding.reservationRecyclerView.scrollTo(0,0);
+                    for (Reservation r : result) {
+                        if (null != r.getWorkers()
+                                && null != ApplicationManager.getInstance().getMembers()) {
+                            for (Member w : r.getWorkers()) {
+                                if (null != w
+                                        && null != w.getUser()
+                                        && w.getUser().getId() == ApplicationManager.getInstance().getUser().getId()) {
+                                    r.setMyReservation(true);
+                                }
+                            }
+                        }
                     }
 
-                    if (reservations.size() == 0) {
-                        vm.setEmptyFlag(true);
-                    } else {
-                        vm.setEmptyFlag(false);
+                    if (null == myReservations) {
+                        myReservations = new ArrayList<>();
                     }
+                    if (reservations.size() + result.size() > reservations.size()) {
+                        reservations.addAll(result);
+
+                        for (Reservation r : reservations) {
+                            if (r.isMyReservation()) {
+                                myReservations.add(r);
+                            }
+                        }
+                    }
+                    vm.setDatas(myReservations);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Reservation>> call, Throwable t) {
                 Log.e("api : ", "failure");
-                vm.setEmptyFlag(true);
+                vm.setDatas(new ArrayList<Reservation>());
             }
         });
     }
 
-    public void setEditFlag(boolean flag){
+    public void setEditFlag(boolean flag) {
         editFlag = flag;
     }
 
-    public void editItem(Reservation reservation){
+    public void editItem(Reservation reservation) {
         editItem = reservation;
     }
 
@@ -147,14 +163,14 @@ public class ReservationFragment extends BaseFragment {
         if (editFlag) {
             editFlag = false;
             if (editItem != null) {
-                for (int i = 0; i < reservations.size(); i++) {
+                for (int i = 0; i < myReservations.size(); i++) {
 
-                    if (reservations.get(i).getId() == editItem.getId()){
-                        reservations.set(i, editItem);
+                    if (myReservations.get(i).getId() == editItem.getId()) {
+                        myReservations.set(i, editItem);
                     }
                 }
             }
-            vm.setDatas(reservations);
+            vm.setDatas(myReservations);
         }
     }
 }

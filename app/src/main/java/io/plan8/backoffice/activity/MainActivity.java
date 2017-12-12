@@ -30,8 +30,8 @@ import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.fragment.NotificationFragment;
 import io.plan8.backoffice.fragment.ReservationFragment;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
-import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.vm.MainActivityVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity {
     private FragmentManager fragmentManager;
     private int currentTabPosition = 0;
     private List<Fragment> fragments = new ArrayList<>();
-    private List<Team> teams;
+    private List<Member> members;
     private ReservationFragment reservationFragment;
 
     public static Intent buildIntent(Context context) {
@@ -59,17 +59,18 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        Call<List<Team>> getTeams = RestfulAdapter.getInstance().getServiceApi().getTeams("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-        getTeams.enqueue(new Callback<List<Team>>() {
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+        getUserMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
-            public void onResponse(Call<List<Team>> call, Response<List<Team>> response) {
-                teams = response.body();
-                ApplicationManager.getInstance().setTeams(teams);
-                if (null == teams || teams.size() == 0) {
+            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                members = response.body();
+                ApplicationManager.getInstance().setMembers(members);
+                if (null == members || members.size() == 0) {
                     vm.setEmptyTeamFlag(true);
                 } else {
-                    if (ApplicationManager.getInstance().getCurrentTeam() == null) {
-                        ApplicationManager.getInstance().setCurrentTeam(teams.get(0));
+                    if (ApplicationManager.getInstance().getCurrentTeam() == null
+                            && null != members.get(0)) {
+                        ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
                     }
                     vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
@@ -77,23 +78,10 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Team>> call, Throwable t) {
+            public void onFailure(Call<List<Member>> call, Throwable t) {
                 Log.e("api : ", "failure");
             }
         });
-
-//        Call<List<Worker>> memberCall = RestfulAdapter.getInstance().getServiceApi().getTeamMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-//        memberCall.enqueue(new Callback<List<Worker>>() {
-//            @Override
-//            public void onResponse(Call<List<Worker>> call, Response<List<Worker>> response) {
-//                Log.e("test", "test");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Worker>> call, Throwable t) {
-//                Log.e("test", "test");
-//            }
-//        });
     }
 
     private void initTabAndViewPager() {

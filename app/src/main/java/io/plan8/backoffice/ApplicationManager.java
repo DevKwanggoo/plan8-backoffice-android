@@ -8,9 +8,9 @@ import java.util.Locale;
 
 import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
-import io.plan8.backoffice.model.api.Me;
-import io.plan8.backoffice.model.api.Worker;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.PushManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,9 +23,9 @@ import retrofit2.Response;
 public class ApplicationManager {
     private Context context;
     private static volatile ApplicationManager instance = null;
-    private Me me;
-    private List<Team> teams;
-    private List<Worker> currentTeamWorkers;
+    private User user;
+    private List<Member> members;
+    private List<Member> currentTeamMembers;
     private Team currentTeam;
     private MainActivity mainActivity;
 
@@ -58,21 +58,21 @@ public class ApplicationManager {
         return "https://api-sandbox.plan8.io";
     }
 
-    public Me getMe() {
-        return me;
+    public User getUser() {
+        return user;
     }
 
-    public void setMe(Me me) {
-        this.me = me;
-        new PushManager().setPublicIdTag(me);
+    public void setUser(User user) {
+        this.user = user;
+        new PushManager().setPublicIdTag(user);
     }
 
-    public List<Team> getTeams() {
-        return teams;
+    public List<Member> getMembers() {
+        return members;
     }
 
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 
     public Team getCurrentTeam() {
@@ -82,15 +82,15 @@ public class ApplicationManager {
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
         if (null != currentTeam) {
-            final Call<List<Worker>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
-            currentWorkersCall.enqueue(new Callback<List<Worker>>() {
+            final Call<List<Member>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
+            currentWorkersCall.enqueue(new Callback<List<Member>>() {
                 @Override
-                public void onResponse(Call<List<Worker>> call, Response<List<Worker>> response) {
-                    currentTeamWorkers = response.body();
+                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                    currentTeamMembers = response.body();
                 }
 
                 @Override
-                public void onFailure(Call<List<Worker>> call, Throwable t) {
+                public void onFailure(Call<List<Member>> call, Throwable t) {
 
                 }
             });
@@ -106,11 +106,11 @@ public class ApplicationManager {
         this.mainActivity = mainActivity;
     }
 
-    public List<Worker> getCurrentTeamWorkers() {
-        return currentTeamWorkers;
+    public List<Member> getCurrentTeamMembers() {
+        return currentTeamMembers;
     }
 
-    public void setCurrentTeamWorkers(List<Worker> currentTeamWorkers) {
-        this.currentTeamWorkers = currentTeamWorkers;
+    public void setCurrentTeamMembers(List<Member> currentTeamMembers) {
+        this.currentTeamMembers = currentTeamMembers;
     }
 }

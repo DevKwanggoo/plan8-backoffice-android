@@ -23,9 +23,11 @@ public class Reservation implements BaseModel {
     @SerializedName("email") String email;
     @SerializedName("address") Address address;
     @SerializedName("products") List<Product> products;
-    @SerializedName("workers") List<Worker> workers;
+    @SerializedName("workers") List<Member> workers;
     @SerializedName("user") User user;
     @SerializedName("userId") int userId;
+
+    private boolean myReservation;
 
     public Reservation() {
     }
@@ -126,11 +128,11 @@ public class Reservation implements BaseModel {
         this.products = products;
     }
 
-    public List<Worker> getWorkers() {
+    public List<Member> getWorkers() {
         return workers;
     }
 
-    public void setWorkers(List<Worker> workers) {
+    public void setWorkers(List<Member> workers) {
         this.workers = workers;
     }
 
@@ -148,5 +150,13 @@ public class Reservation implements BaseModel {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public boolean isMyReservation() {
+        return myReservation;
+    }
+
+    public void setMyReservation(boolean myReservation) {
+        this.myReservation = myReservation;
     }
 }
