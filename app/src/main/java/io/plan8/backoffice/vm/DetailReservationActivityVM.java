@@ -20,8 +20,8 @@ import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Comment;
-import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.vm.item.DetailReservationCommentFileItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationCommentItemVM;
@@ -36,8 +36,8 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
-    private BindingRecyclerViewAdapter<Member> mentionAdapter;
-    private List<Member> memberList;
+    private BindingRecyclerViewAdapter<User> mentionAdapter;
+    private List<User> userList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private Plan8BottomSheetDialog fileUploadBottomSheet;
     private boolean isActiveSendBtn;
@@ -93,14 +93,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             }
         };
 
-        mentionAdapter = new BindingRecyclerViewAdapter<Member>() {
+        mentionAdapter = new BindingRecyclerViewAdapter<User>() {
             @Override
-            protected int selectViewLayoutType(Member data) {
+            protected int selectViewLayoutType(User data) {
                 return R.layout.item_mention;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Member data) {
+            protected void bindVariables(ViewDataBinding binding, User data) {
                 binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
             }
         };
@@ -157,12 +157,12 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         adapter.setData(datas);
     }
 
-    public void addData(List<BaseModel> data, int startIndex, int dataSize) {
+    public void addDatas(List<BaseModel> data, int startIndex, int dataSize) {
         adapter.addData(data, startIndex, dataSize);
     }
 
-    public void addData(BaseModel data, int startIndex) {
-        adapter.addData(data, startIndex);
+    public void addData(BaseModel data, int startIndex, int dataSize) {
+        adapter.addData(data, startIndex, dataSize);
     }
 
     public RecyclerView.LayoutManager getVerticalLayoutManager() {
@@ -177,7 +177,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         return adapter;
     }
 
-    public BindingRecyclerViewAdapter<Member> getMentionAdapter() {
+    public BindingRecyclerViewAdapter<User> getMentionAdapter() {
         return mentionAdapter;
     }
 
@@ -201,13 +201,13 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         }
     }
 
-    public void setAutoCompleteMentionData(List<Member> memberList) {
-        this.memberList = memberList;
-        if (null != memberList) {
-            mentionAdapter.setData(memberList);
+    public void setAutoCompleteMentionData(List<User> userList) {
+        this.userList = userList;
+        if (null != userList) {
+            mentionAdapter.setData(userList);
         }
-        if (null == memberList
-                || memberList.size() <= 0) {
+        if (null == userList
+                || userList.size() <= 0) {
             setEmptyMentionList(true);
         } else {
             setEmptyMentionList(false);
@@ -264,16 +264,16 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.currentText);
     }
 
-    public List<Member> getMemberList() {
-        return memberList;
+    public List<User> getUserList() {
+        return userList;
     }
 
-    public void setMemberList(List<Member> memberList) {
-        this.memberList = memberList;
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
-    public void replaceToMention(Member member) {
-        setMemberList(null);
+    public void replaceToMention(User user) {
+        setUserList(null);
         setEmptyMentionList(true);
 
         int index = 0;
@@ -283,7 +283,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + member.getUsername() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " ");
         setSelection();
     }
 

@@ -1,5 +1,7 @@
 package io.plan8.backoffice.util;
 
+import android.util.Log;
+
 import com.onesignal.OneSignal;
 
 import org.json.JSONException;
@@ -16,6 +18,7 @@ public class PushManager {
         JSONObject tags = new JSONObject();
         try {
             if (null != user) {
+                Log.e("PushManager", ""+user.getPublicId());
                 String publicId = user.getPublicId();
                 tags.put("user", publicId);
                 OneSignal.sendTags(tags);
@@ -26,7 +29,7 @@ public class PushManager {
     }
 
     public void clearTag() {
-        OneSignal.sendTags("");
+        OneSignal.deleteTag("user");
     }
 
 }

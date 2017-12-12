@@ -72,7 +72,7 @@ public class ViewUtil {
 
         if (comment.getType().equals("statusChanged")) {
             return comment.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
-        } else if (comment.getType().equals("mobileNumberChanged")) {
+        } else if (comment.getType().equals("phoneNumberChanged")) {
             return comment.getCreator().getName() + "님이 고객 연락처를 수정하였습니다.";
         } else if (comment.getType().equals("emailChanged")) {
             return comment.getCreator().getName() + "님이 이메일을 수정하였습니다.";

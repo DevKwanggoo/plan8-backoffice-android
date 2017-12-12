@@ -52,6 +52,7 @@ import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.DetailReservationActivityVM;
@@ -70,7 +71,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private Reservation reservation;
     private int reservationId;
     private MentionsEditText mentionsEditText;
-    private Member.MemberLoader member;
+    private User.UserLoader userLoader;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
     private List<Comment> comments;
@@ -124,14 +125,21 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     private void setMentionEditText(List<Member> memberList) {
-        member = new Member.MemberLoader(memberList);
+        List<User> userList = new ArrayList<>();
+        for (Member m : memberList) {
+            if (null != m) {
+                userList.add(m.getUser());
+            }
+        }
+
+        userLoader = new User.UserLoader(userList);
         mentionsEditText = findViewById(R.id.mentionEditText);
         mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
         mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 List<String> buckets = Arrays.asList(BUCKET);
-                List<Member> suggestions = member.getSuggestions(queryToken);
+                List<User> suggestions = userLoader.getSuggestions(queryToken);
                 SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
                 // Have suggestions, now call the listener (which is this activity)
                 onReceiveSuggestionsResult(result, BUCKET);
@@ -156,7 +164,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (isAlreadyReplaceMention) {
             return;
         }
-        List<Member> userList = (List<Member>) result.getSuggestions();
+        List<User> userList = (List<User>) result.getSuggestions();
         vm.setAutoCompleteMentionData(userList);
     }
 
@@ -378,9 +386,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         dialog.show();
     }
 
-    public void replaceToMention(Member member) {
+    public void replaceToMention(User user) {
         isAlreadyReplaceMention = true;
-        vm.replaceToMention(member);
+        vm.replaceToMention(user);
         isAlreadyReplaceMention = false;
     }
 
@@ -433,7 +441,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         comments.addAll(result);
                         List<BaseModel> tempList = new ArrayList<BaseModel>();
                         tempList.addAll(result);
-                        vm.addData(tempList, 2, result.size());
+                        vm.addDatas(tempList, 2, result.size());
                     }
                 }
             }
@@ -474,7 +482,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 Comment result = response.body();
                 if (null != result) {
                     comments.add(0, result);
-                    vm.addData(result, 2);
+                    vm.addData(result, 2, comments.size());
                 }
                 vm.setCurrentText("");
             }
@@ -493,7 +501,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 Comment result = response.body();
                 if (result != null) {
                     comments.add(0, result);
-                    vm.addData(detailReservations, 2, 1);
+                    vm.addDatas(detailReservations, 2, comments.size());
                 }
                 vm.setCurrentText("");
             }

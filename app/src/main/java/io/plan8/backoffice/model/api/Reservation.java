@@ -19,7 +19,7 @@ public class Reservation implements BaseModel {
     @SerializedName("totalPrice") int totalPrice;
     @SerializedName("additionalRequests") String addtionalRequest;
     @SerializedName("status") String status;
-    @SerializedName("mobileNumber") String mobileNumber;
+    @SerializedName("phoneNumber") String phoneNumber;
     @SerializedName("email") String email;
     @SerializedName("address") Address address;
     @SerializedName("products") List<Product> products;
@@ -96,12 +96,12 @@ public class Reservation implements BaseModel {
         this.status = status;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {

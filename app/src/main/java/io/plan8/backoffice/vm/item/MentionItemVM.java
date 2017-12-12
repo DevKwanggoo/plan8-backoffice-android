@@ -7,6 +7,7 @@ import android.view.View;
 
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.ActivityVM;
 
 /**
@@ -14,40 +15,40 @@ import io.plan8.backoffice.vm.ActivityVM;
  */
 
 public class MentionItemVM extends ActivityVM {
-    private Member member;
+    private User user;
 
-    public MentionItemVM(Activity activity, Bundle savedInstanceState, Member member) {
+    public MentionItemVM(Activity activity, Bundle savedInstanceState, User user) {
         super(activity, savedInstanceState);
-        this.member = member;
+        this.user = user;
     }
 
     @Bindable
     public String getName() {
-        if (member != null && member.getName() != null){
-            return member.getName();
+        if (user != null && user.getName() != null){
+            return user.getName();
         }
         return "이름없음";
     }
 
     @Bindable
     public String getUserName(){
-        if (member != null && member.getUsername() != null){
-            return "@" + member.getUsername();
+        if (user != null && user.getUsername() != null){
+            return "@" + user.getUsername();
         }
         return "비어있음";
     }
 
     @Bindable
     public String getAvatar() {
-        if (null == member) {
+        if (null == user) {
             return "";
         }
-        return member.getAvatar();
+        return user.getAvatar();
     }
 
     public void clickMention(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).replaceToMention(member);
+            ((DetailReservationActivity) getActivity()).replaceToMention(user);
         }
     }
 }

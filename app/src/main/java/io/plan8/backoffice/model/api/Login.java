@@ -9,18 +9,18 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Login implements BaseModel {
-    @SerializedName("mobileNumber") String mobileNumber;
+    @SerializedName("phoneNumber") String phoneNumber;
     @SerializedName("code") String code;
 
     public Login() {
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getCode() {

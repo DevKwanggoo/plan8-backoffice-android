@@ -1,4 +1,4 @@
-package io.plan8.backoffice.handler;
+package io.plan8.backoffice.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,7 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
 
     @Override
     public void notificationOpened(OSNotificationOpenResult result) {
+        Log.e("test", "push!!");
         OSNotificationAction.ActionType actionType = result.action.type;
         JSONObject data = result.notification.payload.additionalData;
         Uri openUrl = null;

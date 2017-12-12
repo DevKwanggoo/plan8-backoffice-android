@@ -32,7 +32,7 @@ import retrofit2.http.Query;
 public interface ApiService {
     @FormUrlEncoded
     @POST("1/auth/pin-code")
-    Call<Login> getPinCode(@Field("mobileNumber") String mobileNumber);
+    Call<Login> getPinCode(@Field("phoneNumber") String phoneNumber);
 
     @FormUrlEncoded
     @POST("1/auth/token")

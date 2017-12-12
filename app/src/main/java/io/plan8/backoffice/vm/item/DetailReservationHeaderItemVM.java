@@ -37,7 +37,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         if (null == reservation) {
             return "";
         }
-        return reservation.getMobileNumber();
+        return reservation.getPhoneNumber();
     }
 
     @Bindable

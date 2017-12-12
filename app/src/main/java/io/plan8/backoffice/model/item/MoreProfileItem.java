@@ -8,11 +8,11 @@ import io.plan8.backoffice.model.BaseModel;
 
 public class MoreProfileItem implements BaseModel {
     private String name;
-    private String mobileNumber;
+    private String phoneNumber;
 
-    public MoreProfileItem(String name, String mobileNumber) {
+    public MoreProfileItem(String name, String phoneNumber) {
         this.name = name;
-        this.mobileNumber = mobileNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -23,11 +23,11 @@ public class MoreProfileItem implements BaseModel {
         this.name = name;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
