@@ -537,6 +537,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Comment> call, Throwable t) {
+                Log.e("failure : ", "sendAttachment");
             }
         });
     }

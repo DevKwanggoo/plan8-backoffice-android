@@ -77,7 +77,7 @@ public class DetailReservationCommentFileItemVM extends ActivityVM {
         if (null == comment || null == comment.getAttachment()) {
             return;
         }
-        Intent previewIntent = PreviewActivity.buildIntent(getActivity(), comment.getAttachment().getUrl());
+        Intent previewIntent = PreviewActivity.buildIntent(getActivity(), comment.getAttachment());
         getActivity().startActivity(previewIntent);
         getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }

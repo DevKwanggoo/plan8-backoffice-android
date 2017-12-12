@@ -97,7 +97,7 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
 
-        if (mimeType.contains("JPG") || mimeType.contains("PNG") || mimeType.contains("MPEG")){
+        if (mimeType.contains("jpg") || mimeType.contains("png") || mimeType.contains("mpeg")){
             String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
             File file = new File(targetDir + "/" + fileName + ".jpg");
 

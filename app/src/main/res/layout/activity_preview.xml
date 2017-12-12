@@ -43,7 +43,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_centerInParent="true"
-                android:text="IMG_1325.JPG"/>
+                android:text="@{vm.prevTitle}"/>
 
             <RelativeLayout
                 android:id="@+id/previewDownload"
