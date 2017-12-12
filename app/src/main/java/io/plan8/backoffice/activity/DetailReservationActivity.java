@@ -472,7 +472,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 List<Action> result = response.body();
                 if (null != result) {
                     if (actions.size() + result.size() > actions.size()) {
-                        Collections.reverse(result);
                         actions.addAll(result);
                         List<BaseModel> tempList = new ArrayList<BaseModel>();
                         tempList.addAll(result);
@@ -529,7 +528,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAttachment(Attachment attachment) {
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachment);
+        HashMap<String, Object> attachmentMap = new HashMap<>();
+        attachmentMap.put("attachment", attachment);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachmentMap);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
