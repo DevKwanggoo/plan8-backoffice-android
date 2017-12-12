@@ -48,8 +48,8 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Attachment;
-import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
@@ -74,7 +74,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private User.UserLoader userLoader;
     private static final String BUCKET = "user";
     private boolean isAlreadyReplaceMention;
-    private List<Comment> comments;
+    private List<Action> actions;
     private List<BaseModel> detailReservations;
     private List<BaseModel> tempList;
     private boolean editFlag = false;
@@ -406,7 +406,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public void deleteComment(Comment comment) {
+    public void deleteAction(Action action) {
         //TODO : 코멘트 삭제
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .content("댓글을 삭제하시겠어요?")
@@ -439,7 +439,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 if (null != r) {
                     if (detailReservations.size() <= 0) {
                         detailReservations.add(0, r);
-                        refreshCommentData();
+                        refreshActionData();
                     } else {
                         detailReservations.set(0, r);
                         vm.setData(detailReservations);
@@ -454,26 +454,26 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    public void refreshCommentData() {
-        if (null == comments) {
-            comments = new ArrayList<>();
+    public void refreshActionData() {
+        if (null == actions) {
+            actions = new ArrayList<>();
         }
-        Call<List<Comment>> commentCall = RestfulAdapter.getInstance().getServiceApi().getComments("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
+        Call<List<Action>> actionsCall = RestfulAdapter.getInstance().getServiceApi().getActions("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
                 reservationId,
                 15,
-                comments.size());
-        commentCall.enqueue(new Callback<List<Comment>>() {
+                actions.size());
+        actionsCall.enqueue(new Callback<List<Action>>() {
             @Override
-            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+            public void onResponse(Call<List<Action>> call, Response<List<Action>> response) {
                 if (detailReservations.size() <= 1) {
                     detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
                     vm.setData(detailReservations);
                 }
-                List<Comment> result = response.body();
+                List<Action> result = response.body();
                 if (null != result) {
-                    if (comments.size() + result.size() > comments.size()) {
+                    if (actions.size() + result.size() > actions.size()) {
                         Collections.reverse(result);
-                        comments.addAll(result);
+                        actions.addAll(result);
                         List<BaseModel> tempList = new ArrayList<BaseModel>();
                         tempList.addAll(result);
                         vm.addDatas(tempList, 2, result.size());
@@ -482,7 +482,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             }
 
             @Override
-            public void onFailure(Call<List<Comment>> call, Throwable t) {
+            public void onFailure(Call<List<Action>> call, Throwable t) {
 
             }
         });
@@ -509,40 +509,40 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    public void sendComment(String text) {
-        Call<Comment> createCommentCall = RestfulAdapter.getInstance().getServiceApi().createComment("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, text);
-        createCommentCall.enqueue(new Callback<Comment>() {
+    public void sendAction(String text) {
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, text);
+        createActionCall.enqueue(new Callback<Action>() {
             @Override
-            public void onResponse(Call<Comment> call, Response<Comment> response) {
-                Comment result = response.body();
+            public void onResponse(Call<Action> call, Response<Action> response) {
+                Action result = response.body();
                 if (null != result) {
-                    comments.add(0, result);
-                    vm.addData(result, 2, comments.size());
+                    actions.add(0, result);
+                    vm.addData(result, 2, actions.size());
                 }
                 vm.setCurrentText("");
             }
 
             @Override
-            public void onFailure(Call<Comment> call, Throwable t) {
+            public void onFailure(Call<Action> call, Throwable t) {
             }
         });
     }
 
     public void sendAttachment(Attachment attachment) {
-        Call<Comment> createCommentCall = RestfulAdapter.getInstance().getServiceApi().createComment("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachment);
-        createCommentCall.enqueue(new Callback<Comment>() {
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachment);
+        createActionCall.enqueue(new Callback<Action>() {
             @Override
-            public void onResponse(Call<Comment> call, Response<Comment> response) {
-                Comment result = response.body();
+            public void onResponse(Call<Action> call, Response<Action> response) {
+                Action result = response.body();
                 if (result != null) {
-                    comments.add(0, result);
-                    vm.addDatas(detailReservations, 2, comments.size());
+                    actions.add(0, result);
+                    vm.addData(result, 2, actions.size());
                 }
                 vm.setCurrentText("");
             }
 
             @Override
-            public void onFailure(Call<Comment> call, Throwable t) {
+            public void onFailure(Call<Action> call, Throwable t) {
                 Log.e("failure : ", "sendAttachment");
             }
         });

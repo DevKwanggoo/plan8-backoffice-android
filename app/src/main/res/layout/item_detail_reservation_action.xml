@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="io.plan8.backoffice.vm.item.DetailReservationCommentItemVM" />
+            type="io.plan8.backoffice.vm.item.DetailReservationActionItemVM" />
     </data>
 
     <RelativeLayout
@@ -62,10 +62,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{vm.comment}"
+                        android:text="@{vm.action}"
                         android:textColor="#3c4858"
                         android:fontFamily="sans-serif"
-                        commonViewAdapter:mention="@{vm.comment}"
+                        commonViewAdapter:mention="@{vm.action}"
                         android:textSize="14dp" />
                 </LinearLayout>
             </RelativeLayout>

@@ -31,7 +31,7 @@ public class DetailReservationMoreButtonItemVM extends ActivityVM {
 
     public void callMoreComment(View view) {
         if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).refreshCommentData();
+            ((DetailReservationActivity) getActivity()).refreshActionData();
         }
     }
 }

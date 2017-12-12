@@ -3,6 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
+
+//    plugins {
+//        id 'com.onesignal.androidsdk.onesignal-gradle-plugin' version '0.8.0'
+//    }
+//    apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
     defaultConfig {
         applicationId "io.plan8.backoffice"
 
@@ -12,9 +18,9 @@ android {
 //                                onesignal_google_project_number: "53462702224"]
 
         //inhouse
-        manifestPlaceholders = [manifestApplicationId          : "${applicationId}",
-                                onesignal_app_id               : "758f6bdb-aa6f-4d98-93ad-49215de66ecc",
-                                onesignal_google_project_number: "871666820571"]
+        manifestPlaceholders = [onesignal_app_id               : "758f6bdb-aa6f-4d98-93ad-49215de66ecc",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "REMOTE"]
 
         minSdkVersion 19
         targetSdkVersion 26
@@ -78,4 +84,5 @@ dependencies {
     compile 'com.twitter:twitter-text:1.6.1'
     compile 'com.twitter.penguin:korean-text:4.4'
 }
+
 apply plugin: 'com.google.gms.google-services'

@@ -24,12 +24,12 @@ public class BaseApplication extends MultiDexApplication {
         RestfulAdapter.build(getApplicationContext());
 
         OneSignal.startInit(this)
-                .autoPromptLocation(false) // default call promptLocation later
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .setNotificationReceivedHandler(new OneSignalNotificationReciever())
                 .setNotificationOpenedHandler(new OneSignalNotificationOpenedHandler(getApplicationContext()))
-                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
-        OneSignal.setSubscription(true);
+
+//        OneSignal.setSubscription(true);
     }
 }

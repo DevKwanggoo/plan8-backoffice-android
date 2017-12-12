@@ -8,7 +8,7 @@ import io.plan8.backoffice.model.BaseModel;
  * Created by chokwanghwan on 2017. 11. 29..
  */
 
-public class Comment implements BaseModel {
+public class Action implements BaseModel {
     @SerializedName("id") int id;
     @SerializedName("created") String created;
     @SerializedName("type") String type;
@@ -17,10 +17,10 @@ public class Comment implements BaseModel {
     @SerializedName("attachment") Attachment attachment;
     @SerializedName("text") String text;
 
-    public Comment() {
+    public Action() {
     }
 
-    public Comment(String text) {
+    public Action(String text) {
         this.text = text;
     }
 

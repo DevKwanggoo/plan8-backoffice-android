@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 
-import io.plan8.backoffice.model.api.Comment;
+import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.ActivityVM;
@@ -13,24 +13,24 @@ import io.plan8.backoffice.vm.ActivityVM;
  * Created by SSozi on 2017. 11. 29..
  */
 
-public class DetailReservationCommentReplaceItemVM extends ActivityVM {
-    private Comment comment;
+public class DetailReservationActionReplaceItemVM extends ActivityVM {
+    private Action action;
 
-    public DetailReservationCommentReplaceItemVM(Activity activity, Bundle savedInstanceState, Comment comment) {
+    public DetailReservationActionReplaceItemVM(Activity activity, Bundle savedInstanceState, Action action) {
         super(activity, savedInstanceState);
-        this.comment = comment;
+        this.action = action;
     }
 
     @Bindable
     public String getReplaceTitle(){
-        return ViewUtil.getInstance().getActivityItemText(comment);
+        return ViewUtil.getInstance().getActivityItemText(action);
     }
 
     @Bindable
     public String getCreatedDate(){
-        if (null == comment) {
+        if (null == action) {
             return "";
         }
-        return DateUtil.getInstance().getChatTime(comment.getCreated());
+        return DateUtil.getInstance().getChatTime(action.getCreated());
     }
 }

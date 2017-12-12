@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import io.plan8.backoffice.Constants;
-import io.plan8.backoffice.model.api.Comment;
+import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Reservation;
 
 /**
@@ -65,21 +65,21 @@ public class ViewUtil {
         }
     }
 
-    public String getActivityItemText(Comment comment) {
-        if (null == comment) {
+    public String getActivityItemText(Action action) {
+        if (null == action) {
             return "";
         }
 
-        if (comment.getType().equals("statusChanged")) {
-            return comment.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
-        } else if (comment.getType().equals("phoneNumberChanged")) {
-            return comment.getCreator().getName() + "님이 고객 연락처를 수정하였습니다.";
-        } else if (comment.getType().equals("emailChanged")) {
-            return comment.getCreator().getName() + "님이 이메일을 수정하였습니다.";
-        } else if (comment.getType().equals("totalPriceChanged")) {
-            return comment.getCreator().getName() + "님이 상품 가격을 수정하였습니다.";
-        } else if (comment.getType().equals("additionalRequestsChanged")) {
-            return comment.getCreator().getName() + "님이 추가요청 사항을 수정하였습니다.";
+        if (action.getType().equals("statusChanged")) {
+            return action.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
+        } else if (action.getType().equals("phoneNumberChanged")) {
+            return action.getCreator().getName() + "님이 고객 연락처를 수정하였습니다.";
+        } else if (action.getType().equals("emailChanged")) {
+            return action.getCreator().getName() + "님이 이메일을 수정하였습니다.";
+        } else if (action.getType().equals("totalPriceChanged")) {
+            return action.getCreator().getName() + "님이 상품 가격을 수정하였습니다.";
+        } else if (action.getType().equals("additionalRequestsChanged")) {
+            return action.getCreator().getName() + "님이 추가요청 사항을 수정하였습니다.";
         } else {
             return "";
         }

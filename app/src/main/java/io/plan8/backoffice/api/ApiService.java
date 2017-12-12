@@ -3,9 +3,9 @@ package io.plan8.backoffice.api;
 import java.util.HashMap;
 import java.util.List;
 
+import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Auth;
-import io.plan8.backoffice.model.api.Comment;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
@@ -80,22 +80,18 @@ public interface ApiService {
     Call<List<Member>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);
 
     @FormUrlEncoded
-    @POST("1/reservations/{id}/comments")
-    Call<Comment> createComment(@Header("authorization") String auth, @Path("id") int reservationId, @Field("text") String text);
+    @POST("1/reservations/{id}/actions")
+    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("text") String text);
 
     @FormUrlEncoded
-    @POST("1/reservations/{id}/comments")
-    Call<Comment> createComment(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
-
-    @FormUrlEncoded
-    @POST("1/reservations/{id}/comments")
-    Call<Comment> createActivity(@Header("authorization") String auth, @Path("id") int reservationId, @Field("type") String type);
+    @POST("1/reservations/{id}/actions")
+    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
 
     @GET("1/reservations/{id}/activities")
-    Call<List<Comment>> getComments(@Header("authorization") String auth,
-                                    @Path("id") int reservationId,
-                                    @Query("take") int take,
-                                    @Query("skip") int skip);
+    Call<List<Action>> getActions(@Header("authorization") String auth,
+                                  @Path("id") int reservationId,
+                                  @Query("take") int take,
+                                  @Query("skip") int skip);
 
     @GET("1/teams/{id}/notification")
     Call<List<NotificationItem>> getNotifications(@Header("authorization") String auth, @Path("id") int teamId);
