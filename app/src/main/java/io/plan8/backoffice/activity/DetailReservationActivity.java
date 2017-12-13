@@ -35,7 +35,6 @@ import com.linkedin.android.spyglass.ui.MentionsEditText;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -472,7 +471,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 List<Action> result = response.body();
                 if (null != result) {
                     if (actions.size() + result.size() > actions.size()) {
-                        Collections.reverse(result);
                         actions.addAll(result);
                         List<BaseModel> tempList = new ArrayList<BaseModel>();
                         tempList.addAll(result);

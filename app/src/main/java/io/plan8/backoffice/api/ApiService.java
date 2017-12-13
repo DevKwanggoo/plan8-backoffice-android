@@ -87,7 +87,7 @@ public interface ApiService {
     @POST("1/reservations/{id}/actions")
     Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
 
-    @GET("1/reservations/{id}/activities")
+    @GET("1/reservations/{id}/actions")
     Call<List<Action>> getActions(@Header("authorization") String auth,
                                   @Path("id") int reservationId,
                                   @Query("take") int take,
