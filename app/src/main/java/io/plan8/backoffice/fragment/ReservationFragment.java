@@ -104,12 +104,11 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 currentDate,
                 ApplicationManager.getInstance().getCurrentMember().getId(),
-                5,
+                15,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
-                Log.e("test", "test");
                 List<Reservation> result = response.body();
 
                 if (null == myReservations) {

@@ -94,5 +94,7 @@ public interface ApiService {
                                   @Query("skip") int skip);
 
     @GET("1/users/me/notifications")
-    Call<List<Notification>> getNotifications(@Header("authorization") String auth);
+    Call<List<Notification>> getNotifications(@Header("authorization") String auth,
+                                              @Query("take") int take,
+                                              @Query("skip") int skip);
 }

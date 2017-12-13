@@ -79,8 +79,7 @@ public class ReservationItemVM extends FragmentVM {
     }
 
     public void showDetailReservation(View view) {
-//        getFragment().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation));
-        getFragment().startActivityForResult(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation), Constants.REFRESH_RESERVATION_FRAGMENT);
+        getFragment().startActivityForResult(DetailReservationActivity.buildIntent(getFragment().getContext(), reservation.getId()), Constants.REFRESH_RESERVATION_FRAGMENT);
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 }

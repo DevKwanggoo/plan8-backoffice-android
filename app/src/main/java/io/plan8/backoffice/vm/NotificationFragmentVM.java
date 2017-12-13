@@ -13,7 +13,6 @@ import java.util.List;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.vm.item.NotificationItemVM;
 
@@ -22,22 +21,22 @@ import io.plan8.backoffice.vm.item.NotificationItemVM;
  */
 
 public class NotificationFragmentVM extends FragmentVM {
-    private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private BindingRecyclerViewAdapter<Notification> adapter;
     private boolean empty;
-    private List<BaseModel> notifications;
+    private List<Notification> notifications;
 
     public NotificationFragmentVM(Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
         notifications = new ArrayList<>();
-        adapter = new BindingRecyclerViewAdapter<BaseModel>() {
+        adapter = new BindingRecyclerViewAdapter<Notification>() {
             @Override
-            protected int selectViewLayoutType(BaseModel data) {
+            protected int selectViewLayoutType(Notification data) {
                 return R.layout.item_notification;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, BaseModel data) {
-                binding.setVariable(BR.vm, new NotificationItemVM(getFragment(), savedInstanceState, (Notification) data));
+            protected void bindVariables(ViewDataBinding binding, Notification data) {
+                binding.setVariable(BR.vm, new NotificationItemVM(getFragment(), savedInstanceState, data));
             }
         };
     }
@@ -50,7 +49,7 @@ public class NotificationFragmentVM extends FragmentVM {
         return adapter;
     }
 
-    public void setData(List<BaseModel> data) {
+    public void setData(List<Notification> data) {
         adapter.setData(data);
         if (this.notifications.size() <= 0) {
             setEmpty(true);
@@ -59,7 +58,7 @@ public class NotificationFragmentVM extends FragmentVM {
         }
     }
 
-    public void addData(List<BaseModel> data) {
+    public void addData(List<Notification> data) {
         this.notifications.addAll(data);
         adapter.addData(data);
         if (this.notifications.size() <= 0) {

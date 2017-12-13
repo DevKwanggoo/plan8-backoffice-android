@@ -18,7 +18,6 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentNotificationBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
-import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.vm.NotificationFragmentVM;
 import retrofit2.Call;
@@ -32,7 +31,7 @@ import retrofit2.Response;
 public class NotificationFragment extends BaseFragment {
     private FragmentNotificationBinding binding;
     private NotificationFragmentVM vm;
-    private List<BaseModel> notifications;
+    private List<Notification> notifications;
 
     @Nullable
     @Override
@@ -41,7 +40,6 @@ public class NotificationFragment extends BaseFragment {
         vm = new NotificationFragmentVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
-
         return binding.getRoot();
     }
 
@@ -49,16 +47,19 @@ public class NotificationFragment extends BaseFragment {
         if (null == notifications) {
             notifications = new ArrayList<>();
         }
-        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getServiceApi().getNotifications("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getContext()));
+
+        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getServiceApi().getNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), 15, notifications.size());
         getNotifications.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
                 List<Notification> result = response.body();
+
                 if (null != result) {
-                    notifications.addAll(result);
-                    List<BaseModel> tempList = new ArrayList<>();
-                    tempList.addAll(result);
-                    vm.addData(tempList);
+                    Log.e("notification", "" + result.size());
+                    if (notifications.size() + result.size() > notifications.size()) {
+                        notifications.addAll(result);
+                        vm.addData(result);
+                    }
                 }
             }
 
@@ -76,8 +77,7 @@ public class NotificationFragment extends BaseFragment {
         binding.notificationRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
-//                refreshNotificationList();
-                Log.e("test", "paging");
+                refreshNotificationList();
             }
         });
         refreshNotificationList();
