@@ -34,7 +34,10 @@ public class ReservationItemVM extends FragmentVM {
 
     @Bindable
     public String getCustomerName() {
-        if (null == reservation || null == reservation.getUser()) {
+        if (null == reservation
+                || null == reservation.getUser() || null == reservation.getUser().getName()
+                || reservation.getUser().getName().equals("")) {
+
             return "고객명 없음";
         }
         return reservation.getUser().getName();

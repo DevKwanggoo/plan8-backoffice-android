@@ -36,11 +36,11 @@ public class MainActivityVM extends ActivityVM {
     }
 
     public void teamLogout(View view) {
-//        SharedPreferenceManager.getInstance().clearUserToken(getActivity());
-//        Intent loginIntent = new Intent(activity, LoginActivity.class);
-//        activity.startActivity(loginIntent);
-//        activity.finish();
-//        activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-        setEmptyTeamFlag(false);
+        SharedPreferenceManager.getInstance().clearUserToken(getActivity());
+        Intent loginIntent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(loginIntent);
+        activity.finish();
+        activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+//        setEmptyTeamFlag(false);
     }
 }

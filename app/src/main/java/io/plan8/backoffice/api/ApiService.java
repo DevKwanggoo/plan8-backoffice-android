@@ -13,6 +13,7 @@ import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.NotificationItem;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -83,9 +84,8 @@ public interface ApiService {
     @POST("1/reservations/{id}/actions")
     Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("text") String text);
 
-    @FormUrlEncoded
     @POST("1/reservations/{id}/actions")
-    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("attachment") Attachment attachment);
+    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Body HashMap<String, Object> attachment);
 
     @GET("1/reservations/{id}/actions")
     Call<List<Action>> getActions(@Header("authorization") String auth,
