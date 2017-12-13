@@ -84,7 +84,9 @@ public class MoreFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        binding.unbind();
+        if (null != binding) {
+            binding.unbind();
+        }
         super.onDestroy();
     }
 

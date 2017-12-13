@@ -97,4 +97,10 @@ public interface ApiService {
     Call<List<Notification>> getNotifications(@Header("authorization") String auth,
                                               @Query("take") int take,
                                               @Query("skip") int skip);
+
+    @PUT("1/users/me/notifications/{id}")
+    Call<Notification> readNotification(@Header("authorization") String auth, @Path("id") int notificationId, @Query("read") boolean read);
+
+    @PUT("1/users/me/notifications")
+    Call<Notification> readAllNotifications(@Header("authorization") String auth);
 }

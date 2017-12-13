@@ -13,15 +13,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@{vm.read ? @color/white : @color/activeNotification}">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/selectable_item_background"
             android:clickable="true"
-            android:onClick="@{vm::detailNotification}"
             android:minHeight="62dp"
+            android:onClick="@{vm::detailNotification}"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -54,8 +54,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:text="@{vm.text}"
                         android:fontFamily="sans-serif"
+                        android:text="@{vm.text}"
                         android:textColor="@color/defaultDarkColor"
                         android:textSize="14dp" />
 
@@ -63,8 +63,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="13dp"
-                        android:text="@{vm.lastModified}"
                         android:fontFamily="sans-serif"
+                        android:text="@{vm.lastModified}"
                         android:textColor="@color/grayColor"
                         android:textSize="12dp" />
                 </LinearLayout>

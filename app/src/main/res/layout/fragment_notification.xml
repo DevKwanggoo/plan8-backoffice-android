@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:notificationFragmentViewAdapter="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -29,6 +30,25 @@
                 android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:onClick="@{vm::readAllNotifications}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="모두읽기"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+            </RelativeLayout>
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -36,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/notificationToolbar"
+            notificationFragmentViewAdapter:initRecyclerView="@{vm.nothing}"
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}"
             android:overScrollMode="never" />

@@ -16,9 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RestfulAdapter {
-    private static RestfulAdapter instance;
-    private static ApiService retrofitServiceApi;
-    private static ApiService upLoadFileApiService;
+    private static volatile RestfulAdapter instance = null;
     private static ApiService newApiService;
     private Context context;
 
@@ -30,11 +28,11 @@ public class RestfulAdapter {
     }
 
     public static RestfulAdapter getInstance() {
-        return instance;
-    }
-
-    public static synchronized RestfulAdapter build(Context context) {
-        if (instance == null) instance = new RestfulAdapter(context);
+        if (null == instance) {
+            synchronized (RestfulAdapter.class) {
+                instance = new RestfulAdapter();
+            }
+        }
         return instance;
     }
 

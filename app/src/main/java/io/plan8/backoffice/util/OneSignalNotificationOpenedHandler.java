@@ -10,7 +10,13 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.adapter.RestfulAdapter;
+import io.plan8.backoffice.model.api.Notification;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by SSozi on 2017. 12. 5..
@@ -37,6 +43,17 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
         }
 
         if (reservationId != -1 && notificationId != -1) {
+            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(context), notificationId, true);
+            readNotificationCall.enqueue(new Callback<Notification>() {
+                @Override
+                public void onResponse(Call<Notification> call, Response<Notification> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<Notification> call, Throwable t) {
+                }
+            });
             Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, reservationId, notificationId);
             detailTaskIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(detailTaskIntent);

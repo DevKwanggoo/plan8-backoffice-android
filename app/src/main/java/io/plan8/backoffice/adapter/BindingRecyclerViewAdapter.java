@@ -36,6 +36,12 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
+    public void setDataNotifyItemRangeChanged(List<T> data) {
+        if (data != null) this.data = data;
+        else this.data = new ArrayList<>();
+        notifyItemRangeChanged(0, this.data.size());
+    }
+
     public void addData(List<T> data, int startIndex, int dataSize){
         if (data != null) this.data.addAll(startIndex, data);
         else this.data = new ArrayList<>();

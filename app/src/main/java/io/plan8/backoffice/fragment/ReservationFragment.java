@@ -90,6 +90,9 @@ public class ReservationFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (null != binding) {
+            binding.unbind();
+        }
     }
 
     private void refreshReservationList() {

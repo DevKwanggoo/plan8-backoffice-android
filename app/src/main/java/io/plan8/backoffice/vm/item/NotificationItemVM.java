@@ -3,13 +3,21 @@ package io.plan8.backoffice.vm.item;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 
+import com.android.databinding.library.baseAdapters.BR;
+
+import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.FragmentVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by SSozi on 2017. 12. 5..
@@ -63,11 +71,30 @@ public class NotificationItemVM extends FragmentVM {
         }
 
         getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
-        //TODO : 읽음 처리 한다.
+        Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), true);
+        readNotificationCall.enqueue(new Callback<Notification>() {
+            @Override
+            public void onResponse(Call<Notification> call, Response<Notification> response) {
+                setRead(true);
+            }
+
+            @Override
+            public void onFailure(Call<Notification> call, Throwable t) {
+                Log.e("test", "test");
+            }
+        });
     }
 
-//    @Bindable
-//    public boolean isRead() {
-//
-//    }
+    @Bindable
+    public boolean isRead() {
+        if (null == notification) {
+            return false;
+        }
+        return notification.isRead();
+    }
+
+    public void setRead(boolean read) {
+        notification.setRead(read);
+        notifyPropertyChanged(BR.read);
+    }
 }

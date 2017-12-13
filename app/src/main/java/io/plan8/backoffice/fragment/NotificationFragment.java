@@ -86,5 +86,17 @@ public class NotificationFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (null != binding) {
+            binding.unbind();
+        }
+    }
+
+    public void readAllNotifications() {
+        for (Notification n : notifications) {
+            if (null != n) {
+                n.setRead(true);
+            }
+        }
+        vm.setData(notifications);
     }
 }

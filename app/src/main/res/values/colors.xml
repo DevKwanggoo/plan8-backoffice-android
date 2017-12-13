@@ -32,4 +32,6 @@
     <color name="inActiveViewColor">#d8dfe4</color>
 
     <color name="grayTintColor">#6d848f</color>
+
+    <color name="activeNotification">#f9fafc</color>
 </resources>
