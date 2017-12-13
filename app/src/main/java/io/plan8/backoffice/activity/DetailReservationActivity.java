@@ -47,6 +47,7 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
+import io.plan8.backoffice.manager.RealTimeHandlerManager;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Attachment;
@@ -167,7 +168,24 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     protected void onDestroy() {
         binding.unbind();
+        RealTimeHandlerManager.getInstance().clearHandler("action");
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
+            RealTimeHandlerManager.getInstance().startHandler("action");
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
+            RealTimeHandlerManager.getInstance().stopHandler("action");
+        }
+        super.onPause();
     }
 
     @Override
@@ -551,5 +569,15 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 Log.e("failure : ", "sendAttachment");
             }
         });
+    }
+
+    public void handlerTest() {
+        /***
+         * 1. handler 만든다
+         * 2. 30초마다 재실행시킨다
+         * 3. reservation과 actions를 가지고 List<BaseModel>을 만든다
+         * 4. vm.setDataNotifiyItemRangeChanged();
+         */
+
     }
 }
