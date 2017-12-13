@@ -56,7 +56,7 @@ public class PreviewActivity extends AppCompatActivity {
     }
 
     private void fileDownload() {
-        new FileDownloader(this, "jpg").execute(attachment.getUrl());
+        new FileDownloader(this, attachment).execute(attachment.getUrl());
 //        new FileDownloader(this, "pdf").execute("http://javacan.tistory.com/attachment/cfile1.uf@246A424C57222FCB1F9229.pdf");
     }
 
