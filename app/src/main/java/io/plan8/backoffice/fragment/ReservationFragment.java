@@ -24,7 +24,6 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentReservationBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
-import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.ReservationFragmentVM;
@@ -104,41 +103,28 @@ public class ReservationFragment extends BaseFragment {
                 ApplicationManager.getInstance().getCurrentTeam().getTeamId(),
                 currentDate,
                 currentDate,
+                ApplicationManager.getInstance().getCurrentMember().getId(),
                 5,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
+                Log.e("test", "test");
                 List<Reservation> result = response.body();
 
+                if (null == myReservations) {
+                    myReservations = new ArrayList<>();
+                }
                 if (null != result) {
-                    for (Reservation r : result) {
-                        if (null != r.getWorkers()
-                                && null != ApplicationManager.getInstance().getMembers()) {
-                            for (Member w : r.getWorkers()) {
-                                if (null != w
-                                        && null != w.getUser()
-                                        && w.getUser().getId() == ApplicationManager.getInstance().getUser().getId()) {
-                                    r.setMyReservation(true);
-                                }
-                            }
-                        }
-                    }
-
-                    if (null == myReservations) {
-                        myReservations = new ArrayList<>();
-                    }
                     if (reservations.size() + result.size() > reservations.size()) {
                         reservations.addAll(result);
 
                         for (Reservation r : reservations) {
-                            if (r.isMyReservation()) {
-                                myReservations.add(r);
-                            }
+                            myReservations.add(r);
                         }
                     }
-                    vm.setDatas(myReservations);
                 }
+                vm.setDatas(myReservations);
             }
 
             @Override

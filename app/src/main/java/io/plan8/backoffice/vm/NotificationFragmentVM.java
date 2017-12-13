@@ -1,17 +1,20 @@
 package io.plan8.backoffice.vm;
 
+import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.model.item.NotificationItem;
+import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.vm.item.NotificationItemVM;
 
 /**
@@ -19,20 +22,22 @@ import io.plan8.backoffice.vm.item.NotificationItemVM;
  */
 
 public class NotificationFragmentVM extends FragmentVM {
-    private BindingRecyclerViewAdapter adapter;
+    private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private boolean empty;
+    private List<BaseModel> notifications;
 
     public NotificationFragmentVM(Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
-
-        adapter = new BindingRecyclerViewAdapter() {
+        notifications = new ArrayList<>();
+        adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
-            protected int selectViewLayoutType(Object data) {
+            protected int selectViewLayoutType(BaseModel data) {
                 return R.layout.item_notification;
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Object data) {
-                binding.setVariable(BR.vm, new NotificationItemVM(getFragment(), savedInstanceState, (NotificationItem) data));
+            protected void bindVariables(ViewDataBinding binding, BaseModel data) {
+                binding.setVariable(BR.vm, new NotificationItemVM(getFragment(), savedInstanceState, (Notification) data));
             }
         };
     }
@@ -45,7 +50,32 @@ public class NotificationFragmentVM extends FragmentVM {
         return adapter;
     }
 
-    public void setData(List<Object> data) {
-        if (null != adapter) adapter.setData(data);
+    public void setData(List<BaseModel> data) {
+        adapter.setData(data);
+        if (this.notifications.size() <= 0) {
+            setEmpty(true);
+        } else  {
+            setEmpty(false);
+        }
+    }
+
+    public void addData(List<BaseModel> data) {
+        this.notifications.addAll(data);
+        adapter.addData(data);
+        if (this.notifications.size() <= 0) {
+            setEmpty(true);
+        } else  {
+            setEmpty(false);
+        }
+    }
+
+    @Bindable
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+        notifyPropertyChanged(BR.empty);
     }
 }

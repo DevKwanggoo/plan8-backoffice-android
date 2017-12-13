@@ -161,8 +161,8 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         adapter.addData(data, startIndex, dataSize);
     }
 
-    public void addData(BaseModel data, int startIndex, int dataSize) {
-        adapter.addData(data, startIndex, dataSize);
+    public void addData(BaseModel data) {
+        adapter.addData(data);
     }
 
     public RecyclerView.LayoutManager getVerticalLayoutManager() {

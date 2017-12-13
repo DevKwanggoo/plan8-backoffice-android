@@ -44,7 +44,6 @@ public class DetailReservationActionItemVM extends ActivityVM {
         return action.getText();
     }
 
-
     @Bindable
     public String getCreated() {
         if (null == action) {

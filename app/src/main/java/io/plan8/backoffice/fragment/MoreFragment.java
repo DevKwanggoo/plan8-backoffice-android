@@ -23,9 +23,9 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
+import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Member;
-import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.EmptySpaceItem;
 import io.plan8.backoffice.model.item.LabelItem;
@@ -49,35 +49,35 @@ public class MoreFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        List<Object> testData = new ArrayList<>();
+        List<BaseModel> moreFragmentData = new ArrayList<>();
 
-        testData.add(new LabelItem("내 프로필"));
+        moreFragmentData.add(new LabelItem("내 프로필"));
         if (ApplicationManager.getInstance().getUser() != null) {
-            testData.add(ApplicationManager.getInstance().getUser());
+            moreFragmentData.add(ApplicationManager.getInstance().getUser());
         }
-        testData.add(new LabelItem("팀 선택"));
+        moreFragmentData.add(new LabelItem("팀 선택"));
 
         if (null != ApplicationManager.getInstance().getMembers()) {
-            List<Team> teams = new ArrayList<>();
+            List<Member> members = new ArrayList<>();
             for (Member m : ApplicationManager.getInstance().getMembers()) {
                 if (null != m) {
-                    teams.add(m.getTeam());
+                    members.add(m);
                 }
             }
 
-            if (teams.size() > 0) {
-                testData.addAll(teams);
+            if (members.size() > 0) {
+                moreFragmentData.addAll(members);
             }
         }
-        testData.add(new EmptySpaceItem(0));
+        moreFragmentData.add(new EmptySpaceItem(0));
 
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
-        vm = new MoreFragmentVM(this, savedInstanceState, testData);
+        vm = new MoreFragmentVM(this, savedInstanceState, moreFragmentData);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
         progressBar = binding.moreMenuProgressBar;
-        vm.setData(testData);
+        vm.setData(moreFragmentData);
 
         return binding.getRoot();
     }

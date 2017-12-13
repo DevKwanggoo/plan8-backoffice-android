@@ -2,8 +2,6 @@ package io.plan8.backoffice.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 
 import com.onesignal.OSNotificationAction;
 import com.onesignal.OSNotificationOpenResult;
@@ -27,29 +25,19 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
 
     @Override
     public void notificationOpened(OSNotificationOpenResult result) {
-        Log.e("test", "push!!");
         OSNotificationAction.ActionType actionType = result.action.type;
         JSONObject data = result.notification.payload.additionalData;
-        Uri openUrl = null;
+        int reservationId = -1;
+        int notificationId = -1;
         try {
-            if (data.getString("openUrl") != null) {
-                openUrl = Uri.parse(data.getString("openUrl"));
-            }
+            reservationId = data.getInt("reservationId");
+            notificationId = data.getInt("notificationId");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String customKey;
-
-        customKey = data.optString("customkey", null);
-        if (customKey != null)
-            Log.e("OneSignalExample", "customkey set with value: " + customKey);
-
-        if (actionType == OSNotificationAction.ActionType.ActionTaken)
-            Log.e("OneSignalExample", "Button pressed with id: " + result.action.actionID);
-
-        if (openUrl != null) {
-            Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, openUrl.toString(), true);
+        if (reservationId != -1 && notificationId != -1) {
+            Intent detailTaskIntent = DetailReservationActivity.buildIntent(context, reservationId, notificationId);
             detailTaskIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(detailTaskIntent);
         }

@@ -26,6 +26,7 @@ public class ApplicationManager {
     private User user;
     private List<Member> members;
     private List<Member> currentTeamMembers;
+    private Member currentMember;
     private Team currentTeam;
     private MainActivity mainActivity;
 
@@ -96,6 +97,15 @@ public class ApplicationManager {
             });
 
         }
+    }
+
+    public Member getCurrentMember() {
+        return currentMember;
+    }
+
+    public void setCurrentMember(Member currentMember) {
+        setCurrentTeam(currentMember.getTeam());
+        this.currentMember = currentMember;
     }
 
     public MainActivity getMainActivity() {

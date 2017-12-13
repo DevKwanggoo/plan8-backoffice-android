@@ -4,9 +4,11 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.Toast;
 
-import io.plan8.backoffice.model.item.NotificationItem;
+import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.model.api.Notification;
+import io.plan8.backoffice.util.DateUtil;
+import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.FragmentVM;
 
 /**
@@ -14,37 +16,58 @@ import io.plan8.backoffice.vm.FragmentVM;
  */
 
 public class NotificationItemVM extends FragmentVM {
-    private NotificationItem notificationItem;
-    public NotificationItemVM(Fragment fragment, Bundle savedInstanceState, NotificationItem notificationItem) {
+    private Notification notification;
+
+    public NotificationItemVM(Fragment fragment, Bundle savedInstanceState, Notification notification) {
         super(fragment, savedInstanceState);
-        this.notificationItem = notificationItem;
+        this.notification = notification;
     }
 
     @Bindable
-    public String getDescription(){
-        if (notificationItem != null && notificationItem.getDescription() != null){
-            return notificationItem.getDescription();
+    public String getText() {
+        if (null == notification || null == notification.getAction()) {
+            return "";
         }
-        return "";
+        String text = "";
+        text = ViewUtil.getInstance().getActionItemText(notification.getAction()) + " ";
+        if (null != notification.getAction().getText()
+                && notification.getAction().getText().length() >= 75) {
+            text += notification.getAction().getText().substring(0, 75) + "...";
+        } else {
+            text += notification.getAction().getText();
+        }
+
+        return text;
     }
 
     @Bindable
     public String getAvatar() {
-        if (notificationItem != null && notificationItem.getAvatar() != null){
-            return notificationItem.getAvatar();
+        if (null == notification || null == notification.getAction() || null == notification.getAction().getCreator()) {
+            return "";
         }
-        return "";
+        return notification.getAction().getCreator().getAvatar();
     }
 
     @Bindable
-    public String getLastModified(){
-        if (notificationItem != null && notificationItem.getLastModified() != null){
-            return notificationItem.getLastModified();
+    public String getLastModified() {
+        if (null == notification) {
+            return "";
         }
-        return "";
+
+        return DateUtil.getInstance().getChatTime(notification.getCreated());
     }
 
-    public void detailNotification(View view){
-        Toast.makeText(getFragment().getContext(), "알림 자세히 보기", Toast.LENGTH_SHORT).show();
+    public void detailNotification(View view) {
+        if (null == notification || null == notification.getAction()) {
+            return;
+        }
+
+        getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
+        //TODO : 읽음 처리 한다.
     }
+
+//    @Bindable
+//    public boolean isRead() {
+//
+//    }
 }

@@ -22,12 +22,12 @@ public class DetailReservationActionReplaceItemVM extends ActivityVM {
     }
 
     @Bindable
-    public String getReplaceTitle(){
-        return ViewUtil.getInstance().getActivityItemText(action);
+    public String getReplaceTitle() {
+        return ViewUtil.getInstance().getActionItemText(action);
     }
 
     @Bindable
-    public String getCreatedDate(){
+    public String getCreatedDate() {
         if (null == action) {
             return "";
         }

@@ -35,6 +35,7 @@ import com.linkedin.android.spyglass.ui.MentionsEditText;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,8 +68,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private DetailReservationActivityVM vm;
     private Uri captureImageUri;
     private long fileLength;
-    private Reservation reservation;
     private int reservationId;
+    private Reservation reservation;
     private MentionsEditText mentionsEditText;
     private User.UserLoader userLoader;
     private static final String BUCKET = "user";
@@ -79,41 +80,35 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private boolean editFlag = false;
     private Uri photoURI;
     private String nougatAbsoluteUri;
+    private Action action;
+    private int notificationId;
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setMaxNumKeywords(1)
             .build();
 
-    public static Intent buildIntent(Context context, Reservation reservation) {
+    public static Intent buildIntent(Context context, int reservationId) {
         Intent intent = new Intent(context, DetailReservationActivity.class);
-        intent.putExtra("reservation", reservation);
+        intent.putExtra("reservationId", reservationId);
         return intent;
     }
 
-    public static Intent buildIntent(Context context, String openUrl, boolean deepLinkFlag) {
+    public static Intent buildIntent(Context context, int reservationId, int notificationId) {
         Intent intent = new Intent(context, DetailReservationActivity.class);
-        intent.putExtra("openUrl", openUrl);
-        intent.putExtra("deepLinkFlag", deepLinkFlag);
+        intent.putExtra("reservationId", reservationId);
+        intent.putExtra("notificationId", notificationId);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.reservation = (Reservation) getIntent().getSerializableExtra("reservation");
+        this.reservationId = getIntent().getIntExtra("reservationId", -1);
+        this.notificationId = getIntent().getIntExtra("notificationId", -1);
 
-        if (getIntent().getBooleanExtra("deepLinkFlag", false)) {
-            Intent deepLinkData = getIntent();
-
-            if (getIntent().getData() != null) {
-                reservationId = Integer.parseInt(deepLinkData.getData().getPath().replace("/", "").trim());
-            } else {
-                Uri deepLinkUri = Uri.parse(deepLinkData.getStringExtra("openUrl"));
-                reservationId = Integer.parseInt(deepLinkUri.getPath().replace("/", "").trim());
-            }
-        } else {
-            reservationId = reservation.getId();
+        if (notificationId != -1) {
+            //TODO : 읽음처리하기
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
@@ -180,7 +175,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (ApplicationManager.getInstance().getMainActivity() != null) {
             Intent returnIntent = new Intent();
             if (editFlag) {
-                returnIntent.putExtra("reservation", reservation);
+                returnIntent.putExtra("reservationId", reservationId);
             }
             setResult(Constants.REFRESH_RESERVATION_FRAGMENT, returnIntent);
             finish();
@@ -434,13 +429,14 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         reservationCall.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                Reservation r = response.body();
-                if (null != r) {
+                reservation = response.body();
+                if (null != reservation) {
                     if (detailReservations.size() <= 0) {
-                        detailReservations.add(0, r);
+                        detailReservations.add(0, reservation);
+                        vm.setData(detailReservations);
                         refreshActionData();
                     } else {
-                        detailReservations.set(0, r);
+                        detailReservations.set(0, reservation);
                         vm.setData(detailReservations);
                     }
                 }
@@ -464,15 +460,16 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         actionsCall.enqueue(new Callback<List<Action>>() {
             @Override
             public void onResponse(Call<List<Action>> call, Response<List<Action>> response) {
-                if (detailReservations.size() <= 1) {
-                    detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
-                    vm.setData(detailReservations);
-                }
                 List<Action> result = response.body();
                 if (null != result) {
+                    if (result.size() > 0 && detailReservations.size() <= 1) {
+                        detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
+                        vm.setData(detailReservations);
+                    }
                     if (actions.size() + result.size() > actions.size()) {
+                        Collections.reverse(result);
                         actions.addAll(result);
-                        List<BaseModel> tempList = new ArrayList<BaseModel>();
+                        List<BaseModel> tempList = new ArrayList<>();
                         tempList.addAll(result);
                         vm.addDatas(tempList, 2, result.size());
                     }
@@ -514,8 +511,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Action> call, Response<Action> response) {
                 Action result = response.body();
                 if (null != result) {
-                    actions.add(0, result);
-                    vm.addData(result, 2, actions.size());
+                    if (detailReservations.size() <= 1) {
+                        detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
+                        vm.setData(detailReservations);
+                    }
+                    actions.add(result);
+                    vm.addData(result);
                 }
                 vm.setCurrentText("");
             }
@@ -535,8 +536,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Action> call, Response<Action> response) {
                 Action result = response.body();
                 if (result != null) {
-                    actions.add(0, result);
-                    vm.addData(result, 2, actions.size());
+                    if (detailReservations.size() <= 1) {
+                        detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));
+                        vm.setData(detailReservations);
+                    }
+                    actions.add(result);
+                    vm.addData(result);
                 }
                 vm.setCurrentText("");
             }

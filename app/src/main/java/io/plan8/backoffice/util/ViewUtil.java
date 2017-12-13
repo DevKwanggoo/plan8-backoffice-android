@@ -65,12 +65,14 @@ public class ViewUtil {
         }
     }
 
-    public String getActivityItemText(Action action) {
+    public String getActionItemText(Action action) {
         if (null == action) {
             return "";
         }
 
-        if (action.getType().equals("statusChanged")) {
+        if (action.getType().equals("commentAdded")) {
+            return action.getCreator().getName() + "님이 작업 댓글을 추가하였습니다.";
+        } else if (action.getType().equals("statusChanged")) {
             return action.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
         } else if (action.getType().equals("phoneNumberChanged")) {
             return action.getCreator().getName() + "님이 고객 연락처를 수정하였습니다.";

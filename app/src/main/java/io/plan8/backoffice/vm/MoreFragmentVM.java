@@ -17,8 +17,8 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.databinding.FragmentMoreBinding;
-import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.util.PushManager;
@@ -32,38 +32,36 @@ import io.plan8.backoffice.vm.item.MoreTeamItemVM;
  */
 
 public class MoreFragmentVM extends FragmentVM {
-    private List<Object> datas;
-    private FragmentMoreBinding binding;
-    private BindingRecyclerViewAdapter adapter;
-    private List<Object> moreItemList = new ArrayList<>();
+    private List<BaseModel> datas;
+    private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private List<BaseModel> moreItemList = new ArrayList<>();
 
-    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<Object> datas) {
+    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
         super(fragment, savedInstanceState);
         this.datas = datas;
 
-        adapter = new BindingRecyclerViewAdapter() {
+        adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
-            protected int selectViewLayoutType(Object data) {
+            protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof LabelItem) {
                     return R.layout.item_more_title;
                 } else if (data instanceof User) {
                     return R.layout.item_more_profile;
-                } else if (data instanceof Team) {
+                } else if (data instanceof Member) {
                     return R.layout.item_more_team;
                 } else {
                     return R.layout.item_empty_space;
                 }
-
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Object data) {
+            protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof LabelItem) {
                     binding.setVariable(BR.vm, new LabelItemVM(getFragment(), savedInstanceState, (LabelItem) data));
                 } else if (data instanceof User) {
                     binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (User) data));
-                } else if (data instanceof Team) {
-                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (Team) data));
+                } else if (data instanceof Member) {
+                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (Member) data));
                 } else {
                     binding.setVariable(BR.vm, new EmptySpaceItemVM(getFragment(), savedInstanceState));
                 }
@@ -81,7 +79,7 @@ public class MoreFragmentVM extends FragmentVM {
         return adapter;
     }
 
-    public void setData(List<Object> data) {
+    public void setData(List<BaseModel> data) {
         if (null != adapter) adapter.setData(data);
     }
 

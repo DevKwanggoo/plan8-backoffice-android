@@ -10,7 +10,7 @@ import android.widget.Toast;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.MainActivity;
-import io.plan8.backoffice.model.api.Team;
+import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.vm.FragmentVM;
 
 /**
@@ -18,39 +18,39 @@ import io.plan8.backoffice.vm.FragmentVM;
  */
 
 public class MoreTeamItemVM extends FragmentVM {
-    private Team team;
+    private Member member;
 
-    public MoreTeamItemVM(Fragment fragment, Bundle savedInstanceState, Team team) {
+    public MoreTeamItemVM(Fragment fragment, Bundle savedInstanceState, Member member) {
         super(fragment, savedInstanceState);
-        this.team = team;
+        this.member = member;
     }
 
     @Bindable
     public String getTeamName() {
-        if (null == team) {
+        if (null == member || null == member.getTeam()) {
             return "";
         }
-        return team.getName();
+        return member.getTeam().getName();
     }
 
     @Bindable
     public String getTeamDescription() {
-        if (null == team) {
+        if (null == member || null == member.getTeam()) {
             return "";
         }
-        return team.getName();
+        return member.getTeam().getName();
     }
 
     @Bindable
     public boolean getSelectTeamFlag() {
-        return ApplicationManager.getInstance().getCurrentTeam().getTeamId() == team.getTeamId();
+        return ApplicationManager.getInstance().getCurrentTeam().getTeamId() == member.getTeam().getTeamId();
     }
 
     public void selectTeam(View view) {
-        if (ApplicationManager.getInstance().getCurrentTeam().getTeamId() == team.getTeamId()){
+        if (ApplicationManager.getInstance().getCurrentTeam().getTeamId() == member.getTeam().getTeamId()) {
             Toast.makeText(getFragment().getContext(), "현재 선택되어 있는 팀입니다.", Toast.LENGTH_SHORT).show();
         } else {
-            ApplicationManager.getInstance().setCurrentTeam(team);
+            ApplicationManager.getInstance().setCurrentMember(member);
 
             Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -61,10 +61,10 @@ public class MoreTeamItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getTeamLogo(){
-        if (null != team.getLogo()){
-            return team.getLogo();
+    public String getTeamLogo() {
+        if (null == member || null == member.getTeam()) {
+            return "";
         }
-        return "";
+        return member.getTeam().getLogo();
     }
 }

@@ -11,11 +11,13 @@ import io.plan8.backoffice.model.BaseModel;
 public class Action implements BaseModel {
     @SerializedName("id") int id;
     @SerializedName("created") String created;
+    @SerializedName("updated") String updated;
     @SerializedName("type") String type;
-    @SerializedName("creator") Creator creator;
+    @SerializedName("text") String text;
     @SerializedName("data") Data data;
     @SerializedName("attachment") Attachment attachment;
-    @SerializedName("text") String text;
+    @SerializedName("reservation") Reservation reservation;
+    @SerializedName("creator") Creator creator;
 
     public Action() {
     }
@@ -69,6 +71,14 @@ public class Action implements BaseModel {
         public String getAfter() {
             return after;
         }
+    }
+
+    public String getUpdated() {
+        return updated;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
     }
 
     public int getId() {

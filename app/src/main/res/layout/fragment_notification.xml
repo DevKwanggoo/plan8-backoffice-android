@@ -3,6 +3,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="io.plan8.backoffice.vm.NotificationFragmentVM" />
@@ -12,19 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/notificationToolbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/reservationComplte">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="알림"
                 android:layout_centerInParent="true"
+                android:text="알림"
                 android:textColor="@color/white"
                 android:textSize="16dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -32,8 +36,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/notificationToolbar"
-            android:overScrollMode="never"
             android:adapter="@{vm.adapter}"
-            android:layoutManager="@{vm.layoutManager}"/>
+            android:layoutManager="@{vm.layoutManager}"
+            android:overScrollMode="never" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:visibility="@{vm.empty ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="알림 없음"
+                android:textColor="@color/grayTextColor"
+                android:textSize="20dp" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

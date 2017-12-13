@@ -19,6 +19,7 @@ public class Reservation implements BaseModel {
     @SerializedName("totalPrice") int totalPrice;
     @SerializedName("additionalRequests") String addtionalRequest;
     @SerializedName("status") String status;
+    @SerializedName("expires") String expires;
     @SerializedName("phoneNumber") String phoneNumber;
     @SerializedName("email") String email;
     @SerializedName("address") Address address;
@@ -26,8 +27,6 @@ public class Reservation implements BaseModel {
     @SerializedName("workers") List<Member> workers;
     @SerializedName("user") User user;
     @SerializedName("userId") int userId;
-
-    private boolean myReservation;
 
     public Reservation() {
     }
@@ -152,11 +151,7 @@ public class Reservation implements BaseModel {
         this.userId = userId;
     }
 
-    public boolean isMyReservation() {
-        return myReservation;
-    }
-
-    public void setMyReservation(boolean myReservation) {
-        this.myReservation = myReservation;
+    public String getExpires() {
+        return expires;
     }
 }
