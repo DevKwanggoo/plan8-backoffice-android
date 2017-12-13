@@ -107,4 +107,11 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         thirdIcon.setVisibility(View.GONE);
         thirdTitle.setText(title);
     }
+
+    public void setThirdItem(int iconResId, String title){
+        thirdItemContainer.setVisibility(View.VISIBLE);
+        thirdIcon.setImageResource(iconResId);
+        thirdIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.grayColor));
+        thirdTitle.setText(title);
+    }
 }

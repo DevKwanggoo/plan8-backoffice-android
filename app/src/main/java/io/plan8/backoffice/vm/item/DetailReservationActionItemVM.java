@@ -30,8 +30,8 @@ public class DetailReservationActionItemVM extends ActivityVM {
 
     @Bindable
     public String getAuthor() {
-        if (null == action || null == action.getCreator()) {
-            return "";
+        if (null == action || null == action.getCreator() || null == action.getCreator().getName()) {
+            return "이름 없음";
         }
         return action.getCreator().getName();
     }

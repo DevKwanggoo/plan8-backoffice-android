@@ -9,15 +9,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.twitter.Extractor;
+import com.twitter.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.Constants;
@@ -39,6 +45,8 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     private String url;
     private User user;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
+    private Pattern usernamePattern;
+    private Matcher matcher;
 
     public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, User user) {
         super(fragment, savedInstanceState);
@@ -50,8 +58,11 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
         plan8BottomSheetDialog = new Plan8BottomSheetDialog(getFragment().getContext());
         plan8BottomSheetDialog.setFirstItem(R.drawable.ic_line_field, "이름 편집");
         plan8BottomSheetDialog.getFirstItem().setOnClickListener(this);
-        plan8BottomSheetDialog.setSecondItem(R.drawable.ic_line_camera, "프로필 사진 변경");
+        plan8BottomSheetDialog.setSecondItem(R.drawable.ic_line_field, "아이디 변경");
         plan8BottomSheetDialog.getSecondItem().setOnClickListener(this);
+        plan8BottomSheetDialog.setThirdItem(R.drawable.ic_line_camera, "프로필 사진 변경");
+        plan8BottomSheetDialog.getThirdItem().setOnClickListener(this);
+        usernamePattern = Pattern.compile("^([A-Za-z0-9_]{1,15})$");
     }
 
     private void refreshFragment() {
@@ -80,7 +91,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
 
     @Bindable
     public String getProfileUserName() {
-        if (user != null && user.getUsername() != null){
+        if (user != null && user.getUsername() != null) {
             return "@" + user.getUsername();
         }
         return "";
@@ -92,7 +103,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.bottomSheetFirstItem){
+        if (view.getId() == R.id.bottomSheetFirstItem) {
             plan8BottomSheetDialog.hide();
             new MaterialDialog.Builder(getFragment().getContext())
                     .title("내 이름 편집")
@@ -105,7 +116,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                             if (!input.equals("")) {
                                 HashMap<String, String> putMap = new HashMap<String, String>();
                                 putMap.put("name", input.toString());
-                                Call<User> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer "+ SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
+                                Call<User> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
                                 putMeCall.enqueue(new Callback<User>() {
                                     @Override
                                     public void onResponse(Call<User> call, Response<User> response) {
@@ -118,6 +129,46 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                         Toast.makeText(getFragment().getContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                            }
+                            dialog.dismiss();
+                        }
+                    }).show();
+        } else if (view.getId() == R.id.bottomSheetSecondItem) {
+            plan8BottomSheetDialog.hide();
+            new MaterialDialog.Builder(getFragment().getContext())
+                    .title("아이디 편집")
+                    .inputType(InputType.TYPE_CLASS_TEXT)
+                    .positiveText("완료")
+                    .negativeText("취소")
+                    .input("다른 사람에게 표시될 아이디를 입력하세요.", user.getUsername(), new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                            if (!input.equals("")) {
+                                matcher = usernamePattern.matcher(input.toString());
+                                if (matcher.find()){
+                                    HashMap<String, String> putUserMap = new HashMap<String, String>();
+                                    putUserMap.put("username", input.toString());
+                                    Call<User> putUser = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putUserMap);
+                                    putUser.enqueue(new Callback<User>() {
+                                        @Override
+                                        public void onResponse(Call<User> call, Response<User> response) {
+                                            User user = response.body();
+                                            if (user != null){
+                                                ApplicationManager.getInstance().setUser(user);
+                                                refreshFragment();
+                                            } else {
+                                                Toast.makeText(getFragment().getContext(), "중복된 아이디가 있거나 사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<User> call, Throwable t) {
+                                            Toast.makeText(getFragment().getContext(), "아이디 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getFragment().getContext(), "중복된 아이디가 있거나 사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                             dialog.dismiss();
                         }
