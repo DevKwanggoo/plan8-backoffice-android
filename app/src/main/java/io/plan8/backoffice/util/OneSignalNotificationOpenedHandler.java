@@ -10,6 +10,9 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -43,7 +46,9 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
         }
 
         if (reservationId != -1 && notificationId != -1) {
-            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(context), notificationId, true);
+            Map<String, Boolean> readMap = new HashMap<String, Boolean>();
+            readMap.put("read", true);
+            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(context), notificationId, readMap);
             readNotificationCall.enqueue(new Callback<Notification>() {
                 @Override
                 public void onResponse(Call<Notification> call, Response<Notification> response) {

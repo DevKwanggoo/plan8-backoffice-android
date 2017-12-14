@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
@@ -86,7 +89,9 @@ public class NotificationFragmentVM extends FragmentVM {
     }
 
     public void readAllNotifications(View view) {
-        Call<Notification> readAllNotificationsCall = RestfulAdapter.getInstance().getServiceApi().readAllNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()));
+        Map<String, Boolean> readMap = new HashMap<String, Boolean>();
+        readMap.put("read", true);
+        Call<Notification> readAllNotificationsCall = RestfulAdapter.getInstance().getServiceApi().readAllNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), readMap);
         readAllNotificationsCall.enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
@@ -97,6 +102,7 @@ public class NotificationFragmentVM extends FragmentVM {
 
             @Override
             public void onFailure(Call<Notification> call, Throwable t) {
+                Log.e("test", "test");
             }
         });
     }

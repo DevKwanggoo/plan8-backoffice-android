@@ -56,10 +56,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/notificationToolbar"
-            notificationFragmentViewAdapter:initRecyclerView="@{vm.nothing}"
             android:adapter="@{vm.adapter}"
+            android:clipToPadding="false"
             android:layoutManager="@{vm.layoutManager}"
-            android:overScrollMode="never" />
+            android:overScrollMode="never"
+            android:paddingBottom="15dp"
+            notificationFragmentViewAdapter:initRecyclerView="@{vm.nothing}" />
 
         <RelativeLayout
             android:layout_width="match_parent"

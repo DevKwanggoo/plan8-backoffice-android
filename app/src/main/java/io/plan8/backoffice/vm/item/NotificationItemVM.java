@@ -8,6 +8,9 @@ import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -71,7 +74,9 @@ public class NotificationItemVM extends FragmentVM {
         }
 
         getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
-        Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), true);
+        Map<String, Boolean> readMap = new HashMap<String, Boolean>();
+        readMap.put("read", true);
+        Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), readMap);
         readNotificationCall.enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {

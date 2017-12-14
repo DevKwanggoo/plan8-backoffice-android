@@ -2,6 +2,7 @@ package io.plan8.backoffice.api;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Attachment;
@@ -98,9 +99,11 @@ public interface ApiService {
                                               @Query("take") int take,
                                               @Query("skip") int skip);
 
+    @FormUrlEncoded
     @PUT("1/users/me/notifications/{id}")
-    Call<Notification> readNotification(@Header("authorization") String auth, @Path("id") int notificationId, @Query("read") boolean read);
+    Call<Notification> readNotification(@Header("authorization") String auth, @Path("id") int notificationId, @FieldMap Map<String, Boolean> readMap);
 
+    @FormUrlEncoded
     @PUT("1/users/me/notifications")
-    Call<Notification> readAllNotifications(@Header("authorization") String auth);
+    Call<Notification> readAllNotifications(@Header("authorization") String auth, @FieldMap Map<String, Boolean> readMap);
 }
