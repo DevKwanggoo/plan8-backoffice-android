@@ -35,6 +35,7 @@ public class NotificationFragmentVM extends FragmentVM {
     private BindingRecyclerViewAdapter<Notification> adapter;
     private boolean empty;
     private List<Notification> notifications;
+    private boolean swipeFlag = true;
 
     public NotificationFragmentVM(Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -116,5 +117,15 @@ public class NotificationFragmentVM extends FragmentVM {
 
     public void setDataNotifyItemRangeChanged(List<Notification> list){
         adapter.setDataNotifyItemRangeChanged(list);
+    }
+
+    @Bindable
+    public boolean getSwipeFlag(){
+        return swipeFlag;
+    }
+
+    public void setSwipeFlag(boolean flag){
+        swipeFlag = flag;
+        notifyPropertyChanged(BR.swipeFlag);
     }
 }

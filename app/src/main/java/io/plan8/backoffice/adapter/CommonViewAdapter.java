@@ -3,6 +3,7 @@ package io.plan8.backoffice.adapter;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Spannable;
@@ -89,5 +90,10 @@ public class CommonViewAdapter {
     public static void initRecyclerView(RecyclerView view, Boolean nothing) {
         view.setHasFixedSize(true);
         view.setItemAnimator(null);
+    }
+
+    @BindingAdapter("commonViewAdapter:setEnabled")
+    public static void setEnabled(SwipeRefreshLayout view, boolean flag) {
+        view.setEnabled(flag);
     }
 }

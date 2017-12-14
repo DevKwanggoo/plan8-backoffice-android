@@ -27,6 +27,7 @@ public class ReservationFragmentVM extends FragmentVM {
     private String toolbarTitle;
     private BindingRecyclerViewAdapter<Reservation> adapter;
     private boolean emptyFlag = true;
+    private boolean swipeFlag = true;
 
     public ReservationFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -43,6 +44,8 @@ public class ReservationFragmentVM extends FragmentVM {
                 binding.setVariable(BR.vm, reservationItemVM);
             }
         };
+
+        adapter.setHasStableIds(true);
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
@@ -114,5 +117,15 @@ public class ReservationFragmentVM extends FragmentVM {
 
     public void changeDate(View view) {
         setOpenedCalendar(!isOpenedCalendar);
+    }
+
+    @Bindable
+    public boolean getSwipeFlag() {
+        return swipeFlag;
+    }
+
+    public void setSwipeFlag(boolean flag){
+        swipeFlag = flag;
+        notifyPropertyChanged(BR.swipeFlag);
     }
 }

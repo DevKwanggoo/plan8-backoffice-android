@@ -15,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private List<Fragment> fragments = new ArrayList<>();
     private List<Member> members;
     private ReservationFragment reservationFragment;
+    private NotificationFragment notificationFragment;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -108,11 +111,11 @@ public class MainActivity extends BaseActivity {
                     tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
                     tabItemTitle.setText("알림");
 
-                    NotificationFragment notiFragment = new NotificationFragment();
+                    notificationFragment = new NotificationFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    notiFragment.setArguments(bundle);
-                    fragments.add(notiFragment);
+                    notificationFragment.setArguments(bundle);
+                    fragments.add(notificationFragment);
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
                     tabItemTitle.setText("더보기");
@@ -169,6 +172,21 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+
+        binding.mainViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                reservationFragment.setSwipeFlag(false);
+                notificationFragment.setSwipeFlag(false);
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        reservationFragment.setSwipeFlag(true);
+                        notificationFragment.setSwipeFlag(true);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -216,8 +234,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed(boolean canDoubleClickFinish) {
-        super.onBackPressed(canDoubleClickFinish);
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void setEmptyFlag(boolean flag) {
