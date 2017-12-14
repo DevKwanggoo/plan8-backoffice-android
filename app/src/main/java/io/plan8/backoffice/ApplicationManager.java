@@ -32,6 +32,7 @@ public class ApplicationManager {
     private Member currentMember;
     private Team currentTeam;
     private MainActivity mainActivity;
+    private String serverTimeOffset;
 
     public static ApplicationManager getInstance() {
         if (null == instance) {
@@ -125,5 +126,17 @@ public class ApplicationManager {
 
     public void setCurrentTeamMembers(List<Member> currentTeamMembers) {
         this.currentTeamMembers = currentTeamMembers;
+    }
+
+    public static void setInstance(ApplicationManager instance) {
+        ApplicationManager.instance = instance;
+    }
+
+    public String getServerTimeOffset() {
+        return serverTimeOffset;
+    }
+
+    public void setServerTimeOffset(String serverTimeOffset) {
+        this.serverTimeOffset = serverTimeOffset;
     }
 }

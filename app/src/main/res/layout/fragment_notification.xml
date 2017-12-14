@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:notificationFragmentViewAdapter="http://schemas.android.com/apk/res-auto">
+    xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/notificationToolbar"
-            notificationFragmentViewAdapter:initRecyclerView="@{vm.nothing}"
+            commonViewAdapter:initRecyclerView="@{vm.nothing}"
             android:adapter="@{vm.adapter}"
             android:layoutManager="@{vm.layoutManager}"
             android:overScrollMode="never" />

@@ -16,8 +16,11 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivitySplashBinding;
+import io.plan8.backoffice.model.api.ServerTime;
 import io.plan8.backoffice.model.api.User;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.SplashActivityVM;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +30,9 @@ public class SplashActivity extends BaseActivity {
     private SplashActivityVM vm;
     private RelativeLayout progressBar;
     private SplashActivity self;
+    private boolean serverTimeFlag = false;
+    private boolean userFlag = false;
+    private String serverTimeOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,30 @@ public class SplashActivity extends BaseActivity {
 //        if (BuildConfig.DEBUG) {
 //            hasTokenStep();
 //        } else {
+
         if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
             String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
             if (RestfulAdapter.getInstance().getServiceApi() != null) {
+
+                Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + token, DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+                getServerTime.enqueue(new Callback<ServerTime>() {
+                    @Override
+                    public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
+                        ServerTime serverTime = response.body();
+                        if (serverTime != null){
+                            serverTimeOffset = serverTime.getOffset();
+                            serverTimeFlag = true;
+                            hasTokenStep();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ServerTime> call, Throwable t) {
+
+                    }
+                });
+
                 Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
                 meCall.enqueue(new Callback<User>() {
                     @Override
@@ -52,6 +78,7 @@ public class SplashActivity extends BaseActivity {
                         User user = response.body();
                         if (user != null) {
                             ApplicationManager.getInstance().setUser(user);
+                            userFlag = true;
                             hasTokenStep();
                         } else {
                             loginStep();
@@ -88,9 +115,12 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void hasTokenStep() {
-        binding.splashProgressBarContainer.setVisibility(View.GONE);
-        startActivity(MainActivity.buildIntent(this));
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (serverTimeFlag && userFlag) {
+            ApplicationManager.getInstance().setServerTimeOffset(serverTimeOffset);
+            binding.splashProgressBarContainer.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 }

@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -47,7 +49,6 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
-import io.plan8.backoffice.manager.RealTimeHandlerManager;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Attachment;
@@ -83,6 +84,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private String nougatAbsoluteUri;
     private Action action;
     private int notificationId;
+    private Handler handler;
+    private List<BaseModel> refreshData;
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
@@ -119,6 +122,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
         setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
         refreshReservation();
+        initHandler();
     }
 
     private void setMentionEditText(List<Member> memberList) {
@@ -168,22 +172,32 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     protected void onDestroy() {
         binding.unbind();
-        RealTimeHandlerManager.getInstance().clearHandler("action");
+//        RealTimeHandlerManager.getInstance().clearHandler("action");
+        if (handler != null) {
+            handler.removeMessages(0);
+            handler = null;
+        }
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
-        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
-            RealTimeHandlerManager.getInstance().startHandler("action");
+//        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
+//            RealTimeHandlerManager.getInstance().startHandler("action");
+//        }
+        if (handler != null) {
+            handler.sendEmptyMessage(0);
         }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
-            RealTimeHandlerManager.getInstance().stopHandler("action");
+//        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
+//            RealTimeHandlerManager.getInstance().stopHandler("action");
+//        }
+        if (handler != null) {
+            handler.removeMessages(0);
         }
         super.onPause();
     }
@@ -571,13 +585,18 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    public void handlerTest() {
-        /***
-         * 1. handler 만든다
-         * 2. 30초마다 재실행시킨다
-         * 3. reservation과 actions를 가지고 List<BaseModel>을 만든다
-         * 4. vm.setDataNotifiyItemRangeChanged();
-         */
-
+    public void initHandler() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (reservation != null && actions != null) {
+                    Log.e("detailReservation : ", "refresh");
+                    vm.setData(detailReservations);
+                }
+                this.sendEmptyMessageDelayed(0, 30000);
+            }
+        };
+        handler.sendEmptyMessage(0);
     }
 }

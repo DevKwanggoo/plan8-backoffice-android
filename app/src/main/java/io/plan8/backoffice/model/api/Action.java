@@ -1,5 +1,7 @@
 package io.plan8.backoffice.model.api;
 
+import android.databinding.Bindable;
+
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;

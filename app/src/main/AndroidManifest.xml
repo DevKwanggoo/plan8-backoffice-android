@@ -39,7 +39,8 @@
         <activity
             android:name=".activity.LoginAuthorizationActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".activity.DetailReservationActivity">
+        <activity android:name=".activity.DetailReservationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

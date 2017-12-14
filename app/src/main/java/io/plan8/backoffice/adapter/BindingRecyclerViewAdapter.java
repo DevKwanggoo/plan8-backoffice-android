@@ -105,4 +105,9 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
             return binding;
         }
     }
+
+    @Override
+    public long getItemId(int position) {
+        return data.get(position).hashCode();
+    }
 }

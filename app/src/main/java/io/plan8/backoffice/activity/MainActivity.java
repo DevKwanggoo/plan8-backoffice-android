@@ -215,6 +215,11 @@ public class MainActivity extends BaseActivity {
         super.onResume();
     }
 
+    @Override
+    public void onBackPressed(boolean canDoubleClickFinish) {
+        super.onBackPressed(canDoubleClickFinish);
+    }
+
     public void setEmptyFlag(boolean flag) {
         vm.setEmptyTeamFlag(flag);
     }

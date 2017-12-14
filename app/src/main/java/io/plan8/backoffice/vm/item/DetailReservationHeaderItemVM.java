@@ -26,8 +26,8 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
 
     @Bindable
     public String getCustomerName() {
-        if (null == reservation || null == reservation.getUser()) {
-            return "";
+        if (null == reservation || null == reservation.getUser() || null == reservation.getUser().getName()) {
+            return "고객명 없음";
         }
         return reservation.getUser().getName();
     }
