@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity {
     private List<Fragment> fragments = new ArrayList<>();
     private List<Member> members;
     private ReservationFragment reservationFragment;
+    private NotificationFragment notificationFragment;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -70,6 +71,7 @@ public class MainActivity extends BaseActivity {
                 } else {
                     if (null != members.get(0)) {
                         ApplicationManager.getInstance().setCurrentMember(members.get(0));
+                        ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
                     }
                     vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
@@ -108,11 +110,11 @@ public class MainActivity extends BaseActivity {
                     tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
                     tabItemTitle.setText("알림");
 
-                    NotificationFragment notiFragment = new NotificationFragment();
+                    notificationFragment = new NotificationFragment();
                     Bundle bundle = new Bundle();
 //        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    notiFragment.setArguments(bundle);
-                    fragments.add(notiFragment);
+                    notificationFragment.setArguments(bundle);
+                    fragments.add(notificationFragment);
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
                     tabItemTitle.setText("더보기");
@@ -222,5 +224,9 @@ public class MainActivity extends BaseActivity {
 
     public void setEmptyFlag(boolean flag) {
         vm.setEmptyTeamFlag(flag);
+    }
+
+    public NotificationFragment getNotificationFragment() {
+        return notificationFragment;
     }
 }

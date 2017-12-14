@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -43,6 +44,12 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
             notificationId = data.getInt("notificationId");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        //refresh notification fragment
+        if (null != ApplicationManager.getInstance().getMainActivity()
+                && null != ApplicationManager.getInstance().getMainActivity().getNotificationFragment()) {
+            ApplicationManager.getInstance().getMainActivity().getNotificationFragment().refreshNotificationList();
         }
 
         if (reservationId != -1 && notificationId != -1) {

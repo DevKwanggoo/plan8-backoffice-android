@@ -73,21 +73,23 @@ public class NotificationItemVM extends FragmentVM {
             return;
         }
 
-        getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
-        Map<String, Boolean> readMap = new HashMap<String, Boolean>();
-        readMap.put("read", true);
-        Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), readMap);
-        readNotificationCall.enqueue(new Callback<Notification>() {
-            @Override
-            public void onResponse(Call<Notification> call, Response<Notification> response) {
-                setRead(true);
-            }
+        if (!notification.isRead()) {
+            getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
+            Map<String, Boolean> readMap = new HashMap<String, Boolean>();
+            readMap.put("read", true);
+            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), readMap);
+            readNotificationCall.enqueue(new Callback<Notification>() {
+                @Override
+                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                }
 
-            @Override
-            public void onFailure(Call<Notification> call, Throwable t) {
-                Log.e("test", "test");
-            }
-        });
+                @Override
+                public void onFailure(Call<Notification> call, Throwable t) {
+                    Log.e("test", "test");
+                }
+            });
+            setRead(true);
+        }
     }
 
     @Bindable

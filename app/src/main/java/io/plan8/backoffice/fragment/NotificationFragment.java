@@ -47,7 +47,7 @@ public class NotificationFragment extends BaseFragment {
         return binding.getRoot();
     }
 
-    private void refreshNotificationList() {
+    public void refreshNotificationList() {
         if (null == notifications) {
             notifications = new ArrayList<>();
         }

@@ -20,7 +20,6 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.fragment.NotificationFragment;
-import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.vm.item.NotificationItemVM;
 import retrofit2.Call;
@@ -98,23 +97,23 @@ public class NotificationFragmentVM extends FragmentVM {
         readAllNotificationsCall.enqueue(new Callback<Notification>() {
             @Override
             public void onResponse(Call<Notification> call, Response<Notification> response) {
-                if (getFragment() instanceof NotificationFragment) {
-                    ((NotificationFragment) getFragment()).readAllNotifications();
-                }
             }
 
             @Override
             public void onFailure(Call<Notification> call, Throwable t) {
-                Log.e("test", "test");
+
             }
         });
+        if (getFragment() instanceof NotificationFragment) {
+            ((NotificationFragment) getFragment()).readAllNotifications();
+        }
     }
 
     public boolean getNothing() {
         return false;
     }
 
-    public void setDataNotifyItemRangeChanged(List<Notification> list){
+    public void setDataNotifyItemRangeChanged(List<Notification> list) {
         adapter.setDataNotifyItemRangeChanged(list);
     }
 }

@@ -111,16 +111,36 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         this.reservationId = getIntent().getIntExtra("reservationId", -1);
         this.notificationId = getIntent().getIntExtra("notificationId", -1);
 
-        if (notificationId != -1) {
-            //TODO : 읽음처리하기
-        }
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
         vm = new DetailReservationActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
+        if (null == ApplicationManager.getInstance().getCurrentTeamMembers()) {
+            Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+            getUserMembersCall.enqueue(new Callback<List<Member>>() {
+                @Override
+                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                    List<Member> members = response.body();
+                    ApplicationManager.getInstance().setMembers(members);
+                    if (null == members || members.size() == 0) {
+                    } else {
+                        if (null != members.get(0)) {
+                            ApplicationManager.getInstance().setCurrentMember(members.get(0));
+                            ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Member>> call, Throwable t) {
+                    Log.e("api : ", "failure");
+                }
+            });
+        } else {
+            setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
+        }
+
         refreshReservation();
         initHandler();
     }
@@ -147,6 +167,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 return buckets;
             }
         });
+
         mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
             @Override
             public void displaySuggestions(boolean display) {

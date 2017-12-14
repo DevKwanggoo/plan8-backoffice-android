@@ -2,10 +2,7 @@ package io.plan8.backoffice;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Handler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -108,7 +105,6 @@ public class ApplicationManager {
     }
 
     public void setCurrentMember(Member currentMember) {
-        setCurrentTeam(currentMember.getTeam());
         this.currentMember = currentMember;
     }
 

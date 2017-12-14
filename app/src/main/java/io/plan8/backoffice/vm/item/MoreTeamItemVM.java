@@ -51,6 +51,7 @@ public class MoreTeamItemVM extends FragmentVM {
             Toast.makeText(getFragment().getContext(), "현재 선택되어 있는 팀입니다.", Toast.LENGTH_SHORT).show();
         } else {
             ApplicationManager.getInstance().setCurrentMember(member);
+            ApplicationManager.getInstance().setCurrentTeam(member.getTeam());
 
             Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
