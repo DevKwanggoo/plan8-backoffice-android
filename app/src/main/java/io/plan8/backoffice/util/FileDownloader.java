@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import io.plan8.backoffice.model.api.Attachment;
+
 /**
  * Created by SSozi on 2017. 11. 30..
  */
@@ -24,11 +26,11 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     private String fileName;
     private final String SAVE_FOLDER = "/plan8-download";
     private Activity activity;
-    private String mimeType;
+    private Attachment attachment;
 
-    public FileDownloader(Activity activity, String mimeType) {
+    public FileDownloader(Activity activity, Attachment attachment) {
         this.activity = activity;
-        this.mimeType = mimeType;
+        this.attachment = attachment;
     }
 
     @Override
@@ -43,9 +45,13 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
         }
 
         //파일 이름 :날짜_시간
-        Date day = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
-        fileName = String.valueOf(sdf.format(day));
+        if (attachment.getName() != null){
+            fileName = attachment.getName();
+        } else {
+            Date day = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA);
+            fileName = String.valueOf(sdf.format(day));
+        }
 
         //웹 서버 쪽 파일이 있는 경로
         String fileUrl = params[0];
@@ -57,7 +63,12 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
 
         }
 
-        String localPath = savePath + "/" + fileName + "." + mimeType;
+        String localPath = savePath + "/" + fileName;
+//        if (attachment.getMimetype().contains("image")){
+//            localPath = savePath + "/" + fileName + "." + mimeType;
+//        } else {
+//            localPath = savePath + "/" + fileName;
+//        }
 
         try {
             URL imgUrl = new URL(fileUrl);
@@ -97,9 +108,9 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
 
-        if (mimeType.contains("jpg") || mimeType.contains("png") || mimeType.contains("mpeg")){
+        if (attachment.getMimetype().contains("image")){
             String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
-            File file = new File(targetDir + "/" + fileName + ".jpg");
+            File file = new File(targetDir + "/" + fileName);
 
             //이미지 스캔해서 갤러리 업데이트
             activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
