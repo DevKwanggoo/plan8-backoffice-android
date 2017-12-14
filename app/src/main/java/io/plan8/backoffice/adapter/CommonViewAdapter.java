@@ -4,11 +4,9 @@ import android.databinding.BindingAdapter;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -23,6 +21,7 @@ import java.util.List;
 
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.model.BaseModel;
 
 /**
  * Created by chokwanghwan on 2017. 11. 29..
@@ -89,5 +88,10 @@ public class CommonViewAdapter {
     public static void initRecyclerView(RecyclerView view, Boolean nothing) {
         view.setHasFixedSize(true);
         view.setItemAnimator(null);
+    }
+
+    @BindingAdapter("commonViewAdapter:recyclerViewScrollTo")
+    public static void recyclerViewScrollTo(RecyclerView view, List<BaseModel> datas) {
+        view.smoothScrollToPosition(datas.size());
     }
 }

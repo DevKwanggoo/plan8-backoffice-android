@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
@@ -47,9 +48,13 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     private int currentTextIndex;
     private boolean isEmptyMentionList;
     private boolean loadingFlag = false;
+    private List<BaseModel> data;
 
     public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState) {
         super(activity, savedInstanceState);
+        if (null == data) {
+            data = new ArrayList<>();
+        }
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
             protected int selectViewLayoutType(BaseModel data) {
@@ -157,15 +162,19 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void setData(List<BaseModel> datas) {
+        this.data = datas;
         adapter.setData(datas);
     }
 
     public void addDatas(List<BaseModel> data, int startIndex, int dataSize) {
+        this.data.addAll(startIndex, data);
         adapter.addData(data, startIndex, dataSize);
     }
 
     public void addData(BaseModel data) {
+        this.data.add(data);
         adapter.addData(data);
+        scrollTo();
     }
 
     public RecyclerView.LayoutManager getVerticalLayoutManager() {
@@ -329,5 +338,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     @Bindable
     public boolean getInitFlag(){
         return false;
+    }
+
+    @Bindable
+    public List<BaseModel> getData() {
+        return data;
+    }
+
+    public void scrollTo() {
+        notifyPropertyChanged(BR.data);
     }
 }

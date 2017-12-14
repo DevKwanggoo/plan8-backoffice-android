@@ -46,12 +46,6 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
             e.printStackTrace();
         }
 
-        //refresh notification fragment
-        if (null != ApplicationManager.getInstance().getMainActivity()
-                && null != ApplicationManager.getInstance().getMainActivity().getNotificationFragment()) {
-            ApplicationManager.getInstance().getMainActivity().getNotificationFragment().refreshNotificationList();
-        }
-
         if (reservationId != -1 && notificationId != -1) {
             Map<String, Boolean> readMap = new HashMap<String, Boolean>();
             readMap.put("read", true);

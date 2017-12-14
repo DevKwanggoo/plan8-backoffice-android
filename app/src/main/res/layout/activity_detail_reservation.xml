@@ -63,7 +63,8 @@
                 android:clipToPadding="false"
                 android:layoutManager="@{vm.verticalLayoutManager}"
                 android:overScrollMode="never"
-                android:paddingBottom="15dp" />
+                android:paddingBottom="15dp"
+                commonViewAdapter:recyclerViewScrollTo="@{vm.data}" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +87,7 @@
                     android:layoutManager="@{vm.horizontalLayoutManager}"
                     android:overScrollMode="never"
                     android:paddingRight="10dp"
-                    commonViewAdapter:initRecyclerView="@{vm.initFlag}"/>
+                    commonViewAdapter:initRecyclerView="@{vm.initFlag}" />
 
                 <View
                     android:layout_width="match_parent"
