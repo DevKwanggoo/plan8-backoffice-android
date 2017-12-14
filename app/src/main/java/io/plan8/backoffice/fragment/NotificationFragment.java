@@ -2,6 +2,8 @@ package io.plan8.backoffice.fragment;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,8 @@ public class NotificationFragment extends BaseFragment {
     private FragmentNotificationBinding binding;
     private NotificationFragmentVM vm;
     private List<Notification> notifications;
+    private Handler handler;
+    private List<Notification> refreshData;
 
     @Nullable
     @Override
@@ -81,14 +85,50 @@ public class NotificationFragment extends BaseFragment {
             }
         });
         refreshNotificationList();
+
+        initHandler();
+    }
+
+    private void initHandler() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (notifications != null && notifications.size() != 0){
+                    vm.setDataNotifyItemRangeChanged(notifications);
+                    Log.e("notification : ", "refresh");
+                }
+                this.sendEmptyMessageDelayed(0, 30000);
+            }
+        };
+        handler.sendEmptyMessage(0);
+    }
+
+    @Override
+    public void onResume() {
+        if (handler != null){
+            handler.sendEmptyMessage(0);
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (handler != null){
+            handler.removeMessages(0);
+        }
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        if (handler != null){
+            handler.removeMessages(0);
+        }
         if (null != binding) {
             binding.unbind();
         }
+        super.onDestroy();
     }
 
     public void readAllNotifications() {

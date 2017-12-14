@@ -23,6 +23,7 @@ import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
+import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.item.DetailReservationActionFileItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationActionItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationActionReplaceItemVM;
@@ -104,6 +105,8 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 binding.setVariable(BR.vm, new MentionItemVM(getActivity(), savedInstanceState, data));
             }
         };
+
+        adapter.setHasStableIds(true);
 
         setAutoCompleteMentionData(null);
 
@@ -194,6 +197,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void sendComment(View view) {
+        ViewUtil.getInstance().hideKeyboard(getActivity().getApplicationContext());
         if (getActivity() instanceof DetailReservationActivity) {
             if (null != currentText && currentText.length() > 0) {
                 ((DetailReservationActivity) getActivity()).sendAction(currentText);
@@ -316,5 +320,14 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     public void setLoadingFlag(boolean flag) {
         loadingFlag = flag;
         notifyPropertyChanged(BR.loadingFlag);
+    }
+
+    public void setDataNotifyItemRangeChanged(List<BaseModel> list){
+        adapter.setDataNotifyItemRangeChanged(list);
+    }
+
+    @Bindable
+    public boolean getInitFlag(){
+        return false;
     }
 }

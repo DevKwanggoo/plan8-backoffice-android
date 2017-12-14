@@ -10,9 +10,11 @@ import io.plan8.backoffice.model.api.Auth;
 import io.plan8.backoffice.model.api.Login;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Reservation;
+import io.plan8.backoffice.model.api.ServerTime;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.api.Notification;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -106,4 +108,7 @@ public interface ApiService {
     @FormUrlEncoded
     @PUT("1/users/me/notifications")
     Call<Notification> readAllNotifications(@Header("authorization") String auth, @FieldMap Map<String, Boolean> readMap);
+
+    @GET("1/server-time-offset")
+    Call<ServerTime> getServerTime(@Header("authorization") String auth, @Query("now") String now);
 }

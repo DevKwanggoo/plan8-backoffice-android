@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:notificationFragmentViewAdapter="http://schemas.android.com/apk/res-auto">
+    xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -61,7 +61,7 @@
             android:layoutManager="@{vm.layoutManager}"
             android:overScrollMode="never"
             android:paddingBottom="15dp"
-            notificationFragmentViewAdapter:initRecyclerView="@{vm.nothing}" />
+            commonViewAdapter:initRecyclerView="@{vm.nothing}" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -3,9 +3,12 @@ package io.plan8.backoffice.adapter;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -80,5 +83,11 @@ public class CommonViewAdapter {
         } else {
             bgShape.setColor(ContextCompat.getColor(view.getContext(), R.color.transparent));
         }
+    }
+
+    @BindingAdapter("commonViewAdapter:initRecyclerView")
+    public static void initRecyclerView(RecyclerView view, Boolean nothing) {
+        view.setHasFixedSize(true);
+        view.setItemAnimator(null);
     }
 }

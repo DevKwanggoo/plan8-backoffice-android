@@ -20,6 +20,7 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.fragment.NotificationFragment;
+import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.vm.item.NotificationItemVM;
 import retrofit2.Call;
@@ -49,6 +50,8 @@ public class NotificationFragmentVM extends FragmentVM {
                 binding.setVariable(BR.vm, new NotificationItemVM(getFragment(), savedInstanceState, data));
             }
         };
+
+        adapter.setHasStableIds(true);
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
@@ -109,5 +112,9 @@ public class NotificationFragmentVM extends FragmentVM {
 
     public boolean getNothing() {
         return false;
+    }
+
+    public void setDataNotifyItemRangeChanged(List<Notification> list){
+        adapter.setDataNotifyItemRangeChanged(list);
     }
 }

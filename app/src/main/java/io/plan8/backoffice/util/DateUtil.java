@@ -113,4 +113,18 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTimeInMillis();
     }
+
+    public String getMilisecondsToTZFormat(Long tzDate) {
+        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA);
+        originalFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String convertDate = originalFormat.format(new Date(tzDate));
+
+        return convertDate;
+    }
+
+    public String sumTime(String date, Long millisecond){
+        Long prevTime = getTZFormatToMiliseconds(date);
+        prevTime = prevTime + millisecond;
+        return getMilisecondsToTZFormat(prevTime);
+    }
 }
