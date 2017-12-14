@@ -24,7 +24,9 @@ import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
 import io.plan8.backoffice.model.api.Auth;
+import io.plan8.backoffice.model.api.ServerTime;
 import io.plan8.backoffice.model.api.User;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
 import retrofit2.Call;
@@ -46,6 +48,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private TextView sixthInput;
     private LinearLayout inputField;
     private EditText authoEditText;
+    private boolean userFlag = false;
+    private boolean serverTimeFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,15 +278,37 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setUser(response.body());
-
+                                userFlag = true;
                                 //TODO : 푸시 매니저에
                                 nextActivity();
+                            } else {
+                                isApiError();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            isApiError();
+                        }
+                    });
+
+                    Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+                    getServerTime.enqueue(new Callback<ServerTime>() {
+                        @Override
+                        public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
+                            ServerTime serverTime = response.body();
+                            if (serverTime != null && serverTime.getOffset() != null){
+                                ApplicationManager.getInstance().setServerTimeOffset(serverTime.getOffset());
+                                serverTimeFlag = true;
+                                nextActivity();
+                            } else {
+                                isApiError();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ServerTime> call, Throwable t) {
+                            isApiError();
                         }
                     });
                 }
@@ -298,10 +324,12 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     }
 
     private void nextActivity() {
-        progressBar.setVisibility(View.GONE);
-        startActivity(MainActivity.buildIntent(this));
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (userFlag && serverTimeFlag) {
+            progressBar.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 
     @Override
@@ -328,5 +356,11 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             authoEditText.setFocusableInTouchMode(true);
             ViewUtil.getInstance().showKeyboard(authoEditText);
         }
+    }
+
+    public void isApiError(){
+        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
+        onBackPressed();
     }
 }

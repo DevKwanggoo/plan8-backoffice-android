@@ -58,16 +58,19 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
                         ServerTime serverTime = response.body();
+                        serverTimeFlag = true;
                         if (serverTime != null){
                             serverTimeOffset = serverTime.getOffset();
-                            serverTimeFlag = true;
                             hasTokenStep();
+                        } else {
+                            loginStep();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ServerTime> call, Throwable t) {
-
+                        serverTimeFlag = true;
+                        loginStep();
                     }
                 });
 
@@ -107,11 +110,13 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void loginStep() {
-        binding.splashProgressBarContainer.setVisibility(View.GONE);
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (serverTimeFlag) {
+            binding.splashProgressBarContainer.setVisibility(View.GONE);
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 
     private void hasTokenStep() {
