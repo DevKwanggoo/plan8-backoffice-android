@@ -21,22 +21,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/selectable_item_background">
+            android:layout_height="match_parent">
+            <!--android:background="@drawable/selectable_item_background"-->
 
             <RelativeLayout
                 android:id="@+id/moreProfileImage"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:background="@drawable/item_rounded_border_not_solid">
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:scaleType="fitCenter"
                     android:layout_centerInParent="true"
+                    android:scaleType="fitCenter"
                     app:riv_corner_radius="5dp"
                     app:riv_mutate_background="true"
                     commonAdapter:glide="@{vm.teamLogo}" />
@@ -68,7 +68,7 @@
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_solid_check"
                 android:tint="@color/blueColor"
-                android:visibility="@{vm.selectTeamFlag ? View.VISIBLE : View.GONE}" />
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

@@ -47,18 +47,18 @@ public class MoreTeamItemVM extends FragmentVM {
     }
 
     public void selectTeam(View view) {
-        if (ApplicationManager.getInstance().getCurrentTeam().getTeamId() == member.getTeam().getTeamId()) {
-            Toast.makeText(getFragment().getContext(), "현재 선택되어 있는 팀입니다.", Toast.LENGTH_SHORT).show();
-        } else {
-            ApplicationManager.getInstance().setCurrentMember(member);
-            ApplicationManager.getInstance().setCurrentTeam(member.getTeam());
-
-            Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            getFragment().getActivity().startActivity(mainIntent);
-            getFragment().getActivity().finish();
-            getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
-        }
+//        if (ApplicationManager.getInstance().getCurrentTeam().getTeamId() == member.getTeam().getTeamId()) {
+//            Toast.makeText(getFragment().getContext(), "현재 선택되어 있는 팀입니다.", Toast.LENGTH_SHORT).show();
+//        } else {
+//            ApplicationManager.getInstance().setCurrentMember(member);
+//            ApplicationManager.getInstance().setCurrentTeam(member.getTeam());
+//
+//            Intent mainIntent = MainActivity.buildIntent(getFragment().getContext());
+//            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            getFragment().getActivity().startActivity(mainIntent);
+//            getFragment().getActivity().finish();
+//            getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+//        }
     }
 
     @Bindable

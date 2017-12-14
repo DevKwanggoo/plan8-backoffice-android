@@ -55,7 +55,7 @@ public class MoreFragment extends BaseFragment {
         if (ApplicationManager.getInstance().getUser() != null) {
             moreFragmentData.add(ApplicationManager.getInstance().getUser());
         }
-        moreFragmentData.add(new LabelItem("팀 선택"));
+        moreFragmentData.add(new LabelItem("내가 속한 팀"));
 
         if (null != ApplicationManager.getInstance().getMembers()) {
             List<Member> members = new ArrayList<>();
