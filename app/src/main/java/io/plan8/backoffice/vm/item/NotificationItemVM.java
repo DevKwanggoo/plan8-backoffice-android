@@ -1,9 +1,9 @@
 package io.plan8.backoffice.vm.item;
 
+import android.content.Intent;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -69,7 +69,7 @@ public class NotificationItemVM extends FragmentVM {
     }
 
     public void detailNotification(View view) {
-        if (null == notification || null == notification.getAction()) {
+        if (null == notification || null == notification.getAction() || null == notification.getAction().getReservation()) {
             return;
         }
 
@@ -85,11 +85,12 @@ public class NotificationItemVM extends FragmentVM {
 
                 @Override
                 public void onFailure(Call<Notification> call, Throwable t) {
-                    Log.e("test", "test");
                 }
             });
             setRead(true);
         }
+        Intent detailTaskIntent = DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId());
+        getFragment().startActivity(detailTaskIntent);
     }
 
     @Bindable
