@@ -275,15 +275,15 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri imageUri = Uri.parse(nougatAbsoluteUri);
-                callNougatFileUpload(imageUri);
-            } else {
-                if (requestCode == Constants.PICK_IMAGE_CODE) {
+            if (requestCode == Constants.PICK_IMAGE_CODE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Uri imageUri = Uri.parse(nougatAbsoluteUri);
+                    callNougatFileUpload(imageUri);
+                } else {
                     callFileUpload(captureImageUri);
-                } else if (requestCode == Constants.SELECT_FILE_CODE) {
-                    callFileUpload(data.getData());
                 }
+            } else if (requestCode == Constants.SELECT_FILE_CODE) {
+                callFileUpload(data.getData());
             }
         }
     }
@@ -615,10 +615,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 @Override
                 public void handleMessage(Message msg) {
                     super.handleMessage(msg);
-
-                    Log.e("detailReservation : ", "refresh");
                     vm.setData(detailReservations);
-
                     this.sendEmptyMessageDelayed(0, 30000);
                 }
             };
