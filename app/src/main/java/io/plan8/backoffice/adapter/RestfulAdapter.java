@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestfulAdapter {
     private static volatile RestfulAdapter instance = null;
-    private static ApiService newApiService;
+    private ApiService newApiService;
     private Context context;
 
     public RestfulAdapter() {

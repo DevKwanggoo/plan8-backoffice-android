@@ -3,6 +3,7 @@ package io.plan8.backoffice;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,7 +88,7 @@ public class ApplicationManager {
     public void setCurrentTeam(Team currentTeam) {
         this.currentTeam = currentTeam;
         if (null != currentTeam) {
-            final Call<List<Member>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
+            Call<List<Member>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
             currentWorkersCall.enqueue(new Callback<List<Member>>() {
                 @Override
                 public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
@@ -96,7 +97,7 @@ public class ApplicationManager {
 
                 @Override
                 public void onFailure(Call<List<Member>> call, Throwable t) {
-
+                    Log.e("applicationInfoManager", "getCurrentTeamFailure");
                 }
             });
 
