@@ -34,7 +34,7 @@ public class NotificationFragment extends BaseFragment {
     private FragmentNotificationBinding binding;
     private NotificationFragmentVM vm;
     private List<Notification> notifications;
-    private Handler handler;
+    private Handler handler = null;
     private List<Notification> refreshData;
 
     @Nullable
@@ -61,6 +61,9 @@ public class NotificationFragment extends BaseFragment {
                 if (null != result) {
                     Log.e("notification", "" + result.size());
                     if (notifications.size() + result.size() > notifications.size()) {
+                        if (handler == null) {
+                            initHandler();
+                        }
                         notifications.addAll(result);
                         vm.addData(result);
                     }
@@ -90,23 +93,25 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initHandler() {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (notifications != null && notifications.size() != 0){
+        if (notifications != null && notifications.size() != 0) {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+
                     vm.setDataNotifyItemRangeChanged(notifications);
                     Log.e("notification : ", "refresh");
+
+                    this.sendEmptyMessageDelayed(0, 30000);
                 }
-                this.sendEmptyMessageDelayed(0, 30000);
-            }
-        };
-        handler.sendEmptyMessage(0);
+            };
+            handler.sendEmptyMessage(0);
+        }
     }
 
     @Override
     public void onResume() {
-        if (handler != null){
+        if (handler != null) {
             handler.sendEmptyMessage(0);
         }
         super.onResume();
@@ -114,7 +119,7 @@ public class NotificationFragment extends BaseFragment {
 
     @Override
     public void onPause() {
-        if (handler != null){
+        if (handler != null) {
             handler.removeMessages(0);
         }
         super.onPause();
@@ -122,7 +127,7 @@ public class NotificationFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (handler != null){
+        if (handler != null) {
             handler.removeMessages(0);
         }
         if (null != binding) {

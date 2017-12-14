@@ -84,7 +84,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private String nougatAbsoluteUri;
     private Action action;
     private int notificationId;
-    private Handler handler;
+    private Handler handler = null;
     private List<BaseModel> refreshData;
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
@@ -499,6 +499,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         vm.setData(detailReservations);
                     }
                     if (actions.size() + result.size() > actions.size()) {
+                        if (handler == null) {
+                            initHandler();
+                        }
                         Collections.reverse(result);
                         actions.addAll(result);
                         List<BaseModel> tempList = new ArrayList<>();
@@ -586,17 +589,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void initHandler() {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (reservation != null && actions != null) {
+        if (reservation != null && actions != null) {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+
                     Log.e("detailReservation : ", "refresh");
                     vm.setData(detailReservations);
+
+                    this.sendEmptyMessageDelayed(0, 30000);
                 }
-                this.sendEmptyMessageDelayed(0, 30000);
-            }
-        };
-        handler.sendEmptyMessage(0);
+            };
+            handler.sendEmptyMessage(0);
+        }
     }
 }
