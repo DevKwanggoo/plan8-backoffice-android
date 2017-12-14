@@ -59,18 +59,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         Log.d("lifeCycle", "onNewIntent :: " + getClass().getSimpleName() + "  ::  " + hashCode());
     }
 
-    public void onBackPressed(boolean canDoubleClickFinish) {
-        if (canDoubleClickFinish) {
-            long tempTime = System.currentTimeMillis();
-            long intervalTime = tempTime - backPressedTime;
+    public void onBackPressed() {
+        long tempTime = System.currentTimeMillis();
+        long intervalTime = tempTime - backPressedTime;
 
-            if (0 <= intervalTime && 2000 >= intervalTime) {
-                finish();
-            } else {
-                backPressedTime = tempTime;
-                Toast toast = Toast.makeText(getBaseContext(), "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
-                toast.show();
-            }
+        if (0 <= intervalTime && 2000 >= intervalTime) {
+            finish();
+        } else {
+            backPressedTime = tempTime;
+            Toast toast = Toast.makeText(getBaseContext(), "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

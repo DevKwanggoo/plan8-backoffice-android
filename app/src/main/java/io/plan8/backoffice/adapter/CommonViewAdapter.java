@@ -3,6 +3,7 @@ package io.plan8.backoffice.adapter;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -93,5 +94,10 @@ public class CommonViewAdapter {
     @BindingAdapter("commonViewAdapter:recyclerViewScrollTo")
     public static void recyclerViewScrollTo(RecyclerView view, List<BaseModel> datas) {
         view.smoothScrollToPosition(datas.size());
+    }
+
+    @BindingAdapter("commonViewAdapter:setEnabled")
+    public static void setEnabled(SwipeRefreshLayout view, boolean flag) {
+        view.setEnabled(flag);
     }
 }

@@ -55,8 +55,8 @@
                     android:textStyle="bold" />
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/moreFragmentBody"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/detailReservationSwipeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adapter="@{vm.adapter}"
@@ -64,7 +64,18 @@
                 android:layoutManager="@{vm.verticalLayoutManager}"
                 android:overScrollMode="never"
                 android:paddingBottom="15dp"
-                commonViewAdapter:recyclerViewScrollTo="@{vm.data}" />
+                commonViewAdapter:recyclerViewScrollTo="@{vm.data}" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/moreFragmentBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adapter="@{vm.adapter}"
+                    android:clipToPadding="false"
+                    android:layoutManager="@{vm.verticalLayoutManager}"
+                    android:overScrollMode="never"
+                    android:paddingBottom="15dp" />
+            </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 
         <LinearLayout
