@@ -41,7 +41,6 @@ public class ReservationFragment extends BaseFragment {
     private ReservationFragmentVM vm;
     private String currentDate;
     private List<Reservation> reservations;
-    private List<Reservation> myReservations;
     private boolean editFlag = false;
     private Reservation editItem;
     private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
@@ -71,7 +70,6 @@ public class ReservationFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 reservations.clear();
-                myReservations.clear();
                 endlessRecyclerOnScrollListener.initPrevItemCount();
                 refreshReservationList();
                 binding.reservationRefreshLayout.setRefreshing(false);
@@ -91,7 +89,6 @@ public class ReservationFragment extends BaseFragment {
                 vm.setSelectedDate(DateUtil.getInstance().dateToYYYYMd(date.getDate()));
                 currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(date.getDate());
                 reservations.clear();
-                myReservations.clear();
                 endlessRecyclerOnScrollListener.initPrevItemCount();
                 vm.setOpenedCalendar(false);
                 refreshReservationList();
@@ -120,26 +117,19 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 currentDate,
                 ApplicationManager.getInstance().getCurrentMember().getId(),
-                15,
+                3,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 List<Reservation> result = response.body();
 
-                if (null == myReservations) {
-                    myReservations = new ArrayList<>();
-                }
                 if (null != result) {
                     if (reservations.size() + result.size() > reservations.size()) {
                         reservations.addAll(result);
-
-                        for (Reservation r : reservations) {
-                            myReservations.add(r);
-                        }
                     }
                 }
-                vm.setDatas(myReservations);
+                vm.setDatas(reservations);
             }
 
             @Override
@@ -149,8 +139,6 @@ public class ReservationFragment extends BaseFragment {
             }
         });
     }
-
-
 
     public void setEditFlag(boolean flag) {
         editFlag = flag;
@@ -166,18 +154,18 @@ public class ReservationFragment extends BaseFragment {
         if (editFlag) {
             editFlag = false;
             if (editItem != null) {
-                for (int i = 0; i < myReservations.size(); i++) {
+                for (int i = 0; i < reservations.size(); i++) {
 
-                    if (myReservations.get(i).getId() == editItem.getId()) {
-                        myReservations.set(i, editItem);
+                    if (reservations.get(i).getId() == editItem.getId()) {
+                        reservations.set(i, editItem);
                     }
                 }
             }
-            vm.setDatas(myReservations);
+            vm.setDatas(reservations);
         }
     }
 
-    public void setSwipeFlag(boolean flag){
+    public void setSwipeFlag(boolean flag) {
         vm.setSwipeFlag(flag);
     }
 }

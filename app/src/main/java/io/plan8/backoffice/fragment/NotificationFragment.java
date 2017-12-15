@@ -36,8 +36,6 @@ public class NotificationFragment extends BaseFragment {
     private NotificationFragmentVM vm;
     private List<Notification> notifications;
     private Handler handler = null;
-    private List<Notification> refreshData;
-    private List<Notification> result;
 
     @Nullable
     @Override
@@ -58,7 +56,7 @@ public class NotificationFragment extends BaseFragment {
         getNotifications.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
-                result = response.body();
+                List<Notification> result = response.body();
 
                 if (null != result) {
                     Log.e("notification", "" + result.size());
@@ -87,8 +85,8 @@ public class NotificationFragment extends BaseFragment {
         binding.notificationSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                result.clear();
-                vm.setData(result);
+                notifications.clear();
+//                vm.setData(notifications);
                 refreshNotificationList();
                 binding.notificationSwipeLayout.setRefreshing(false);
             }
@@ -111,10 +109,7 @@ public class NotificationFragment extends BaseFragment {
                 @Override
                 public void handleMessage(Message msg) {
                     super.handleMessage(msg);
-
                     vm.setDataNotifyItemRangeChanged(notifications);
-                    Log.e("notification : ", "refresh");
-
                     this.sendEmptyMessageDelayed(0, 30000);
                 }
             };
