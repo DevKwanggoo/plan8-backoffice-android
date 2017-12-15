@@ -9,19 +9,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
-import com.twitter.Extractor;
-import com.twitter.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,6 +62,9 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     }
 
     private void refreshFragment() {
+//        if (getFragment() instanceof MoreFragment) {
+//            getFragment().refresh();
+//        }
         getFragment().getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .detach(getFragment())

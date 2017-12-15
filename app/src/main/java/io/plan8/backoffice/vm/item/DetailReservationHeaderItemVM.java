@@ -80,7 +80,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
             return "";
         }
 
-        return "" + reservation.getProducts().get(0).getName() + " (" + ViewUtil.getInstance().getCommaFormat(reservation.getTotalPrice()) + "원)";
+        return "" + reservation.getProducts().get(0).getName() + " (" + ViewUtil.getInstance().getCommaFormat(reservation.getValue()) + "원)";
     }
 
     @Bindable

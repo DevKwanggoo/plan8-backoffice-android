@@ -19,7 +19,6 @@ public class BaseApplication extends MultiDexApplication {
         super.onCreate();
         ApplicationManager.getInstance().setContext(getApplicationContext());
         FirebaseApp.initializeApp(getApplicationContext());
-//        Intercom.initialize(this, "android_sdk-5efb4215c714d457c400f5fe0297cd84e265c758", "pno474gz");
 
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
@@ -27,7 +26,5 @@ public class BaseApplication extends MultiDexApplication {
                 .setNotificationOpenedHandler(new OneSignalNotificationOpenedHandler(getApplicationContext()))
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
-
-//        OneSignal.setSubscription(true);
     }
 }

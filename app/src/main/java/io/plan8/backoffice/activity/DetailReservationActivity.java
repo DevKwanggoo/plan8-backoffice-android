@@ -117,30 +117,30 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (null == ApplicationManager.getInstance().getCurrentTeamMembers()) {
-            Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-            getUserMembersCall.enqueue(new Callback<List<Member>>() {
-                @Override
-                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-                    List<Member> members = response.body();
-                    ApplicationManager.getInstance().setMembers(members);
-                    if (null == members || members.size() == 0) {
-                    } else {
-                        if (null != members.get(0)) {
-                            ApplicationManager.getInstance().setCurrentMember(members.get(0));
-                            ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Member>> call, Throwable t) {
-                    Log.e("api : ", "failure");
-                }
-            });
-        } else {
-            setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
-        }
+//        if (null == ApplicationManager.getInstance().getCurrentTeamMembers()) {
+//            Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+//            getUserMembersCall.enqueue(new Callback<List<Member>>() {
+//                @Override
+//                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+//                    List<Member> members = response.body();
+//                    ApplicationManager.getInstance().setMembers(members);
+//                    if (null == members || members.size() == 0) {
+//                    } else {
+//                        if (null != members.get(0)) {
+//                            ApplicationManager.getInstance().setCurrentMember(members.get(0));
+//                            ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<Member>> call, Throwable t) {
+//                    Log.e("api : ", "failure");
+//                }
+//            });
+//        } else {
+//            setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
+//        }
 
         refreshReservation();
         initHandler();
@@ -155,38 +155,53 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    private void setMentionEditText(List<Member> memberList) {
-        List<User> userList = new ArrayList<>();
-        for (Member m : memberList) {
-            if (null != m) {
-                userList.add(m.getUser());
-            }
-        }
-
-        userLoader = new User.UserLoader(userList);
-        mentionsEditText = findViewById(R.id.mentionEditText);
-        mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
-        mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+    private void setMentionEditText(int teamId) {
+        teamId = 0;
+        Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), teamId);
+        currentTeamMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
-            public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-                List<String> buckets = Arrays.asList(BUCKET);
-                List<User> suggestions = userLoader.getSuggestions(queryToken);
-                SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
-                // Have suggestions, now call the listener (which is this activity)
-                onReceiveSuggestionsResult(result, BUCKET);
-                return buckets;
+            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                List<Member> result = response.body();
+                if (null != result) {
+                    List<User> userList = new ArrayList<>();
+                    for (Member m : result) {
+                        if (null != m) {
+                            userList.add(m.getUser());
+                        }
+                    }
+
+                    userLoader = new User.UserLoader(userList);
+                    mentionsEditText = findViewById(R.id.mentionEditText);
+                    mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
+                    mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+                        @Override
+                        public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+                            List<String> buckets = Arrays.asList(BUCKET);
+                            List<User> suggestions = userLoader.getSuggestions(queryToken);
+                            SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
+                            // Have suggestions, now call the listener (which is this activity)
+                            onReceiveSuggestionsResult(result, BUCKET);
+                            return buckets;
+                        }
+                    });
+
+                    mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
+                        @Override
+                        public void displaySuggestions(boolean display) {
+
+                        }
+
+                        @Override
+                        public boolean isDisplayingSuggestions() {
+                            return false;
+                        }
+                    });
+                }
             }
-        });
-
-        mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
-            @Override
-            public void displaySuggestions(boolean display) {
-
-            }
 
             @Override
-            public boolean isDisplayingSuggestions() {
-                return false;
+            public void onFailure(Call<List<Member>> call, Throwable t) {
+
             }
         });
     }
@@ -487,6 +502,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 reservation = response.body();
                 if (null != reservation) {
+                    //TODO : resrvation의 teamId를 가져와서 teams/{id}/memvers 로 멘션 리스트 구성하기.
+                    setMentionEditText(reservation.getTeam().getTeamId());
+
                     if (detailReservations.size() <= 0) {
                         detailReservations.add(0, reservation);
                         vm.setData(detailReservations);
@@ -517,8 +535,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             @Override
             public void onResponse(Call<List<Action>> call, Response<List<Action>> response) {
                 List<Action> result = response.body();
-
-                //TODO : resrvation의 teamId를 가져와서 teams/{id}/memvers 로 멘션 리스트 구성하기.
 
                 if (null != result) {
                     if (result.size() > 0 && detailReservations.size() <= 1) {
@@ -552,11 +568,10 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         putReservationStatus.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                if (response.body() != null) {
-                    refreshReservation();
-                    reservation.setStatus(status);
-                    editFlag = true;
-                }
+                detailReservations.clear();
+                actions.clear();
+                refreshReservation();
+                editFlag = true;
             }
 
             @Override

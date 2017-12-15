@@ -52,20 +52,11 @@ public interface ApiService {
     @PUT("1/users/me")
     Call<User> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
 
-    @GET("1/teams/{id}/reservations")
+    @GET("1/reservations")
     Call<List<Reservation>> getReservations(@Header("authorization") String auth,
-                                            @Path("id") int teamId,
                                             @Query("after") String after,
                                             @Query("before") String before,
-                                            @Query("worker") int workerId,
-                                            @Query("take") int take,
-                                            @Query("skip") int skip);
-
-    @GET("1/teams/{id}/reservations")
-    Call<List<Reservation>> getReservations(@Header("authorization") String auth,
-                                            @Path("id") int teamId,
-                                            @Query("after") String after,
-                                            @Query("before") String before,
+                                            @Query("worker") int userId,
                                             @Query("take") int take,
                                             @Query("skip") int skip);
 
@@ -76,8 +67,8 @@ public interface ApiService {
     @PUT("1/reservations/{id}")
     Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId, @FieldMap HashMap<String, String> putReservationMap);
 
-    @GET("1/users/me/members")
-    Call<List<Member>> getUserMembers(@Header("authorization") String auth);
+    @GET("1/members")
+    Call<List<Member>> getUserMembers(@Header("authorization") String auth, @Query("user") int userId);
 
     @GET("1/teams/{id}/members")
     Call<List<Member>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);

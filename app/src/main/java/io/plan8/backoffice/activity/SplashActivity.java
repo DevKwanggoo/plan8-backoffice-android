@@ -20,7 +20,6 @@ import io.plan8.backoffice.model.api.ServerTime;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.SplashActivityVM;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +58,7 @@ public class SplashActivity extends BaseActivity {
                     public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
                         ServerTime serverTime = response.body();
                         serverTimeFlag = true;
-                        if (serverTime != null){
+                        if (serverTime != null) {
                             serverTimeOffset = serverTime.getOffset();
                             hasTokenStep();
                         } else {
@@ -110,13 +109,11 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void loginStep() {
-        if (serverTimeFlag) {
-            binding.splashProgressBarContainer.setVisibility(View.GONE);
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
-        }
+        binding.splashProgressBarContainer.setVisibility(View.GONE);
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 
     private void hasTokenStep() {

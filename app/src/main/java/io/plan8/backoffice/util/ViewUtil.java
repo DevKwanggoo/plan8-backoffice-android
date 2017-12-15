@@ -87,6 +87,8 @@ public class ViewUtil {
             return action.getCreator().getName() + "님이 상품 가격을 수정하였습니다.";
         } else if (action.getType().equals("additionalRequestsChanged")) {
             return action.getCreator().getName() + "님이 추가요청 사항을 수정하였습니다.";
+        } else if (action.getType().equals("action")) {
+            return action.getCreator().getName() + "님이 action을 수정하였습니다.";
         } else {
             return "";
         }

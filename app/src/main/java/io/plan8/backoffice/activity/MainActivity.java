@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), ApplicationManager.getInstance().getUser().getId());
         getUserMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
@@ -71,10 +71,6 @@ public class MainActivity extends BaseActivity {
                 if (null == members || members.size() == 0) {
                     vm.setEmptyTeamFlag(true);
                 } else {
-                    if (null != members.get(0)) {
-                        ApplicationManager.getInstance().setCurrentMember(members.get(0));
-                        ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
-                    }
                     vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
                 }

@@ -7,27 +7,22 @@ import java.util.List;
 import java.util.Locale;
 
 import io.plan8.backoffice.activity.MainActivity;
-import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Member;
-import io.plan8.backoffice.model.api.Team;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.PushManager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
  */
 
 public class ApplicationManager {
+//    private static final String BASE_SERVER_URL = "https://api-sandbox.plan8.io";
+    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
     private Context context;
     private static volatile ApplicationManager instance = null;
     private User user;
     private List<Member> members;
     private List<Member> currentTeamMembers;
-    private Member currentMember;
-    private Team currentTeam;
     private MainActivity mainActivity;
     private String serverTimeOffset;
 
@@ -57,7 +52,7 @@ public class ApplicationManager {
     }
 
     public String getServerUrl() {
-        return "https://api-sandbox.plan8.io";
+        return BASE_SERVER_URL;
     }
 
     public User getUser() {
@@ -77,37 +72,6 @@ public class ApplicationManager {
         this.members = members;
     }
 
-    public Team getCurrentTeam() {
-        return currentTeam;
-    }
-
-    public void setCurrentTeam(Team currentTeam) {
-        this.currentTeam = currentTeam;
-        if (null != currentTeam) {
-            Call<List<Member>> currentWorkersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), currentTeam.getTeamId());
-            currentWorkersCall.enqueue(new Callback<List<Member>>() {
-                @Override
-                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-                    currentTeamMembers = response.body();
-                }
-
-                @Override
-                public void onFailure(Call<List<Member>> call, Throwable t) {
-                    Log.e("applicationInfoManager", "getCurrentTeamFailure");
-                }
-            });
-
-        }
-    }
-
-    public Member getCurrentMember() {
-        return currentMember;
-    }
-
-    public void setCurrentMember(Member currentMember) {
-        this.currentMember = currentMember;
-    }
-
     public MainActivity getMainActivity() {
         return mainActivity;
     }
@@ -118,14 +82,6 @@ public class ApplicationManager {
 
     public List<Member> getCurrentTeamMembers() {
         return currentTeamMembers;
-    }
-
-    public void setCurrentTeamMembers(List<Member> currentTeamMembers) {
-        this.currentTeamMembers = currentTeamMembers;
-    }
-
-    public static void setInstance(ApplicationManager instance) {
-        ApplicationManager.instance = instance;
     }
 
     public String getServerTimeOffset() {

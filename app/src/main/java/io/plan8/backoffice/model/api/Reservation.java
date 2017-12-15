@@ -12,11 +12,12 @@ import io.plan8.backoffice.model.BaseModel;
 
 public class Reservation implements BaseModel {
     @SerializedName("id") int id;
+    @SerializedName("name") int name;
     @SerializedName("created") String created;
     @SerializedName("updated") String updated;
     @SerializedName("start") String start;
     @SerializedName("end") String end;
-    @SerializedName("totalPrice") int totalPrice;
+    @SerializedName("value") int value;
     @SerializedName("additionalRequests") String addtionalRequest;
     @SerializedName("status") String status;
     @SerializedName("expires") String expires;
@@ -27,6 +28,7 @@ public class Reservation implements BaseModel {
     @SerializedName("workers") List<Member> workers;
     @SerializedName("user") User user;
     @SerializedName("userId") int userId;
+    @SerializedName("team") Team team;
 
     public Reservation() {
     }
@@ -71,12 +73,12 @@ public class Reservation implements BaseModel {
         this.end = end;
     }
 
-    public int getTotalPrice() {
-        return totalPrice;
+    public int getValue() {
+        return value;
     }
 
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public String getAddtionalRequest() {
@@ -153,5 +155,25 @@ public class Reservation implements BaseModel {
 
     public String getExpires() {
         return expires;
+    }
+
+    public void setExpires(String expires) {
+        this.expires = expires;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public int getName() {
+        return name;
+    }
+
+    public void setName(int name) {
+        this.name = name;
     }
 }
