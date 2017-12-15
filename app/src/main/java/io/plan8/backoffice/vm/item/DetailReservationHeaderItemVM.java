@@ -109,4 +109,12 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
             ((DetailReservationActivity) getActivity()).showBottomSheet();
         }
     }
+
+    @Bindable
+    public String getCustomerTeamName() {
+        if (null == reservation) {
+            return "";
+        }
+        return "픽스나우";
+    }
 }

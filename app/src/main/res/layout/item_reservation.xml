@@ -36,10 +36,10 @@
                     android:layout_marginTop="5dp">
 
                     <!--<RelativeLayout-->
-                        <!--android:id="@+id/firstStatus"-->
-                        <!--android:layout_width="12dp"-->
-                        <!--android:layout_height="12dp"-->
-                        <!--reservationViewAdapter:setReadStatus="@{vm.reservationStatus}" />-->
+                    <!--android:id="@+id/firstStatus"-->
+                    <!--android:layout_width="12dp"-->
+                    <!--android:layout_height="12dp"-->
+                    <!--reservationViewAdapter:setReadStatus="@{vm.reservationStatus}" />-->
 
                     <RelativeLayout
                         android:layout_width="12dp"
@@ -66,17 +66,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
                         android:fontFamily="sans-serif"
-                        android:text="@{vm.customerName}"
+                        android:maxLines="1"
+                        android:text="@{vm.customerAndTeamName}"
                         android:textColor="#3C4858"
                         android:textSize="14dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
                         android:fontFamily="sans-serif"
+                        android:maxLines="1"
                         android:text="@{vm.customerAddress}"
                         android:textColor="#8492A6"
                         android:textSize="14dp" />
@@ -84,8 +84,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
                         android:fontFamily="sans-serif"
+                        android:maxLines="1"
                         android:text="@{vm.productName}"
                         android:textColor="#8492A6"
                         android:textSize="14dp" />

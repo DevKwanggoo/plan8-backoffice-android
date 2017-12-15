@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="15dp"
-                    android:text="전화번호"
+                    android:text="팀"
                     android:fontFamily="sans-serif"
                     android:textColor="#FF8492A6"
                     android:textSize="12dp" />
@@ -86,12 +86,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:autoLink="phone"
                     android:fontFamily="sans-serif"
-                    android:text="@{vm.customerPhoneNumber}"
+                    android:text="@{vm.customerTeamName}"
                     android:textColor="#FF3C4858"
                     android:textSize="16dp" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="72dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="15dp"
+                android:text="전화번호"
+                android:fontFamily="sans-serif"
+                android:textColor="#FF8492A6"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="21dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:autoLink="phone"
+                android:fontFamily="sans-serif"
+                android:text="@{vm.customerPhoneNumber}"
+                android:layout_marginTop="8dp"
+                android:textColor="#FF3C4858"
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout

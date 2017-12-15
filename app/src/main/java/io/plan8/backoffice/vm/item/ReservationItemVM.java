@@ -33,20 +33,26 @@ public class ReservationItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getCustomerName() {
+    public String getCustomerAndTeamName() {
+        String customerName = "";
+        String teamName = "픽스나우";
         if (null == reservation
-                || null == reservation.getUser() || null == reservation.getUser().getName()
+                || null == reservation.getUser()
+                || null == reservation.getUser().getName()
                 || reservation.getUser().getName().equals("")) {
 
-            return "고객명 없음";
+            customerName = "고객명 없음";
+        } else {
+            customerName = reservation.getUser().getName();
         }
-        return reservation.getUser().getName();
+
+        return customerName + " ∙ " + teamName;
     }
 
     @Bindable
     public String getCustomerAddress() {
         if (null == reservation || null == reservation.getAddress()) {
-            return "";
+            return "주소 없음";
         }
 
         return reservation.getAddress().getName();

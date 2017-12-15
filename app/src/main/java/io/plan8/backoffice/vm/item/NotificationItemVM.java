@@ -60,12 +60,17 @@ public class NotificationItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getLastModified() {
+    public String getTeamNameAndLastModified() {
+        String teamName = "픽스나우";
+        String lastModified = "";
+
         if (null == notification) {
-            return "";
+            lastModified = "";
+        } else {
+            lastModified = DateUtil.getInstance().getChatTime(notification.getCreated());
         }
 
-        return DateUtil.getInstance().getChatTime(notification.getCreated());
+        return teamName + " ∙ " + lastModified;
     }
 
     public void detailNotification(View view) {
