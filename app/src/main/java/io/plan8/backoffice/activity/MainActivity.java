@@ -15,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -171,6 +173,21 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+
+        binding.mainViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                reservationFragment.setSwipeFlag(false);
+                notificationFragment.setSwipeFlag(false);
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        reservationFragment.setSwipeFlag(true);
+                        notificationFragment.setSwipeFlag(true);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -218,8 +235,8 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed(boolean canDoubleClickFinish) {
-        super.onBackPressed(canDoubleClickFinish);
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void setEmptyFlag(boolean flag) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class NotificationFragment extends BaseFragment {
     private List<Notification> notifications;
     private Handler handler = null;
     private List<Notification> refreshData;
+    private List<Notification> result;
 
     @Nullable
     @Override
@@ -56,7 +58,7 @@ public class NotificationFragment extends BaseFragment {
         getNotifications.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
-                List<Notification> result = response.body();
+                result = response.body();
 
                 if (null != result) {
                     Log.e("notification", "" + result.size());
@@ -80,6 +82,17 @@ public class NotificationFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.notificationSwipeLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.notificationSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                result.clear();
+                vm.setData(result);
+                refreshNotificationList();
+                binding.notificationSwipeLayout.setRefreshing(false);
+            }
+        });
 
         binding.notificationRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -143,5 +156,9 @@ public class NotificationFragment extends BaseFragment {
             }
         }
         vm.setData(notifications);
+    }
+
+    public void setSwipeFlag(boolean flag){
+        vm.setSwipeFlag(flag);
     }
 }

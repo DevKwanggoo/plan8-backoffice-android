@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,18 @@ public class ReservationFragment extends BaseFragment {
                 refreshReservationList();
             }
         };
+
+        binding.reservationRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.reservationRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reservations.clear();
+                myReservations.clear();
+                endlessRecyclerOnScrollListener.initPrevItemCount();
+                refreshReservationList();
+                binding.reservationRefreshLayout.setRefreshing(false);
+            }
+        });
 
         binding.reservationRecyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
 
@@ -137,6 +150,8 @@ public class ReservationFragment extends BaseFragment {
         });
     }
 
+
+
     public void setEditFlag(boolean flag) {
         editFlag = flag;
     }
@@ -160,5 +175,9 @@ public class ReservationFragment extends BaseFragment {
             }
             vm.setDatas(myReservations);
         }
+    }
+
+    public void setSwipeFlag(boolean flag){
+        vm.setSwipeFlag(flag);
     }
 }

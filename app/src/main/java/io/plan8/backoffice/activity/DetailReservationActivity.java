@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -143,6 +144,15 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
         refreshReservation();
         initHandler();
+
+        binding.detailReservationSwipeLayout.setColorSchemeResources(R.color.colorAccent);
+        binding.detailReservationSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshReservation();
+                binding.detailReservationSwipeLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void setMentionEditText(List<Member> memberList) {

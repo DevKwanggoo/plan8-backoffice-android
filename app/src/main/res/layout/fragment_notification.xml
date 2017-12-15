@@ -51,17 +51,24 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/notificationRecycler"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/notificationSwipeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_below="@+id/notificationToolbar"
-            android:adapter="@{vm.adapter}"
-            android:clipToPadding="false"
-            android:layoutManager="@{vm.layoutManager}"
-            android:overScrollMode="never"
-            android:paddingBottom="15dp"
-            commonViewAdapter:initRecyclerView="@{vm.nothing}" />
+            commonViewAdapter:setEnabled="@{vm.swipeFlag}">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/notificationRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adapter="@{vm.adapter}"
+                android:clipToPadding="false"
+                android:layoutManager="@{vm.layoutManager}"
+                android:overScrollMode="never"
+                android:paddingBottom="15dp"
+                commonViewAdapter:initRecyclerView="@{vm.nothing}" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
