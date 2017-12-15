@@ -117,7 +117,7 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 currentDate,
                 ApplicationManager.getInstance().getCurrentMember().getId(),
-                3,
+                15,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override
