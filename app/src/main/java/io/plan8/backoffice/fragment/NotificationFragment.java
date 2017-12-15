@@ -82,7 +82,6 @@ public class NotificationFragment extends BaseFragment {
         final EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
-
                 refreshNotificationList();
             }
         };

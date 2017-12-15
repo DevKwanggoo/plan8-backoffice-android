@@ -15,9 +15,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/white"
-        android:clickable="true"
-        android:onClick="@{vm::selectTeam}">
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -59,16 +57,6 @@
                     android:textSize="14dp" />
 
             </LinearLayout>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/ic_solid_check"
-                android:tint="@color/blueColor"
-                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

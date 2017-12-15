@@ -203,7 +203,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     protected void onDestroy() {
         binding.unbind();
-//        RealTimeHandlerManager.getInstance().clearHandler("action");
         if (handler != null) {
             handler.removeMessages(0);
             handler = null;
@@ -213,9 +212,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     @Override
     protected void onResume() {
-//        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
-//            RealTimeHandlerManager.getInstance().startHandler("action");
-//        }
         if (handler != null) {
             handler.sendEmptyMessage(0);
         }
@@ -224,9 +220,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     @Override
     protected void onPause() {
-//        if (RealTimeHandlerManager.getInstance().getHandlers() != null && RealTimeHandlerManager.getInstance().getHandlers().size() != 0) {
-//            RealTimeHandlerManager.getInstance().stopHandler("action");
-//        }
         if (handler != null) {
             handler.removeMessages(0);
         }
@@ -524,6 +517,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             @Override
             public void onResponse(Call<List<Action>> call, Response<List<Action>> response) {
                 List<Action> result = response.body();
+
+                //TODO : resrvation의 teamId를 가져와서 teams/{id}/memvers 로 멘션 리스트 구성하기.
+
                 if (null != result) {
                     if (result.size() > 0 && detailReservations.size() <= 1) {
                         detailReservations.add(1, new DetailReservationMoreButtonItem("이전 내용 보기"));

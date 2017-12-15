@@ -2,7 +2,6 @@ package io.plan8.backoffice;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Locale;

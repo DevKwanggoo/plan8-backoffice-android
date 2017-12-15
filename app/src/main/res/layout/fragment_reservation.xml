@@ -34,19 +34,6 @@
                 android:overScrollMode="never" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <!--<FrameLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_below="@+id/reservationToolbar"-->
-            <!--android:clickable="true"-->
-            <!--android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}">-->
-
-            <!--<include-->
-                <!--layout="@layout/empty_reservation_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" />-->
-        <!--</FrameLayout>-->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
