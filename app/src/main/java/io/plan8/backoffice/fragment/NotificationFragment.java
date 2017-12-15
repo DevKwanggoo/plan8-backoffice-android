@@ -3,6 +3,7 @@ package io.plan8.backoffice.fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -104,17 +105,17 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initHandler() {
-//        if (notifications != null && notifications.size() != 0) {
-//            handler = new Handler() {
-//                @Override
-//                public void handleMessage(Message msg) {
-//                    super.handleMessage(msg);
-//                    vm.setData(notifications);
-//                    this.sendEmptyMessageDelayed(0, 30000);
-//                }
-//            };
-//            handler.sendEmptyMessage(0);
-//        }
+        if (notifications != null && notifications.size() != 0) {
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    vm.setData(notifications);
+                    this.sendEmptyMessageDelayed(0, 30000);
+                }
+            };
+            handler.sendEmptyMessage(0);
+        }
     }
 
     @Override
