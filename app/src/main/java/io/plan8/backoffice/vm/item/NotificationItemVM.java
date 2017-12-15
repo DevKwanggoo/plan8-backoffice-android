@@ -40,12 +40,12 @@ public class NotificationItemVM extends FragmentVM {
             return "";
         }
         String text = "";
-        text = ViewUtil.getInstance().getActionItemText(notification.getAction()) + " ";
+        text = ViewUtil.getInstance().getActionItemText(notification.getAction()) + "";
         if (null != notification.getAction().getText()
                 && notification.getAction().getText().length() >= 75) {
-            text += notification.getAction().getText().substring(0, 75) + "...";
+            text += " " + notification.getAction().getText().substring(0, 75) + "...";
         } else {
-            text += notification.getAction().getText();
+            text += "";
         }
 
         return text;

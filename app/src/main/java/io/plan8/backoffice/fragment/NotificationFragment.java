@@ -3,10 +3,8 @@ package io.plan8.backoffice.fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,15 +57,14 @@ public class NotificationFragment extends BaseFragment {
                 List<Notification> result = response.body();
 
                 if (null != result) {
-                    Log.e("notification", "" + result.size());
                     if (notifications.size() + result.size() > notifications.size()) {
                         if (handler == null) {
                             initHandler();
                         }
                         notifications.addAll(result);
-                        vm.addData(result);
                     }
                 }
+                vm.setData(notifications);
             }
 
             @Override
@@ -81,40 +78,43 @@ public class NotificationFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore(int currentPage) {
+
+                refreshNotificationList();
+            }
+        };
+
         binding.notificationSwipeLayout.setColorSchemeResources(R.color.colorAccent);
         binding.notificationSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 notifications.clear();
-//                vm.setData(notifications);
+                endlessRecyclerOnScrollListener.initPrevItemCount();
                 refreshNotificationList();
                 binding.notificationSwipeLayout.setRefreshing(false);
             }
         });
 
-        binding.notificationRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
-            @Override
-            public void onLoadMore(int currentPage) {
-                refreshNotificationList();
-            }
-        });
+        binding.notificationRecycler.addOnScrollListener(endlessRecyclerOnScrollListener);
         refreshNotificationList();
 
         initHandler();
     }
 
     private void initHandler() {
-        if (notifications != null && notifications.size() != 0) {
-            handler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    vm.setDataNotifyItemRangeChanged(notifications);
-                    this.sendEmptyMessageDelayed(0, 30000);
-                }
-            };
-            handler.sendEmptyMessage(0);
-        }
+//        if (notifications != null && notifications.size() != 0) {
+//            handler = new Handler() {
+//                @Override
+//                public void handleMessage(Message msg) {
+//                    super.handleMessage(msg);
+//                    vm.setData(notifications);
+//                    this.sendEmptyMessageDelayed(0, 30000);
+//                }
+//            };
+//            handler.sendEmptyMessage(0);
+//        }
     }
 
     @Override
@@ -153,7 +153,7 @@ public class NotificationFragment extends BaseFragment {
         vm.setData(notifications);
     }
 
-    public void setSwipeFlag(boolean flag){
+    public void setSwipeFlag(boolean flag) {
         vm.setSwipeFlag(flag);
     }
 }

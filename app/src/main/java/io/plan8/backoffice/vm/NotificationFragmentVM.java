@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -62,12 +63,15 @@ public class NotificationFragmentVM extends FragmentVM {
     }
 
     public void setData(List<Notification> data) {
-        adapter.setDataNotifyItemRangeChanged(data);
-        if (this.notifications.size() <= 0) {
+        Log.e("notification", "setData = " + data.size());
+        if (data.size() <= 0) {
             setEmpty(true);
         } else {
             setEmpty(false);
         }
+//        notifications = data;
+//        adapter.setDataNotifyItemRangeChanged(data);
+        adapter.setData(data);
     }
 
     public void addData(List<Notification> data) {
@@ -111,10 +115,6 @@ public class NotificationFragmentVM extends FragmentVM {
 
     public boolean getNothing() {
         return false;
-    }
-
-    public void setDataNotifyItemRangeChanged(List<Notification> list) {
-        adapter.setDataNotifyItemRangeChanged(list);
     }
 
     @Bindable

@@ -14,6 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffff"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -68,21 +69,21 @@
                 android:overScrollMode="never"
                 android:paddingBottom="15dp"
                 commonViewAdapter:initRecyclerView="@{vm.nothing}" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:visibility="@{vm.empty ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="알림 없음"
+                    android:textColor="@color/grayTextColor"
+                    android:textSize="20dp" />
+            </RelativeLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffffff"
-            android:visibility="@{vm.empty ? View.VISIBLE : View.GONE}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="알림 없음"
-                android:textColor="@color/grayTextColor"
-                android:textSize="20dp" />
-        </RelativeLayout>
     </RelativeLayout>
 </layout>
