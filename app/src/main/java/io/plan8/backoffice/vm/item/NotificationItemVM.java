@@ -67,7 +67,7 @@ public class NotificationItemVM extends FragmentVM {
         if (null == notification) {
             lastModified = "";
         } else {
-            lastModified = DateUtil.getInstance().getChatTime(notification.getCreated());
+            lastModified = DateUtil.getInstance().getChatTime(notification.getAdded());
         }
 
         return teamName + " ∙ " + lastModified;

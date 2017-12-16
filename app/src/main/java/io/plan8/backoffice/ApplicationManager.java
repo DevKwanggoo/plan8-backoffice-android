@@ -16,8 +16,8 @@ import io.plan8.backoffice.util.PushManager;
  */
 
 public class ApplicationManager {
-//    private static final String BASE_SERVER_URL = "https://api-sandbox.plan8.io";
-    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
+    private static final String BASE_SERVER_URL = "https://api-sandbox.plan8.io";
+//    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
     private Context context;
     private static volatile ApplicationManager instance = null;
     private User user;

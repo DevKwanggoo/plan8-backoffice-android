@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:commonViewAdapter="http://schemas.android.com/tools"
-    xmlns:detailReservationViewAdapter="http://schemas.android.com/apk/res-auto">
+    xmlns:detailReservationViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -126,6 +126,7 @@
 
                     <com.linkedin.android.spyglass.ui.MentionsEditText
                         android:id="@+id/mentionEditText"
+                        detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -139,8 +140,7 @@
                         android:textColor="#3c4858"
                         android:textColorHint="#acb4bf"
                         android:textSize="14dp"
-                        commonViewAdapter:selection="@{vm.textLength}"
-                        detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}" />
+                        commonViewAdapter:selection="@{vm.textLength}" />
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>

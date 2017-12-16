@@ -11,8 +11,8 @@ import io.plan8.backoffice.model.BaseModel;
 public class Notification implements BaseModel {
     @SerializedName("action") Action action;
     @SerializedName("id") int id;
-    @SerializedName("created") String created;
-    @SerializedName("updated") String updated;
+    @SerializedName("added") String added;
+    @SerializedName("edited") String edited;
     @SerializedName("read") boolean read;
 
     public Notification() {
@@ -22,38 +22,36 @@ public class Notification implements BaseModel {
         return action;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-
-
-    public String getUpdated() {
-        return updated;
-    }
-
-    public boolean isRead() {
-        return read;
-    }
-
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public String getAdded() {
+        return added;
     }
 
-    public void setUpdated(String updated) {
-        this.updated = updated;
+    public void setAdded(String added) {
+        this.added = added;
+    }
+
+    public String getEdited() {
+        return edited;
+    }
+
+    public void setEdited(String edited) {
+        this.edited = edited;
+    }
+
+    public boolean isRead() {
+        return read;
     }
 
     public void setRead(boolean read) {

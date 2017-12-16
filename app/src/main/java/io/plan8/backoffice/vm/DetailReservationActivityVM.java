@@ -200,9 +200,9 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     public void sendComment(View view) {
         ViewUtil.getInstance().hideKeyboard(getActivity().getApplicationContext());
         if (getActivity() instanceof DetailReservationActivity) {
-            if (null != currentText && currentText.length() > 0) {
+//            if (null != currentText && currentText.length() > 0) {
                 ((DetailReservationActivity) getActivity()).sendAction(currentText);
-            }
+//            }
         }
     }
 
@@ -221,7 +221,6 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
     public OnTextChangeListener getTextChangeListener() {
         if (null == onTextChangeListener) {
-
             onTextChangeListener = new OnTextChangeListener() {
                 @Override
                 public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {

@@ -1,7 +1,5 @@
 package io.plan8.backoffice.model.api;
 
-import android.databinding.Bindable;
-
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -12,8 +10,8 @@ import io.plan8.backoffice.model.BaseModel;
 
 public class Action implements BaseModel {
     @SerializedName("id") int id;
-    @SerializedName("created") String created;
-    @SerializedName("updated") String updated;
+    @SerializedName("added") String added;
+    @SerializedName("edited") String edited;
     @SerializedName("type") String type;
     @SerializedName("text") String text;
     @SerializedName("data") Data data;
@@ -75,52 +73,36 @@ public class Action implements BaseModel {
         }
     }
 
-    public String getUpdated() {
-        return updated;
-    }
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Creator getCreator() {
-        return creator;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public String getCreated() {
-        return created;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public String getAdded() {
+        return added;
+    }
+
+    public void setAdded(String added) {
+        this.added = added;
+    }
+
+    public String getEdited() {
+        return edited;
+    }
+
+    public void setEdited(String edited) {
+        this.edited = edited;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public void setCreator(Creator creator) {
-        this.creator = creator;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
     }
 
     public String getText() {
@@ -131,11 +113,31 @@ public class Action implements BaseModel {
         this.text = text;
     }
 
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
     public Attachment getAttachment() {
         return attachment;
     }
 
     public void setAttachment(Attachment attachment) {
         this.attachment = attachment;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
+
+    public Creator getCreator() {
+        return creator;
     }
 }

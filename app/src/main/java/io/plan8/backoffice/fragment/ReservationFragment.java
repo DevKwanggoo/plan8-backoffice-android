@@ -112,10 +112,16 @@ public class ReservationFragment extends BaseFragment {
         if (null == currentDate || currentDate.equals("")) {
             currentDate = DateUtil.getInstance().getCurrnetDateAPIFormat(Calendar.getInstance().getTime());
         }
+
+        int userId = -1;
+        if (null != ApplicationManager.getInstance().getUser()) {
+            userId = ApplicationManager.getInstance().getUser().getId();
+        }
+
         Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()),
                 currentDate,
                 currentDate,
-                ApplicationManager.getInstance().getUser().getId(),
+                userId,
                 15,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {

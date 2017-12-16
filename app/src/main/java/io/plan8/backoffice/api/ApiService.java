@@ -75,7 +75,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("1/reservations/{id}/actions")
-    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("text") String text);
+    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("type") String type, @Field("text") String text);
 
     @POST("1/reservations/{id}/actions")
     Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Body HashMap<String, Object> attachment);

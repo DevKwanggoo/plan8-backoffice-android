@@ -51,6 +51,6 @@ public class DetailReservationActionItemVM extends ActivityVM {
         if (null == action) {
             return "";
         }
-        return DateUtil.getInstance().getChatTime(action.getCreated());
+        return DateUtil.getInstance().getChatTime(action.getAdded());
     }
 }

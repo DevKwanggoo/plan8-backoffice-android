@@ -582,7 +582,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAction(String text) {
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, text);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, "commentAdded", "hello");
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -600,6 +600,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
+                Log.e("test", "test");
             }
         });
     }
