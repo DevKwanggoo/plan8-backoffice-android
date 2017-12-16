@@ -17,44 +17,13 @@ public class Action implements BaseModel {
     @SerializedName("data") Data data;
     @SerializedName("attachment") Attachment attachment;
     @SerializedName("reservation") Reservation reservation;
-    @SerializedName("creator") Creator creator;
+    @SerializedName("creator") User creator;
 
     public Action() {
     }
 
     public Action(String text) {
         this.text = text;
-    }
-
-    public class Creator implements BaseModel {
-        @SerializedName("id") int id;
-        @SerializedName("username") String username;
-        @SerializedName("name") String name;
-        @SerializedName("avatar") String avatar;
-        @SerializedName("hasPassword") boolean hasPassword;
-
-        public Creator() {
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getAvatar() {
-            return avatar;
-        }
-
-        public boolean isHasPassword() {
-            return hasPassword;
-        }
     }
 
     public class Data implements BaseModel {
@@ -137,7 +106,7 @@ public class Action implements BaseModel {
         this.reservation = reservation;
     }
 
-    public Creator getCreator() {
+    public User getCreator() {
         return creator;
     }
 }

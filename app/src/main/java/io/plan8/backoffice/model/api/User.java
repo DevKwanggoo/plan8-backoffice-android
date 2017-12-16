@@ -22,8 +22,8 @@ import io.plan8.backoffice.util.MentionsLoader;
 
 public class User implements BaseModel, Mentionable {
     @SerializedName("id") int id;
-    @SerializedName("created") String created;
-    @SerializedName("updated") String updated;
+    @SerializedName("added") String added;
+    @SerializedName("edited") String edited;
     @SerializedName("publicId") String publicId;
     @SerializedName("username") String username;
     @SerializedName("phoneNumber") String phoneNumber;
@@ -46,20 +46,20 @@ public class User implements BaseModel, Mentionable {
         this.id = id;
     }
 
-    public String getCreated() {
-        return created;
+    public String getAdded() {
+        return added;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setAdded(String added) {
+        this.added = added;
     }
 
-    public String getUpdated() {
-        return updated;
+    public String getEdited() {
+        return edited;
     }
 
-    public void setUpdated(String updated) {
-        this.updated = updated;
+    public void setEdited(String edited) {
+        this.edited = edited;
     }
 
     public String getPublicId() {

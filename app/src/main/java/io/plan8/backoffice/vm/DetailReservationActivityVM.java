@@ -200,9 +200,9 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     public void sendComment(View view) {
         ViewUtil.getInstance().hideKeyboard(getActivity().getApplicationContext());
         if (getActivity() instanceof DetailReservationActivity) {
-//            if (null != currentText && currentText.length() > 0) {
+            if (null != currentText && currentText.length() > 0) {
                 ((DetailReservationActivity) getActivity()).sendAction(currentText);
-//            }
+            }
         }
     }
 
@@ -281,7 +281,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         setEmptyMentionList(true);
 
         int index = 0;
-        for (int i = currentTextIndex; i >= 0; i--) {
+        for (int i = currentTextIndex-1; i >= 0; i--) {
             if (currentText.charAt(i) == '@') {
                 index = i;
                 break;

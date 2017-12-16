@@ -70,19 +70,19 @@ public interface ApiService {
     @GET("1/members")
     Call<List<Member>> getUserMembers(@Header("authorization") String auth, @Query("user") int userId);
 
-    @GET("1/teams/{id}/members")
-    Call<List<Member>> getCurrentTeamMemebers(@Header("authorization") String auth, @Path("id") int teamId);
+    @GET("1/members")
+    Call<List<Member>> getMembers(@Header("authorization") String auth, @Query("team") int teamId);
 
     @FormUrlEncoded
-    @POST("1/reservations/{id}/actions")
-    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Field("type") String type, @Field("text") String text);
+    @POST("1/actions")
+    Call<Action> createAction(@Header("authorization") String auth, @Field("reservation") int reservationId, @Field("type") String type, @Field("text") String text);
 
-    @POST("1/reservations/{id}/actions")
-    Call<Action> createAction(@Header("authorization") String auth, @Path("id") int reservationId, @Body HashMap<String, Object> attachment);
+    @POST("1/actions")
+    Call<Action> createAction(@Header("authorization") String auth, @Field("reservation") int reservationId, @Body HashMap<String, Object> attachment);
 
-    @GET("1/reservations/{id}/actions")
+    @GET("1/actions")
     Call<List<Action>> getActions(@Header("authorization") String auth,
-                                  @Path("id") int reservationId,
+                                  @Query("reservation") int reservationId,
                                   @Query("take") int take,
                                   @Query("skip") int skip);
 

@@ -156,8 +156,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     private void setMentionEditText(int teamId) {
-        teamId = 0;
-        Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getServiceApi().getCurrentTeamMemebers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), teamId);
+        Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getServiceApi().getMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), teamId);
         currentTeamMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
@@ -502,7 +501,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 reservation = response.body();
                 if (null != reservation) {
-                    //TODO : resrvation의 teamId를 가져와서 teams/{id}/memvers 로 멘션 리스트 구성하기.
                     setMentionEditText(reservation.getTeam().getTeamId());
 
                     if (detailReservations.size() <= 0) {
@@ -582,7 +580,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAction(String text) {
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, "commentAdded", "hello");
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, "commentAdded", text);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -600,7 +598,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
-                Log.e("test", "test");
             }
         });
     }
