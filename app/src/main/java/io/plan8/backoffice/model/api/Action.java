@@ -67,8 +67,10 @@ public class Action implements BaseModel {
 
     public class Data implements BaseModel {
         @SerializedName("before")
+        @Expose
         String before;
         @SerializedName("after")
+        @Expose
         String after;
 
         public Data() {
