@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -10,22 +11,31 @@ import io.plan8.backoffice.model.BaseModel;
 
 public class Product implements BaseModel {
     @SerializedName("id")
+    @Expose()
     int id;
     @SerializedName("created")
+    @Expose()
     String created;
     @SerializedName("updated")
+    @Expose()
     String updated;
     @SerializedName("name")
+    @Expose()
     String name;
     @SerializedName("description")
+    @Expose()
     String description;
     @SerializedName("duration")
+    @Expose()
     int duration;
     @SerializedName("price")
+    @Expose()
     int price;
     @SerializedName("numberOfWorkersRequired")
+    @Expose()
     int numberOfWorkersRequired;
     @SerializedName("deactivated")
+    @Expose()
     boolean deactivated;
 
     public Product() {

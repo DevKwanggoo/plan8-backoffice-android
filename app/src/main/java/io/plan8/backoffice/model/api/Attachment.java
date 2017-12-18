@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,10 +10,18 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Attachment implements BaseModel {
-    @SerializedName("name") private String name;
-    @SerializedName("mimetype") private String mimetype;
-    @SerializedName("url") private String url;
-    @SerializedName("bytes") private long bytes;
+    @SerializedName("name")
+    @Expose()
+    private String name;
+    @SerializedName("mimetype")
+    @Expose()
+    private String mimetype;
+    @SerializedName("url")
+    @Expose()
+    private String url;
+    @SerializedName("bytes")
+    @Expose()
+    private long bytes;
 
     public Attachment() {
     }

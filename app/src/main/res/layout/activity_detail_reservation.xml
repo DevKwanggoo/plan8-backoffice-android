@@ -67,6 +67,7 @@
                     android:adapter="@{vm.adapter}"
                     android:clipToPadding="false"
                     android:layoutManager="@{vm.verticalLayoutManager}"
+                    commonViewAdapter:recyclerViewScrollTo="@{vm.data}"
                     android:overScrollMode="never"
                     android:paddingBottom="15dp" />
             </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,20 +1,11 @@
 package io.plan8.backoffice.model.api;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.linkedin.android.spyglass.mentions.Mentionable;
-import com.linkedin.android.spyglass.tokenization.QueryToken;
 
-import org.json.JSONArray;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.model.BaseModel;
-import io.plan8.backoffice.util.MentionsLoader;
 
 /**
  * Created by SSozi on 2017. 12. 7..
@@ -22,26 +13,37 @@ import io.plan8.backoffice.util.MentionsLoader;
 
 public class Member implements BaseModel {
     @SerializedName("id")
+    @Expose()
     int id;
     @SerializedName("created")
+    @Expose()
     String created;
     @SerializedName("updated")
+    @Expose()
     String updated;
     @SerializedName("configuration")
+    @Expose()
     Configuration configuration;
     @SerializedName("user")
+    @Expose()
     User user;
     @SerializedName("phoneNumber")
+    @Expose()
     String phoneNumber;
     @SerializedName("owner")
+    @Expose()
     boolean owner;
     @SerializedName("admin")
+    @Expose()
     boolean admin;
     @SerializedName("team")
+    @Expose()
     Team team;
     @SerializedName("deactivated")
+    @Expose()
     boolean deactivated;
     @SerializedName("daysOff")
+    @Expose()
     List<DayOff> dayOffs;
 
     public Member() {

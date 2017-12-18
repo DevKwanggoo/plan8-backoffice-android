@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,17 +10,55 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Action implements BaseModel {
-    @SerializedName("id") int id;
-    @SerializedName("added") String added;
-    @SerializedName("edited") String edited;
-    @SerializedName("type") String type;
-    @SerializedName("text") String text;
-    @SerializedName("data") Data data;
-    @SerializedName("attachment") Attachment attachment;
-    @SerializedName("reservation") Reservation reservation;
-    @SerializedName("creator") User creator;
+    @SerializedName("id")
+    @Expose(serialize = false)
+    int id;
+
+    @SerializedName("type")
+    @Expose()
+    String type;
+
+    @SerializedName("creator")
+    @Expose(serialize = false)
+    User creator;
+
+    @SerializedName("data")
+    @Expose(serialize = false)
+    Data data;
+
+    @SerializedName("added")
+    @Expose(serialize = false)
+    String added;
+
+    @SerializedName("edited")
+    @Expose(serialize = false)
+    String edited;
+
+    @SerializedName("text")
+    @Expose()
+    String text;
+
+    @SerializedName("attachment")
+    @Expose()
+    Attachment attachment;
+
+    @SerializedName("reservation")
+    @Expose()
+    Reservation reservation;
 
     public Action() {
+    }
+
+    public Action(Reservation reservation, Attachment attachment) {
+        this.type = "comment";
+        this.reservation = reservation;
+        this.attachment = attachment;
+    }
+
+    public Action(Reservation reservation, String text) {
+        this.type = "comment";
+        this.reservation = reservation;
+        this.text = text;
     }
 
     public Action(String text) {
@@ -27,8 +66,10 @@ public class Action implements BaseModel {
     }
 
     public class Data implements BaseModel {
-        @SerializedName("before") String before;
-        @SerializedName("after") String after;
+        @SerializedName("before")
+        String before;
+        @SerializedName("after")
+        String after;
 
         public Data() {
         }

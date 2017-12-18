@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,11 +10,21 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Notification implements BaseModel {
-    @SerializedName("action") Action action;
-    @SerializedName("id") int id;
-    @SerializedName("added") String added;
-    @SerializedName("edited") String edited;
-    @SerializedName("read") boolean read;
+    @SerializedName("action")
+    @Expose()
+    Action action;
+    @SerializedName("id")
+    @Expose()
+    int id;
+    @SerializedName("added")
+    @Expose()
+    String added;
+    @SerializedName("edited")
+    @Expose()
+    String edited;
+    @SerializedName("read")
+    @Expose()
+    boolean read;
 
     public Notification() {
     }

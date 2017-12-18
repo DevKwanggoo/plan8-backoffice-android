@@ -47,7 +47,7 @@ public class ViewUtil {
         immhide.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void hideKeyboard(Context context){
+    public void hideKeyboard(Context context) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
@@ -75,7 +75,7 @@ public class ViewUtil {
             return "";
         }
 
-        if (action.getType().equals("commentAdded")) {
+        if (action.getType().equals("comment")) {
             return action.getCreator().getName() + "님이 작업 댓글을 추가하였습니다.";
         } else if (action.getType().equals("statusChanged")) {
             return action.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
@@ -92,6 +92,14 @@ public class ViewUtil {
         } else {
             return "";
         }
+    }
+
+    public String getDefaultAvatar(int userId) {
+        return "http://assets.starshell.co/plan8/default/avatars/" + userId % 27 + ".png";
+    }
+
+    public String getDefaultTeamLogo(int teamId) {
+        return "http://assets.starshell.co/plan8/default/avatars/" + teamId % 27 + ".png";
     }
 
     public String getCommaFormat(int num) {

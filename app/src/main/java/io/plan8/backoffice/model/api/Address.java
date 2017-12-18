@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,10 +10,21 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Address implements BaseModel {
-    @SerializedName("name") String name;
-    @SerializedName("alias") String alias;
-    @SerializedName("latitude") Number latitude;
-    @SerializedName("longitude") Number longitude;
+    @SerializedName("name")
+    @Expose()
+    String name;
+
+    @SerializedName("alias")
+    @Expose()
+    String alias;
+
+    @SerializedName("latitude")
+    @Expose()
+    Number latitude;
+
+    @SerializedName("longitude")
+    @Expose()
+    Number longitude;
 
     public String getName() {
         return name;

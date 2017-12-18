@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.linkedin.android.spyglass.mentions.Mentionable;
 import com.linkedin.android.spyglass.tokenization.QueryToken;
@@ -21,19 +22,45 @@ import io.plan8.backoffice.util.MentionsLoader;
  */
 
 public class User implements BaseModel, Mentionable {
-    @SerializedName("id") int id;
-    @SerializedName("added") String added;
-    @SerializedName("edited") String edited;
-    @SerializedName("publicId") String publicId;
-    @SerializedName("username") String username;
-    @SerializedName("phoneNumber") String phoneNumber;
-    @SerializedName("email") String email;
-    @SerializedName("password") String password;
-    @SerializedName("name") String name;
-    @SerializedName("avatar") String avatar;
-    @SerializedName("verified") boolean verified;
-    @SerializedName("hasPassword") boolean hasPassword;
-    @SerializedName("hasName") boolean hasName;
+    @SerializedName("id")
+    @Expose()
+    int id;
+    @SerializedName("added")
+    @Expose()
+    String added;
+    @SerializedName("edited")
+    @Expose()
+    String edited;
+    @SerializedName("publicId")
+    @Expose()
+    String publicId;
+    @SerializedName("username")
+    @Expose()
+    String username;
+    @SerializedName("phoneNumber")
+    @Expose()
+    String phoneNumber;
+    @SerializedName("email")
+    @Expose()
+    String email;
+    @SerializedName("password")
+    @Expose()
+    String password;
+    @SerializedName("name")
+    @Expose()
+    String name;
+    @SerializedName("avatar")
+    @Expose()
+    String avatar;
+    @SerializedName("verified")
+    @Expose()
+    boolean verified;
+    @SerializedName("hasPassword")
+    @Expose()
+    boolean hasPassword;
+    @SerializedName("hasName")
+    @Expose()
+    boolean hasName;
 
     public User() {
     }

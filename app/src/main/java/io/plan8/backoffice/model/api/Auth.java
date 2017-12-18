@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,14 +10,11 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Auth implements BaseModel {
-    @SerializedName("user") User user;
-    @SerializedName("token") String token;
+    @SerializedName("token")
+    @Expose()
+    String token;
 
     public Auth() {
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public String getToken() {

@@ -245,7 +245,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (ApplicationManager.getInstance().getMainActivity() != null) {
             Intent returnIntent = new Intent();
             if (editFlag) {
-                returnIntent.putExtra("reservationId", reservationId);
+                returnIntent.putExtra("reservation", reservation);
             }
             setResult(Constants.REFRESH_RESERVATION_FRAGMENT, returnIntent);
             finish();
@@ -580,7 +580,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAction(String text) {
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, "commentAdded", text);
+        Action comment = new Action(reservation, text);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), comment);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -592,20 +593,21 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     }
                     actions.add(result);
                     vm.addData(result);
+                    vm.scrollTo();
                 }
                 vm.setCurrentText("");
             }
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
+                Log.e("test", "test");
             }
         });
     }
 
     public void sendAttachment(Attachment attachment) {
-        HashMap<String, Object> attachmentMap = new HashMap<>();
-        attachmentMap.put("attachment", attachment);
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().createAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, attachmentMap);
+        Action attachmentAction = new Action(reservation, attachment);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), attachmentAction);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -617,6 +619,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     }
                     actions.add(result);
                     vm.addData(result);
+                    vm.scrollTo();
                 }
                 vm.setCurrentText("");
             }

@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,24 +12,60 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Reservation implements BaseModel {
-    @SerializedName("id") int id;
-    @SerializedName("name") int name;
-    @SerializedName("added") String added;
-    @SerializedName("edited") String edited;
-    @SerializedName("start") String start;
-    @SerializedName("end") String end;
-    @SerializedName("value") int value;
-    @SerializedName("additionalRequests") String addtionalRequest;
-    @SerializedName("status") String status;
-    @SerializedName("expires") String expires;
-    @SerializedName("phoneNumber") String phoneNumber;
-    @SerializedName("email") String email;
-    @SerializedName("address") Address address;
-    @SerializedName("products") List<Product> products;
-    @SerializedName("workers") List<Member> workers;
-    @SerializedName("user") User user;
-    @SerializedName("userId") int userId;
-    @SerializedName("team") Team team;
+    @SerializedName("id")
+    @Expose()
+    int id;
+    @SerializedName("name")
+    @Expose()
+    int name;
+    @SerializedName("added")
+    @Expose()
+    String added;
+    @SerializedName("edited")
+    @Expose()
+    String edited;
+    @SerializedName("start")
+    @Expose()
+    String start;
+    @SerializedName("end")
+    @Expose()
+    String end;
+    @SerializedName("value")
+    @Expose()
+    int value;
+    @SerializedName("additionalRequests")
+    @Expose()
+    String addtionalRequest;
+    @SerializedName("status")
+    @Expose()
+    String status;
+    @SerializedName("expires")
+    @Expose()
+    String expires;
+    @SerializedName("phoneNumber")
+    @Expose()
+    String phoneNumber;
+    @SerializedName("email")
+    @Expose()
+    String email;
+    @SerializedName("address")
+    @Expose()
+    Address address;
+    @SerializedName("products")
+    @Expose()
+    List<Product> products;
+    @SerializedName("workers")
+    @Expose()
+    List<Member> workers;
+    @SerializedName("user")
+    @Expose()
+    User user;
+    @SerializedName("userId")
+    @Expose()
+    int userId;
+    @SerializedName("team")
+    @Expose()
+    Team team;
 
     public Reservation() {
     }

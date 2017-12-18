@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,9 +10,15 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class ServerTime implements BaseModel {
-    @SerializedName("offset") private String offset;
-    @SerializedName("server") private String server;
-    @SerializedName("client") private String client;
+    @SerializedName("offset")
+    @Expose()
+    private String offset;
+    @SerializedName("server")
+    @Expose()
+    private String server;
+    @SerializedName("client")
+    @Expose()
+    private String client;
 
     public ServerTime () {}
 

@@ -3,7 +3,6 @@ package io.plan8.backoffice.vm.item;
 import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.os.Handler;
 
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.util.DateUtil;
@@ -15,7 +14,6 @@ import io.plan8.backoffice.vm.ActivityVM;
 
 public class DetailReservationActionItemVM extends ActivityVM {
     private Action action;
-    private Handler handler;
 
     public DetailReservationActionItemVM(Activity activity, Bundle savedInstanceState, final Action action) {
         super(activity, savedInstanceState);

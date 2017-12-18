@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -9,15 +10,30 @@ import io.plan8.backoffice.model.BaseModel;
  */
 
 public class Configuration implements BaseModel {
-    @SerializedName("transportation") String transportation;
-    @SerializedName("weight") long weight;
-    @SerializedName("assignable") boolean assignable;
-    @SerializedName("useTeamShifts") boolean useTeamShifts;
-    @SerializedName("useTeamTransportation") boolean useTeamTransportation;
-    @SerializedName("useTeamAddress") boolean useTeamAddress;
-    @SerializedName("useTeamWeight") boolean useTeamWeight;
-    @SerializedName("shifts") Shifts shifts;
-    @SerializedName("address") Address address;
+    @SerializedName("transportation")
+    @Expose()
+    String transportation;
+    @SerializedName("weight")
+    @Expose()
+    long weight;
+    @SerializedName("assignable")
+    @Expose()
+    boolean assignable;
+    @SerializedName("useTeamShifts")
+    @Expose()
+    boolean useTeamShifts;
+    @SerializedName("useTeamTransportation")
+    @Expose()
+    boolean useTeamTransportation;
+    @SerializedName("useTeamAddress")
+    @Expose()
+    boolean useTeamAddress;
+    @SerializedName("useTeamWeight")
+    @Expose()
+    boolean useTeamWeight;
+    @SerializedName("address")
+    @Expose()
+    Address address;
 
     public Configuration() {
     }
@@ -76,14 +92,6 @@ public class Configuration implements BaseModel {
 
     public void setUseTeamWeight(boolean useTeamWeight) {
         this.useTeamWeight = useTeamWeight;
-    }
-
-    public Shifts getShifts() {
-        return shifts;
-    }
-
-    public void setShifts(Shifts shifts) {
-        this.shifts = shifts;
     }
 
     public Address getAddress() {

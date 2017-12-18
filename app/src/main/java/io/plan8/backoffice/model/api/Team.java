@@ -1,5 +1,6 @@
 package io.plan8.backoffice.model.api;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.plan8.backoffice.model.BaseModel;
@@ -10,21 +11,26 @@ import io.plan8.backoffice.model.BaseModel;
 
 public class Team implements BaseModel {
     @SerializedName("id")
+    @Expose()
     int teamId;
     @SerializedName("publicId")
+    @Expose()
     String publicId;
     @SerializedName("name")
+    @Expose()
     String name;
     @SerializedName("logo")
+    @Expose()
     String logo;
     @SerializedName("configuration")
+    @Expose()
     Configuration configuration;
     @SerializedName("ownerId")
+    @Expose()
     String ownerId;
     @SerializedName("deactivated")
+    @Expose()
     boolean deactivated;
-    @SerializedName("front")
-    Front front;
 
     public Team() {
     }
@@ -55,9 +61,5 @@ public class Team implements BaseModel {
 
     public boolean isDeactivated() {
         return deactivated;
-    }
-
-    public Front getFront() {
-        return front;
     }
 }
