@@ -17,4 +17,12 @@ public class Constants {
 
     //activity Refresh code
     public static final int REFRESH_RESERVATION_FRAGMENT = 3000;
+
+    //default logo
+    public static final String DEFAULT_TEAM_LOGO_URL = "http://assets.starshell.co/plan8/default/team.png";
+
+    //default logo
+    public static String DEFAULT_USER_AVATAR_URL(int userId) {
+        return "http://assets.starshell.co/plan8/default/avatars/" + userId % 27 + ".png";
+    }
 }

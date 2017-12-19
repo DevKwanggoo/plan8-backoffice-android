@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.util.MentionsLoader;
 
@@ -138,6 +139,9 @@ public class User implements BaseModel, Mentionable {
     }
 
     public String getAvatar() {
+        if (null == avatar || avatar.equals("")) {
+            return Constants.DEFAULT_USER_AVATAR_URL(id);
+        }
         return avatar;
     }
 

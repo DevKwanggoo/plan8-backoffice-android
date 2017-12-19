@@ -62,9 +62,6 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     }
 
     private void refreshFragment() {
-//        if (getFragment() instanceof MoreFragment) {
-//            getFragment().refresh();
-//        }
         getFragment().getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .detach(getFragment())
@@ -74,10 +71,10 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
 
     @Bindable
     public String getAvatar() {
-        if (null != ApplicationManager.getInstance().getUser()) {
-            return ApplicationManager.getInstance().getUser().getAvatar();
+        if (null == ApplicationManager.getInstance().getUser()) {
+            return "";
         }
-        return "";
+        return ApplicationManager.getInstance().getUser().getAvatar();
     }
 
     @Bindable
