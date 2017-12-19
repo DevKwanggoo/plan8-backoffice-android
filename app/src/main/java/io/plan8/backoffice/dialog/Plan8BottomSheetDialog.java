@@ -1,6 +1,7 @@
 package io.plan8.backoffice.dialog;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.util.ViewUtil;
 
 /**
  * Created by SSozi on 2017. 11. 30..
@@ -85,6 +87,16 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
         firstTitle.setText(title);
     }
 
+    public void setFirstCircleItem(int colorId, String title) {
+        firstIcon.getLayoutParams().height = ViewUtil.getInstance().dpToPx(12);
+        firstIcon.getLayoutParams().width = ViewUtil.getInstance().dpToPx(12);
+        firstIcon.requestLayout();
+        firstIcon.setBackgroundResource(R.drawable.circle);
+        GradientDrawable bgShape = (GradientDrawable) firstIcon.getBackground();
+        bgShape.setColor(ContextCompat.getColor(firstIcon.getContext(), colorId));
+        firstTitle.setText(title);
+    }
+
     public void setFirstItem(int iconResId, String title) {
         firstIcon.setImageResource(iconResId);
         firstIcon.setColorFilter(ContextCompat.getColor(getContext(), R.color.grayColor));
@@ -93,6 +105,16 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
 
     public void setSecondItem(String title) {
         secondIcon.setVisibility(View.GONE);
+        secondTitle.setText(title);
+    }
+
+    public void setSecondCircleItem(int colorId, String title) {
+        secondIcon.getLayoutParams().height = ViewUtil.getInstance().dpToPx(12);
+        secondIcon.getLayoutParams().width = ViewUtil.getInstance().dpToPx(12);
+        secondIcon.requestLayout();
+        secondIcon.setBackgroundResource(R.drawable.circle);
+        GradientDrawable bgShape = (GradientDrawable) secondIcon.getBackground();
+        bgShape.setColor(ContextCompat.getColor(secondIcon.getContext(), colorId));
         secondTitle.setText(title);
     }
 
@@ -105,6 +127,17 @@ public class Plan8BottomSheetDialog extends BottomSheetDialog {
     public void setThirdItem(String title) {
         thirdItemContainer.setVisibility(View.VISIBLE);
         thirdIcon.setVisibility(View.GONE);
+        thirdTitle.setText(title);
+    }
+
+    public void setThirdCircleItem(int colorId, String title) {
+        thirdIcon.getLayoutParams().height = ViewUtil.getInstance().dpToPx(12);
+        thirdIcon.getLayoutParams().width = ViewUtil.getInstance().dpToPx(12);
+        thirdIcon.requestLayout();
+        thirdItemContainer.setVisibility(View.VISIBLE);
+        thirdIcon.setBackgroundResource(R.drawable.circle);
+        GradientDrawable bgShape = (GradientDrawable) thirdIcon.getBackground();
+        bgShape.setColor(ContextCompat.getColor(thirdIcon.getContext(), colorId));
         thirdTitle.setText(title);
     }
 

@@ -30,7 +30,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        vm = new LoginActivityVM(this, savedInstanceState);
+        vm = new LoginActivityVM(this, savedInstanceState, binding);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 

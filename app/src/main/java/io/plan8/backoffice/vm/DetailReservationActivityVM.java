@@ -115,11 +115,11 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
     private void initBottomSheet() {
         plan8BottomSheetDialog = new Plan8BottomSheetDialog(getActivity());
-        plan8BottomSheetDialog.setFirstItem("완료");
+        plan8BottomSheetDialog.setFirstCircleItem(R.color.reservationComplte, "완료");
         plan8BottomSheetDialog.getFirstItem().setOnClickListener(this);
-        plan8BottomSheetDialog.setSecondItem("대기");
+        plan8BottomSheetDialog.setSecondCircleItem(R.color.reservationIncomplte, "대기");
         plan8BottomSheetDialog.getSecondItem().setOnClickListener(this);
-        plan8BottomSheetDialog.setThirdItem("취소됨");
+        plan8BottomSheetDialog.setThirdCircleItem(R.color.reservationCanceled, "취소됨");
         plan8BottomSheetDialog.getThirdItem().setOnClickListener(this);
 
         fileUploadBottomSheet = new Plan8BottomSheetDialog(getActivity());

@@ -66,7 +66,7 @@ public class ViewUtil {
         } else if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
             return "대기";
         } else {
-            return "미완료";
+            return "취소됨";
         }
     }
 

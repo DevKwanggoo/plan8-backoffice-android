@@ -11,6 +11,7 @@ import com.android.databinding.library.baseAdapters.BR;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -79,7 +80,6 @@ public class NotificationItemVM extends FragmentVM {
         }
 
         if (!notification.isRead()) {
-            getFragment().getActivity().startActivity(DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId(), notification.getId()));
             Map<String, Boolean> readMap = new HashMap<String, Boolean>();
             readMap.put("read", true);
             Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), readMap);
@@ -96,6 +96,7 @@ public class NotificationItemVM extends FragmentVM {
         }
         Intent detailTaskIntent = DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId());
         getFragment().startActivity(detailTaskIntent);
+        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
     }
 
     @Bindable

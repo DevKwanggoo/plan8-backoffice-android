@@ -106,7 +106,9 @@ public class MainActivity extends BaseActivity {
                     fragments.add(reservationFragment);
                 } else if (i == 1) {
                     tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
+                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
                     tabItemTitle.setText("알림");
+                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
 
                     notificationFragment = new NotificationFragment();
                     Bundle bundle = new Bundle();
@@ -115,7 +117,9 @@ public class MainActivity extends BaseActivity {
                     fragments.add(notificationFragment);
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
+                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
                     tabItemTitle.setText("더보기");
+                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
 
                     MoreFragment moreFragment = new MoreFragment();
                     Bundle bundle = new Bundle();
