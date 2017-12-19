@@ -54,6 +54,14 @@
                     android:fontFamily="sans-serif"
                     android:text="@{vm.teamName}"
                     android:textColor="@color/defaultDarkColor"
+                    android:textSize="14dp" /> 
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@{vm.teamPosition}"
+                    android:textColor="@color/grayColor"
                     android:textSize="14dp" />
 
             </LinearLayout>

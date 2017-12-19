@@ -42,4 +42,19 @@ public class MoreTeamItemVM extends FragmentVM {
         }
         return member.getTeam().getLogo();
     }
+
+    @Bindable
+    public String getTeamPosition() {
+        if (null == member){
+            return "직책 없음";
+        }
+
+        if (member.isAdmin()){
+            return "관리자";
+        } else if (member.isOwner()) {
+            return "소유자";
+        } else {
+            return "팀원";
+        }
+    }
 }

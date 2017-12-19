@@ -20,7 +20,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="48dp">
 
 
                 <RelativeLayout
@@ -97,7 +97,8 @@
                         android:id="@+id/deleteNumberBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_alignParentRight="true">
+                        android:layout_alignParentRight="true"
+                        android:onClick="@{vm::deletePhoneNumber}">
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="12dp"
