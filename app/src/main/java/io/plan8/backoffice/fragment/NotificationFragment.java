@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,13 +60,11 @@ public class NotificationFragment extends BaseFragment {
 
                 if (null != result) {
                     if (notifications.size() + result.size() > notifications.size()) {
-                        if (handler == null) {
-                            initHandler();
-                        }
                         notifications.addAll(result);
                     }
                 }
                 vm.setData(notifications);
+                initHandler();
             }
 
             @Override
@@ -104,16 +103,19 @@ public class NotificationFragment extends BaseFragment {
     }
 
     private void initHandler() {
-        if (notifications != null && notifications.size() != 0) {
-            handler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    vm.setData(notifications);
-                    this.sendEmptyMessageDelayed(0, 30000);
-                }
-            };
-            handler.sendEmptyMessage(0);
+        if (handler == null) {
+            if (notifications != null && notifications.size() != 0) {
+                handler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        vm.setData(notifications);
+                        Log.e("notification : ", "refresh");
+                        this.sendEmptyMessageDelayed(0, 30000);
+                    }
+                };
+                handler.sendEmptyMessage(0);
+            }
         }
     }
 
