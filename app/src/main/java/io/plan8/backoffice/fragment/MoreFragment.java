@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,7 +43,6 @@ import retrofit2.Response;
 public class MoreFragment extends BaseFragment {
     private FragmentMoreBinding binding;
     private MoreFragmentVM vm;
-    private RelativeLayout progressBar;
 
     @Nullable
     @Override
@@ -76,8 +74,8 @@ public class MoreFragment extends BaseFragment {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        progressBar = binding.moreMenuProgressBar;
         vm.setData(moreFragmentData);
+        setCompletedLoading(false);
 
         return binding.getRoot();
     }
@@ -91,6 +89,7 @@ public class MoreFragment extends BaseFragment {
     }
 
     public void uploadImage(Uri data) {
+        setCompletedLoading(false);
         Uri uri = data;
         String imagePath = getRealPathFromURI(uri);
 
@@ -107,9 +106,10 @@ public class MoreFragment extends BaseFragment {
         uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
             public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
-                if (response.body() != null) {
+                List<Attachment> attachments = response.body();
+                if (attachments != null) {
                     HashMap<String, String> putMeImage = new HashMap<String, String>();
-                    putMeImage.put("avatar", response.body().get(0).getUrl());
+                    putMeImage.put("avatar", attachments.get(0).getUrl());
                     Call<User> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
                     putMe.enqueue(new Callback<User>() {
                         @Override
@@ -118,11 +118,13 @@ public class MoreFragment extends BaseFragment {
                                 ApplicationManager.getInstance().setUser(response.body());
                                 refreshFragment();
                             }
+                            setCompletedLoading(true);
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            setCompletedLoading(true);
                         }
                     });
                 }
@@ -131,6 +133,7 @@ public class MoreFragment extends BaseFragment {
             @Override
             public void onFailure(Call<List<Attachment>> call, Throwable t) {
                 Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                setCompletedLoading(true);
             }
         });
     }
@@ -149,5 +152,9 @@ public class MoreFragment extends BaseFragment {
                 .detach(this)
                 .attach(this)
                 .commitAllowingStateLoss();
+    }
+
+    public void setCompletedLoading(boolean completedLoading) {
+        vm.setCompletedLoading(completedLoading);
     }
 }

@@ -48,6 +48,7 @@ public class NotificationFragment extends BaseFragment {
     }
 
     public void refreshNotificationList() {
+        vm.setCompletedLoading(false);
         if (null == notifications) {
             notifications = new ArrayList<>();
         }
@@ -67,11 +68,14 @@ public class NotificationFragment extends BaseFragment {
                     }
                 }
                 vm.setData(notifications);
+                vm.setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<List<Notification>> call, Throwable t) {
                 Toast.makeText(getContext(), "알림 목록을 받아오는데 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                vm.setData(notifications);
+                vm.setCompletedLoading(true);
             }
         });
     }

@@ -37,6 +37,23 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ccffffff"
+            android:layout_below="@+id/reservationToolbar"
+            commonViewAdapter:fadeout="@{vm.completedLoading}">
+
+            <ProgressBar
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_in"
+                commonViewAdapter:fadeout="@{vm.completedLoading}" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/reservationToolbar"
             android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}">
 
@@ -51,19 +68,17 @@
         </RelativeLayout>
 
         <io.plan8.backoffice.view.BlurView
-            reservationViewAdapter:fadeout="@{vm.openedCalendar}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/reservationToolbar"
             android:background="#80000000"
             android:clickable="true"
             android:onClick="@{vm::changeDate}"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            reservationViewAdapter:fadeout="@{vm.openedCalendar}" />
 
         <io.plan8.backoffice.view.Plan8ReservationCalendarView
             android:id="@+id/reservationCalendarView"
-            reservationViewAdapter:displayCalendar="@{vm.openedCalendar}"
-            reservationViewAdapter:initCalendar="@{vm.openedCalendar}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/reservationToolbar"
@@ -72,7 +87,9 @@
             app:mcv_leftArrowMask="@drawable/ic_line_chevron_left"
             app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
             app:mcv_selectionColor="@color/colorPrimary"
-            app:mcv_showOtherDates="all" />
+            app:mcv_showOtherDates="all"
+            reservationViewAdapter:displayCalendar="@{vm.openedCalendar}"
+            reservationViewAdapter:initCalendar="@{vm.openedCalendar}" />
 
         <RelativeLayout
             android:id="@+id/reservationToolbar"

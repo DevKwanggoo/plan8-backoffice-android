@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +106,7 @@ public class ReservationFragment extends BaseFragment {
     }
 
     private void refreshReservationList() {
+        vm.setCompletedLoading(false);
         if (null == reservations) {
             reservations = new ArrayList<>();
         }
@@ -136,12 +136,13 @@ public class ReservationFragment extends BaseFragment {
                     }
                 }
                 vm.setDatas(reservations);
+                vm.setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<List<Reservation>> call, Throwable t) {
-                Log.e("api : ", "failure");
                 vm.setDatas(new ArrayList<Reservation>());
+                vm.setCompletedLoading(true);
             }
         });
     }

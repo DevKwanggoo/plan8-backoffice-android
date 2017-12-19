@@ -34,6 +34,7 @@ public class NotificationFragmentVM extends FragmentVM {
     private boolean empty;
     private List<Notification> notifications;
     private boolean swipeFlag = true;
+    private boolean completedLoading;
 
     public NotificationFragmentVM(Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -121,5 +122,14 @@ public class NotificationFragmentVM extends FragmentVM {
     public void setSwipeFlag(boolean flag){
         swipeFlag = flag;
         notifyPropertyChanged(BR.swipeFlag);
+    }
+
+    @Bindable
+    public boolean isCompletedLoading() {
+        return completedLoading;
+    }
+    public void setCompletedLoading(boolean compltedLoading) {
+        this.completedLoading = compltedLoading;
+        notifyPropertyChanged(BR.completedLoading);
     }
 }

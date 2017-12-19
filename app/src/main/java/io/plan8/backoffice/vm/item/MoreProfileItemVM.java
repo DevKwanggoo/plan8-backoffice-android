@@ -27,6 +27,7 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
+import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.FragmentVM;
 import retrofit2.Call;
@@ -113,6 +114,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                         @Override
                         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                             if (!input.equals("")) {
+                                ((MoreFragment) getFragment()).setCompletedLoading(false);
                                 HashMap<String, String> putMap = new HashMap<String, String>();
                                 putMap.put("name", input.toString());
                                 Call<User> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
@@ -121,11 +123,15 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                     public void onResponse(Call<User> call, Response<User> response) {
                                         ApplicationManager.getInstance().setUser(response.body());
                                         refreshFragment();
+                                        if (getFragment() instanceof MoreFragment) {
+                                            ((MoreFragment) getFragment()).setCompletedLoading(true);
+                                        }
                                     }
 
                                     @Override
                                     public void onFailure(Call<User> call, Throwable t) {
                                         Toast.makeText(getFragment().getContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                        ((MoreFragment) getFragment()).setCompletedLoading(true);
                                     }
                                 });
                             }
@@ -145,6 +151,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                             if (!input.equals("")) {
                                 matcher = usernamePattern.matcher(input.toString());
                                 if (matcher.find()){
+                                    ((MoreFragment) getFragment()).setCompletedLoading(false);
                                     HashMap<String, String> putUserMap = new HashMap<String, String>();
                                     putUserMap.put("username", input.toString());
                                     Call<User> putUser = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putUserMap);
@@ -158,11 +165,13 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                             } else {
                                                 Toast.makeText(getFragment().getContext(), "중복된 아이디가 있거나 사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show();
                                             }
+                                            ((MoreFragment) getFragment()).setCompletedLoading(true);
                                         }
 
                                         @Override
                                         public void onFailure(Call<User> call, Throwable t) {
                                             Toast.makeText(getFragment().getContext(), "아이디 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                            ((MoreFragment) getFragment()).setCompletedLoading(true);
                                         }
                                     });
                                 } else {

@@ -1,5 +1,7 @@
 package io.plan8.backoffice.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -99,5 +102,23 @@ public class CommonViewAdapter {
     @BindingAdapter("commonViewAdapter:setEnabled")
     public static void setEnabled(SwipeRefreshLayout view, boolean flag) {
         view.setEnabled(flag);
+    }
+
+    @BindingAdapter("commonViewAdapter:fadeout")
+    public static void fadeout(final View view, boolean isCompltedLoading) {
+        if (isCompltedLoading) {
+            view.animate()
+                    .alpha(0.0f)
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            view.setVisibility(View.GONE);
+                        }
+                    });
+        } else {
+            view.setVisibility(View.VISIBLE);
+        }
     }
 }

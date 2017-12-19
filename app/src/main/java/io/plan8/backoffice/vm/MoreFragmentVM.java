@@ -1,6 +1,7 @@
 package io.plan8.backoffice.vm;
 
 import android.content.Intent;
+import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ public class MoreFragmentVM extends FragmentVM {
     private List<BaseModel> datas;
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private List<BaseModel> moreItemList = new ArrayList<>();
+    private boolean completedLoading;
 
     public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
         super(fragment, savedInstanceState);
@@ -90,5 +92,14 @@ public class MoreFragmentVM extends FragmentVM {
         getFragment().getActivity().finish();
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
         new PushManager().clearTag();
+    }
+
+    @Bindable
+    public boolean isCompletedLoading() {
+        return completedLoading;
+    }
+    public void setCompletedLoading(boolean compltedLoading) {
+        this.completedLoading = compltedLoading;
+        notifyPropertyChanged(BR.completedLoading);
     }
 }
