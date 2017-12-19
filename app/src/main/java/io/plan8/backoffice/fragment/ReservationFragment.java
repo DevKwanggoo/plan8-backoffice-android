@@ -20,6 +20,7 @@ import java.util.List;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -122,7 +123,7 @@ public class ReservationFragment extends BaseFragment {
                 currentDate,
                 currentDate,
                 userId,
-                15,
+                Constants.PAGINATION_RESERVATION_COUNT,
                 reservations.size());
         getReservations.enqueue(new Callback<List<Reservation>>() {
             @Override

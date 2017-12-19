@@ -17,4 +17,9 @@ public class Constants {
 
     //activity Refresh code
     public static final int REFRESH_RESERVATION_FRAGMENT = 3000;
+
+    //pagination count
+    public static final int PAGINATION_ACTION_COUNT = 15;
+    public static final int PAGINATION_NOTIFICATION_COUNT = 15;
+    public static final int PAGINATION_RESERVATION_COUNT = 15;
 }

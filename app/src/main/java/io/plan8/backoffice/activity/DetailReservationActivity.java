@@ -70,23 +70,20 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private ActivityDetailReservationBinding binding;
     private DetailReservationActivityVM vm;
     private Uri captureImageUri;
-    private long fileLength;
     private int reservationId;
+    private int notificationId;
     private Reservation reservation;
     private MentionsEditText mentionsEditText;
     private User.UserLoader userLoader;
     private static final String BUCKET = "user";
-    private boolean isAlreadyReplaceMention;
     private List<Action> actions;
     private List<BaseModel> detailReservations;
-    private List<BaseModel> tempList;
-    private boolean editFlag = false;
     private Uri photoURI;
     private String nougatAbsoluteUri;
-    private Action action;
-    private int notificationId;
     private Handler handler = null;
-    private List<BaseModel> refreshData;
+    private boolean isAlreadyReplaceMention;
+    private boolean editFlag = false;
+    private boolean isAlreadyRequestActionData = false;
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
@@ -109,38 +106,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.reservationId = getIntent().getIntExtra("reservationId", -1);
-        this.notificationId = getIntent().getIntExtra("notificationId", -1);
+        reservationId = getIntent().getIntExtra("reservationId", -1);
+        notificationId = getIntent().getIntExtra("notificationId", -1);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_reservation);
         vm = new DetailReservationActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
-
-//        if (null == ApplicationManager.getInstance().getCurrentTeamMembers()) {
-//            Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
-//            getUserMembersCall.enqueue(new Callback<List<Member>>() {
-//                @Override
-//                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-//                    List<Member> members = response.body();
-//                    ApplicationManager.getInstance().setMembers(members);
-//                    if (null == members || members.size() == 0) {
-//                    } else {
-//                        if (null != members.get(0)) {
-//                            ApplicationManager.getInstance().setCurrentMember(members.get(0));
-//                            ApplicationManager.getInstance().setCurrentTeam(members.get(0).getTeam());
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<List<Member>> call, Throwable t) {
-//                    Log.e("api : ", "failure");
-//                }
-//            });
-//        } else {
-//            setMentionEditText(ApplicationManager.getInstance().getCurrentTeamMembers());
-//        }
 
         refreshReservation();
         initHandler();
@@ -313,7 +285,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
         RequestBody requestBody = RequestBody.create(MediaType.parse(mime), file);
 
-        fileLength = file.length();
+//        fileLength = file.length();
 
         MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
 
@@ -377,7 +349,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(mime), file);
 
-            fileLength = file.length();
+//            fileLength = file.length();
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
 
@@ -522,16 +494,20 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void refreshActionData() {
+        if (isAlreadyRequestActionData) {
+            return;
+        }
         if (null == actions) {
             actions = new ArrayList<>();
         }
         Call<List<Action>> actionsCall = RestfulAdapter.getInstance().getServiceApi().getActions("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
                 reservationId,
-                15,
+                Constants.PAGINATION_ACTION_COUNT,
                 actions.size());
         actionsCall.enqueue(new Callback<List<Action>>() {
             @Override
             public void onResponse(Call<List<Action>> call, Response<List<Action>> response) {
+                isAlreadyRequestActionData = false;
                 List<Action> result = response.body();
 
                 if (null != result) {
@@ -543,11 +519,30 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         if (handler == null) {
                             initHandler();
                         }
+
                         Collections.reverse(result);
                         actions.addAll(result);
                         List<BaseModel> tempList = new ArrayList<>();
                         tempList.addAll(result);
-                        vm.addDatas(tempList, 2, result.size());
+
+                        if (result.size() < Constants.PAGINATION_ACTION_COUNT) {
+                            if (detailReservations.size() > 1
+                                    && detailReservations.get(1) instanceof DetailReservationMoreButtonItem) {
+                                detailReservations.remove(1);
+                                detailReservations.addAll(1, tempList);
+                                vm.setData(detailReservations);
+                            }
+                        } else {
+                            vm.addDatas(tempList, 2, result.size());
+                        }
+                    } else {
+                        if (result.size() < Constants.PAGINATION_ACTION_COUNT) {
+                            if (detailReservations.size() > 1
+                                    && detailReservations.get(1) instanceof DetailReservationMoreButtonItem) {
+                                detailReservations.remove(1);
+                                vm.setData(detailReservations);
+                            }
+                        }
                     }
                 }
             }
@@ -557,6 +552,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             }
         });
+        isAlreadyRequestActionData = true;
     }
 
     public void editReservationStatus(final String status) {

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -51,7 +52,7 @@ public class NotificationFragment extends BaseFragment {
             notifications = new ArrayList<>();
         }
 
-        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getServiceApi().getNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), 15, notifications.size());
+        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getServiceApi().getNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), Constants.PAGINATION_NOTIFICATION_COUNT, notifications.size());
         getNotifications.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
