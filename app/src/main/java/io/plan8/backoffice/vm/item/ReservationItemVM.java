@@ -46,7 +46,7 @@ public class ReservationItemVM extends FragmentVM {
             customerName = reservation.getUser().getName();
         }
 
-        return customerName + " ∙ " + teamName;
+        return customerName + "ㆍ" + teamName;
     }
 
     @Bindable
