@@ -1,9 +1,16 @@
 package io.plan8.backoffice;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -15,6 +22,7 @@ import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.PushManager;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -101,29 +109,37 @@ public class ApplicationManager {
     }
 
     public void refreshNotificationCount() {
-        Log.e("wtf", "wtf");
-        Map<String, Boolean> readMap = new HashMap<String, Boolean>();
-        readMap.put("read", false);
-        Call<List<Notification>> notificationCountCall = RestfulAdapter.getInstance().getServiceApi().getNotificationCount("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), readMap);
-        notificationCountCall.enqueue(new Callback<List<Notification>>() {
+        Call<ResponseBody> notificationCountCall = RestfulAdapter.getInstance().getServiceApi().getNotificationCount("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), false);
+        notificationCountCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
-                List<Notification> result = response.body();
-                if (null != result) {
-                    setNotificationCount(result.size());
-                } else {
-                    setNotificationCount(0);
-                }
-                if (null != mainActivity) {
-                    mainActivity.refreshNotificationBadgeCount();
-                }
-                Log.e("wtf", "wtf");
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                ResponseBody result = response.body();
+                if (result != null) {
+                    try {
+                        String requestJSON = result.string();
+                        JSONObject jsonObject = new JSONObject(requestJSON);
+                        String count = jsonObject.getString("value");
 
+                        Log.e("notification count : ", count);
+
+                        if (null == count || count.equals("") || Integer.parseInt(count) == 0){
+                            setNotificationCount(0);
+                        } else {
+                            setNotificationCount(Integer.parseInt(count));
+                        }
+
+                        if (null != mainActivity) {
+                            mainActivity.refreshNotificationBadgeCount();
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Notification>> call, Throwable t) {
-                Log.e("wtf", "wtf");
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(context, "알림개수를 받아오는데 실패하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -14,6 +14,7 @@ import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.model.api.ServerTime;
 import io.plan8.backoffice.model.api.User;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -88,7 +89,7 @@ public interface ApiService {
                                               @Query("skip") int skip);
 
     @GET("1/users/me/notifications/count")
-    Call<List<Notification>> getNotificationCount(@Header("authorization") String auth, @FieldMap Map<String, Boolean> readMap);
+    Call<ResponseBody> getNotificationCount(@Header("authorization") String auth, @Query("read") boolean read);
 
     @FormUrlEncoded
     @PUT("1/notifications/{id}")
@@ -96,7 +97,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @PUT("1/users/me/notifications")
-    Call<Notification> readAllNotifications(@Header("authorization") String auth, @FieldMap Map<String, Boolean> readMap);
+    Call<List<Notification>> readAllNotifications(@Header("authorization") String auth, @Field("read") boolean read);
 
     @GET("1/server-time-offset")
     Call<ServerTime> getServerTime(@Header("authorization") String auth, @Query("now") String now);

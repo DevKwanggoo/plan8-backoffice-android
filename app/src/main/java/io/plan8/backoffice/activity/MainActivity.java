@@ -95,7 +95,9 @@ public class MainActivity extends BaseActivity {
 
             if (null != tab.getCustomView()) {
                 AppCompatTextView tabItemTitle = tab.getCustomView().findViewById(R.id.mainTabItemTitle);
-                badgeTabItemIcon = tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView);
+                if (tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView) != null) {
+                    badgeTabItemIcon = tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView);
+                }
                 AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
 
                 if (i == 0) {
@@ -111,7 +113,6 @@ public class MainActivity extends BaseActivity {
                 } else if (i == 1) {
                     badgeTabItemIcon.setImageResource(R.drawable.ic_line_alarm);
                     badgeTabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
-                    refreshNotificationBadgeCount();
                     tabItemTitle.setText("알림");
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
 
@@ -119,6 +120,7 @@ public class MainActivity extends BaseActivity {
                     Bundle bundle = new Bundle();
                     notificationFragment.setArguments(bundle);
                     fragments.add(notificationFragment);
+                    ApplicationManager.getInstance().refreshNotificationCount();
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
                     tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
@@ -222,6 +224,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case Constants.REFRESH_RESERVATION_FRAGMENT:
+                refreshNotificationBadgeCount();
                 reservationFragment.setEditFlag(true);
                 reservationFragment.editItem((Reservation) data.getSerializableExtra("reservation"));
                 break;
@@ -261,12 +264,19 @@ public class MainActivity extends BaseActivity {
 
     public void refreshNotificationBadgeCount() {
         if (null != badgeTabItemIcon) {
-            badgeTabItemIcon.showTextBadge("7");
-//            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
-//            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
-//                badgeTabItemIcon.hiddenBadge();
-//            }
-            //TODO : 밖에있는 뱃지
+            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
+            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
+                badgeTabItemIcon.hiddenBadge();
+            }
+            refreshAppBadgeCount(ApplicationManager.getInstance().getNotificationCount());
         }
+    }
+
+    public void refreshAppBadgeCount(int count) {
+        Intent badgeIntent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
+        badgeIntent.putExtra("badge_count", count);
+        badgeIntent.putExtra("badge_count_pakage_name", getPackageName());
+        badgeIntent.putExtra("badge_count_class_name", "io.plan8.backoffice.activity.SplashActivity");
+        sendBroadcast(badgeIntent);
     }
 }

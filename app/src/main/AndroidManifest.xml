@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -33,6 +34,8 @@
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
+
+        <meta-data android:name = "com.onesignal.BadgeCount" android:value = "ENABLE" />
 
         <activity android:name=".activity.MainActivity" />
         <activity

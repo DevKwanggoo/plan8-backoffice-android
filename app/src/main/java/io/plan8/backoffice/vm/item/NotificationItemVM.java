@@ -11,9 +11,11 @@ import com.android.databinding.library.baseAdapters.BR;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.DateUtil;
@@ -96,6 +98,7 @@ public class NotificationItemVM extends FragmentVM {
             readNotificationCall.enqueue(new Callback<Notification>() {
                 @Override
                 public void onResponse(Call<Notification> call, Response<Notification> response) {
+                    ApplicationManager.getInstance().refreshNotificationCount();
                 }
 
                 @Override
@@ -104,6 +107,7 @@ public class NotificationItemVM extends FragmentVM {
             });
             setRead(true);
         }
+
         Intent detailTaskIntent = DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId());
         getFragment().startActivity(detailTaskIntent);
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
