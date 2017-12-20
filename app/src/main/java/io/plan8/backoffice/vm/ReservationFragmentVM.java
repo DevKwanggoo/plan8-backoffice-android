@@ -28,6 +28,7 @@ public class ReservationFragmentVM extends FragmentVM {
     private BindingRecyclerViewAdapter<Reservation> adapter;
     private boolean emptyFlag = true;
     private boolean swipeFlag = true;
+    private boolean completedLoading;
 
     public ReservationFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -127,5 +128,14 @@ public class ReservationFragmentVM extends FragmentVM {
     public void setSwipeFlag(boolean flag){
         swipeFlag = flag;
         notifyPropertyChanged(BR.swipeFlag);
+    }
+
+    @Bindable
+    public boolean isCompletedLoading() {
+        return completedLoading;
+    }
+    public void setCompletedLoading(boolean compltedLoading) {
+        this.completedLoading = compltedLoading;
+        notifyPropertyChanged(BR.completedLoading);
     }
 }

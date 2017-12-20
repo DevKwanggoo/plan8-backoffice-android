@@ -136,7 +136,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 if (null != result) {
                     List<User> userList = new ArrayList<>();
                     for (Member m : result) {
-                        if (null != m) {
+                        if (null != m
+                                && null != m.getUser()
+                                && m.getUser().getId() != ApplicationManager.getInstance().getUser().getId()) {
                             userList.add(m.getUser());
                         }
                     }
@@ -467,6 +469,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (null == detailReservations) {
             detailReservations = new ArrayList<>();
         }
+        setCompletedLoading(false);
         Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
         reservationCall.enqueue(new Callback<Reservation>() {
             @Override
@@ -483,12 +486,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         detailReservations.set(0, reservation);
                         vm.setData(detailReservations);
                     }
+                    setCompletedLoading(true);
                 }
             }
 
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
-
+                setCompletedLoading(true);
             }
         });
     }
@@ -497,6 +501,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (isAlreadyRequestActionData) {
             return;
         }
+        setCompletedLoading(false);
         if (null == actions) {
             actions = new ArrayList<>();
         }
@@ -545,11 +550,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         }
                     }
                 }
+                setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<List<Action>> call, Throwable t) {
-
+                setCompletedLoading(true);
             }
         });
         isAlreadyRequestActionData = true;
@@ -557,6 +563,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     public void editReservationStatus(final String status) {
         HashMap<String, String> statusMap = new HashMap<>();
+        setCompletedLoading(false);
         statusMap.put("status", status);
         Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getServiceApi().putReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, statusMap);
         putReservationStatus.enqueue(new Callback<Reservation>() {
@@ -566,16 +573,19 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                 actions.clear();
                 refreshReservation();
                 editFlag = true;
+                setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<Reservation> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "예약상태 수정에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                setCompletedLoading(true);
             }
         });
     }
 
     public void sendAction(String text) {
+        setCompletedLoading(false);
         Action comment = new Action(reservation, text);
         Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), comment);
         createActionCall.enqueue(new Callback<Action>() {
@@ -592,15 +602,18 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     vm.scrollTo();
                 }
                 vm.setCurrentText("");
+                setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
+                setCompletedLoading(true);
             }
         });
     }
 
     public void sendAttachment(Attachment attachment) {
+        setCompletedLoading(false);
         Action attachmentAction = new Action(reservation, attachment);
         Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), attachmentAction);
         createActionCall.enqueue(new Callback<Action>() {
@@ -617,10 +630,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     vm.scrollTo();
                 }
                 vm.setCurrentText("");
+                setCompletedLoading(true);
             }
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
+                setCompletedLoading(true);
             }
         });
     }
@@ -637,5 +652,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             };
             handler.sendEmptyMessage(0);
         }
+    }
+
+    public void setCompletedLoading(boolean completedLoading) {
+        vm.setCompltedLoading(completedLoading);
     }
 }

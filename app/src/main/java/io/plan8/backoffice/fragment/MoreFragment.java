@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -44,11 +43,33 @@ import retrofit2.Response;
 public class MoreFragment extends BaseFragment {
     private FragmentMoreBinding binding;
     private MoreFragmentVM vm;
-    private RelativeLayout progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
+        vm = new MoreFragmentVM(this, savedInstanceState);
+        binding.setVariable(BR.vm, vm);
+        binding.executePendingBindings();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        refreshMoreFragmentData();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (null != binding) {
+            binding.unbind();
+        }
+        super.onDestroy();
+    }
+
+    public void refreshMoreFragmentData() {
+        setCompletedLoading(false);
         List<BaseModel> moreFragmentData = new ArrayList<>();
 
         moreFragmentData.add(new LabelItem("내 프로필"));
@@ -71,26 +92,12 @@ public class MoreFragment extends BaseFragment {
         }
         moreFragmentData.add(new EmptySpaceItem(0));
 
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
-        vm = new MoreFragmentVM(this, savedInstanceState, moreFragmentData);
-        binding.setVariable(BR.vm, vm);
-        binding.executePendingBindings();
-
-        progressBar = binding.moreMenuProgressBar;
         vm.setData(moreFragmentData);
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onDestroy() {
-        if (null != binding) {
-            binding.unbind();
-        }
-        super.onDestroy();
+        setCompletedLoading(true);
     }
 
     public void uploadImage(Uri data) {
+        setCompletedLoading(false);
         Uri uri = data;
         String imagePath = getRealPathFromURI(uri);
 
@@ -107,22 +114,25 @@ public class MoreFragment extends BaseFragment {
         uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
             public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
-                if (response.body() != null) {
+                List<Attachment> attachments = response.body();
+                if (attachments != null) {
                     HashMap<String, String> putMeImage = new HashMap<String, String>();
-                    putMeImage.put("avatar", response.body().get(0).getUrl());
+                    putMeImage.put("avatar", attachments.get(0).getUrl());
                     Call<User> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
                     putMe.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setUser(response.body());
-                                refreshFragment();
+                                refreshMoreFragmentData();
                             }
+                            setCompletedLoading(true);
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            setCompletedLoading(true);
                         }
                     });
                 }
@@ -131,6 +141,7 @@ public class MoreFragment extends BaseFragment {
             @Override
             public void onFailure(Call<List<Attachment>> call, Throwable t) {
                 Toast.makeText(getContext(), "프로필 사진 업로드에 실패하였습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                setCompletedLoading(true);
             }
         });
     }
@@ -143,11 +154,7 @@ public class MoreFragment extends BaseFragment {
         return cursor.getString(column_index);
     }
 
-    private void refreshFragment() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .detach(this)
-                .attach(this)
-                .commitAllowingStateLoss();
+    public void setCompletedLoading(boolean completedLoading) {
+        vm.setCompletedLoading(completedLoading);
     }
 }

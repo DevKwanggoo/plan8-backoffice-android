@@ -184,21 +184,19 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/detailReservationProgressBarContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="#97ffffff"
-            android:clickable="true"
-            android:visibility="@{vm.loadingFlag ? View.VISIBLE : View.GONE}">
+            android:background="#00ffffff"
+            commonViewAdapter:fadeout="@{vm.completedLoading}">
 
             <ProgressBar
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_centerInParent="true"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/colorAccent"
-                android:indeterminateTintMode="src_in" />
+                android:indeterminateTintMode="src_in"
+                commonViewAdapter:fadeout="@{vm.completedLoading}" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

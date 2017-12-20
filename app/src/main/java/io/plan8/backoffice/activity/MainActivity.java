@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -55,7 +54,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         vm = new MainActivityVM(this, savedInstanceState);
@@ -78,7 +77,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<List<Member>> call, Throwable t) {
-                Log.e("api : ", "failure");
             }
         });
     }

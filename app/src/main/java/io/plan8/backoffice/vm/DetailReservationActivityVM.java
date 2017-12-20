@@ -47,6 +47,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     private int currentTextIndex;
     private boolean isEmptyMentionList;
     private boolean loadingFlag = false;
+    private boolean completedLoading;
 
     public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState) {
         super(activity, savedInstanceState);
@@ -128,7 +129,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             @Override
             public void onClick(View view) {
                 fileUploadBottomSheet.hide();
-                ((DetailReservationActivity)getActivity()).pickImageForCamera();
+                ((DetailReservationActivity) getActivity()).pickImageForCamera();
             }
         });
         fileUploadBottomSheet.setSecondItem(R.drawable.ic_line_file, "파일매니저에서 가져오기");
@@ -136,7 +137,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
             @Override
             public void onClick(View view) {
                 fileUploadBottomSheet.hide();
-                ((DetailReservationActivity)getActivity()).pickFileForFileManager();
+                ((DetailReservationActivity) getActivity()).pickFileForFileManager();
             }
         });
     }
@@ -281,7 +282,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         setEmptyMentionList(true);
 
         int index = 0;
-        for (int i = currentTextIndex-1; i >= 0; i--) {
+        for (int i = currentTextIndex - 1; i >= 0; i--) {
             if (currentText.charAt(i) == '@') {
                 index = i;
                 break;
@@ -322,12 +323,12 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.loadingFlag);
     }
 
-    public void setDataNotifyItemRangeChanged(List<BaseModel> list){
+    public void setDataNotifyItemRangeChanged(List<BaseModel> list) {
         adapter.setDataNotifyItemRangeChanged(list);
     }
 
     @Bindable
-    public boolean getInitFlag(){
+    public boolean getInitFlag() {
         return false;
     }
 
@@ -338,5 +339,15 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 
     public void scrollTo() {
         notifyPropertyChanged(BR.data);
+    }
+
+    @Bindable
+    public boolean isCompletedLoading() {
+        return completedLoading;
+    }
+
+    public void setCompltedLoading(boolean compltedLoading) {
+        this.completedLoading = compltedLoading;
+        notifyPropertyChanged(BR.completedLoading);
     }
 }
