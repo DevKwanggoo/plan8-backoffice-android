@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:text="이름"
                     android:fontFamily="sans-serif"
@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:text="@{vm.customerName}"
@@ -74,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:text="팀"
                     android:fontFamily="sans-serif"
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:text="@{vm.customerTeamName}"
@@ -102,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:text="전화번호"
                 android:fontFamily="sans-serif"
@@ -113,8 +113,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="21dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:autoLink="phone"
                 android:fontFamily="sans-serif"
                 android:text="@{vm.customerPhoneNumber}"
@@ -132,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:text="주소"
                 android:fontFamily="sans-serif"
@@ -143,8 +143,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="21dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="8dp"
                 android:text="@{vm.customerAddress}"
@@ -156,8 +156,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="12dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="12dp"
             android:background="#19000000" />
 
@@ -191,7 +191,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:text="예약일"
                     android:fontFamily="sans-serif"
@@ -201,7 +201,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="8dp"
                     android:text="@{vm.reservationDate}"
@@ -226,7 +226,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:text="상태"
                         android:textColor="#FF8492A6"
@@ -241,7 +241,7 @@
                             android:layout_width="12dp"
                             android:layout_height="12dp"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="15dp"
                             commonViewAdapter:setReservationStatus="@{vm.reservationStatus}" />
 
                         <TextView
@@ -281,7 +281,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:text="예약시간"
                     android:fontFamily="sans-serif"
@@ -291,7 +291,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="8dp"
                     android:text="@{vm.reservationTime}"
@@ -309,7 +309,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:text="종료시간"
                     android:fontFamily="sans-serif"
@@ -319,7 +319,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
                     android:text="@{vm.reservationEndTime}"
@@ -337,7 +337,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:text="상품 / 이름"
                 android:fontFamily="sans-serif"
@@ -347,8 +347,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif"
                 android:text="@{vm.productName}"
@@ -365,7 +365,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:text="추가 요청 사항"
                 android:textColor="#FF8492A6"
@@ -375,8 +375,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif"
                 android:text="@{vm.customerRequest}"
