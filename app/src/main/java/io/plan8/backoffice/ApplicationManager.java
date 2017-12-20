@@ -22,7 +22,6 @@ public class ApplicationManager {
     private static volatile ApplicationManager instance = null;
     private User user;
     private List<Member> members;
-    private List<Member> currentTeamMembers;
     private MainActivity mainActivity;
     private String serverTimeOffset;
 
@@ -78,10 +77,6 @@ public class ApplicationManager {
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-    }
-
-    public List<Member> getCurrentTeamMembers() {
-        return currentTeamMembers;
     }
 
     public String getServerTimeOffset() {

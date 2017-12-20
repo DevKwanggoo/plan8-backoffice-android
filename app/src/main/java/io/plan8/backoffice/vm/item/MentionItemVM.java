@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import io.plan8.backoffice.activity.DetailReservationActivity;
-import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.ActivityVM;
 

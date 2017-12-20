@@ -22,4 +22,12 @@ public class Constants {
     public static final int PAGINATION_ACTION_COUNT = 15;
     public static final int PAGINATION_NOTIFICATION_COUNT = 15;
     public static final int PAGINATION_RESERVATION_COUNT = 15;
+
+
+    //default logo
+    public static final String DEFAULT_TEAM_LOGO_URL = "http://assets.starshell.co/plan8/default/team.png";
+
+    public static String DEFAULT_USER_AVATAR_URL(int userId) {
+        return "http://assets.starshell.co/plan8/default/avatars/" + userId % 27 + ".png";
+    }
 }

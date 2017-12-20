@@ -4,6 +4,7 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.vm.FragmentVM;
 
@@ -28,17 +29,9 @@ public class MoreTeamItemVM extends FragmentVM {
     }
 
     @Bindable
-    public String getTeamDescription() {
-        if (null == member || null == member.getTeam()) {
-            return "";
-        }
-        return member.getTeam().getName();
-    }
-
-    @Bindable
     public String getTeamLogo() {
         if (null == member || null == member.getTeam()) {
-            return "";
+            return Constants.DEFAULT_TEAM_LOGO_URL;
         }
         return member.getTeam().getLogo();
     }

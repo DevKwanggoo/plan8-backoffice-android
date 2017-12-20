@@ -57,6 +57,7 @@ public class NotificationItemVM extends FragmentVM {
         if (null == notification || null == notification.getAction() || null == notification.getAction().getCreator()) {
             return "";
         }
+
         return notification.getAction().getCreator().getAvatar();
     }
 
