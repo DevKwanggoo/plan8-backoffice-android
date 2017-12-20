@@ -15,7 +15,6 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginBinding;
 import io.plan8.backoffice.model.api.Login;
-import io.plan8.backoffice.util.NetworkUtil;
 import io.plan8.backoffice.vm.LoginActivityVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,25 +55,21 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         final String phoneNumber = binding.loginPhoneNumber.getText().toString();
 
         if (!phoneNumber.equals("") && phoneNumber.length() > 9) {
-            if (!NetworkUtil.getInstance().checkInternetConnection(getApplicationContext())) {
-                Toast.makeText(this, "휴대전화번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
-            } else {
-                Call<Login> pincodeCall = RestfulAdapter.getInstance().getServiceApi().getPinCode(phoneNumber);
-                pincodeCall.enqueue(new Callback<Login>() {
-                    @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
-                        Login login = response.body();
-                        if (null != login) {
-                            nextActivity(phoneNumber, login.getCode());
-                        }
+            Call<Login> pincodeCall = RestfulAdapter.getInstance().getServiceApi().getPinCode(phoneNumber);
+            pincodeCall.enqueue(new Callback<Login>() {
+                @Override
+                public void onResponse(Call<Login> call, Response<Login> response) {
+                    Login login = response.body();
+                    if (null != login) {
+                        nextActivity(phoneNumber, login.getCode());
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<Login> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             Toast.makeText(this, "휴대전화번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
         }

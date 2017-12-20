@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.api.ApiService;
+import io.plan8.backoffice.util.ConnectivityInterceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -42,7 +43,7 @@ public class RestfulAdapter {
         if (newApiService == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(new ConnectivityInterceptor(context)).build();
 
             Gson gson = new GsonBuilder()
                     .setLenient()
@@ -73,5 +74,13 @@ public class RestfulAdapter {
         } else {
             return newApiService;
         }
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

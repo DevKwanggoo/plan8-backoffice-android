@@ -69,9 +69,8 @@ public class MainActivity extends BaseActivity {
                 members = response.body();
                 ApplicationManager.getInstance().setMembers(members);
                 if (null == members || members.size() == 0) {
-                    vm.setEmptyTeamFlag(true);
+                    
                 } else {
-                    vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
                 }
             }
@@ -237,10 +236,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    public void setEmptyFlag(boolean flag) {
-        vm.setEmptyTeamFlag(flag);
     }
 
     public NotificationFragment getNotificationFragment() {

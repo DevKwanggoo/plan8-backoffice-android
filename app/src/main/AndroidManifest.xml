@@ -24,13 +24,12 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
@@ -38,8 +37,10 @@
         <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.LoginAuthorizationActivity"
+            android:theme="@style/whiteStatusBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".activity.DetailReservationActivity"
+        <activity
+            android:name=".activity.DetailReservationActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -52,7 +53,9 @@
                     android:scheme="plan8-backoffice" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/whiteStatusBar" />
         <activity android:name=".activity.EditReservationActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -64,6 +67,11 @@
         <activity
             android:name=".activity.PreviewActivity"
             android:theme="@style/darkStatusBar" />
+        <activity
+            android:name=".activity.EmptyTeamActivity"
+            android:theme="@style/whiteStatusBar" />
+        <activity android:name=".activity.NetworkExceptionActivity"
+            android:theme="@style/whiteStatusBar"/>
     </application>
 
 </manifest>

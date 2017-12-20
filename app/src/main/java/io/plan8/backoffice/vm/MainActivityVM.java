@@ -17,30 +17,10 @@ import io.plan8.backoffice.activity.MainActivity;
  */
 
 public class MainActivityVM extends ActivityVM {
-    private boolean emptyTeamFlag = false;
     private MainActivity activity;
 
     public MainActivityVM(Activity activity, Bundle savedInstanceState) {
         super(activity, savedInstanceState);
         this.activity = (MainActivity) activity;
-    }
-
-    @Bindable
-    public boolean getEmptyTeamFlag() {
-        return emptyTeamFlag;
-    }
-
-    public void setEmptyTeamFlag(boolean emptyTeamFlag) {
-        this.emptyTeamFlag = emptyTeamFlag;
-        notifyPropertyChanged(BR.emptyTeamFlag);
-    }
-
-    public void teamLogout(View view) {
-        SharedPreferenceManager.getInstance().clearUserToken(getActivity());
-        Intent loginIntent = new Intent(activity, LoginActivity.class);
-        activity.startActivity(loginIntent);
-        activity.finish();
-        activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-//        setEmptyTeamFlag(false);
     }
 }
