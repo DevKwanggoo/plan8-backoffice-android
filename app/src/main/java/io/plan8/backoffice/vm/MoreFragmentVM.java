@@ -33,14 +33,12 @@ import io.plan8.backoffice.vm.item.MoreTeamItemVM;
  */
 
 public class MoreFragmentVM extends FragmentVM {
-    private List<BaseModel> datas;
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private List<BaseModel> moreItemList = new ArrayList<>();
     private boolean completedLoading;
 
-    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
+    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
-        this.datas = datas;
 
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override

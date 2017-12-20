@@ -63,14 +63,9 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     }
 
     private void refreshFragment() {
-//        if (getFragment() instanceof MoreFragment) {
-//            getFragment().refresh();
-//        }
-        getFragment().getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .detach(getFragment())
-                .attach(getFragment())
-                .commitAllowingStateLoss();
+        if (getFragment() instanceof MoreFragment) {
+            ((MoreFragment) getFragment()).refreshMoreFragmentData();
+        }
     }
 
     @Bindable

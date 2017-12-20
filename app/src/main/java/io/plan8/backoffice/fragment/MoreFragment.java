@@ -47,6 +47,29 @@ public class MoreFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
+        vm = new MoreFragmentVM(this, savedInstanceState);
+        binding.setVariable(BR.vm, vm);
+        binding.executePendingBindings();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        refreshMoreFragmentData();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (null != binding) {
+            binding.unbind();
+        }
+        super.onDestroy();
+    }
+
+    public void refreshMoreFragmentData() {
+        setCompletedLoading(false);
         List<BaseModel> moreFragmentData = new ArrayList<>();
 
         moreFragmentData.add(new LabelItem("내 프로필"));
@@ -69,23 +92,8 @@ public class MoreFragment extends BaseFragment {
         }
         moreFragmentData.add(new EmptySpaceItem(0));
 
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.fragment_more, container, false);
-        vm = new MoreFragmentVM(this, savedInstanceState, moreFragmentData);
-        binding.setVariable(BR.vm, vm);
-        binding.executePendingBindings();
-
         vm.setData(moreFragmentData);
-        setCompletedLoading(false);
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onDestroy() {
-        if (null != binding) {
-            binding.unbind();
-        }
-        super.onDestroy();
+        setCompletedLoading(true);
     }
 
     public void uploadImage(Uri data) {
@@ -116,7 +124,7 @@ public class MoreFragment extends BaseFragment {
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setUser(response.body());
-                                refreshFragment();
+                                refreshMoreFragmentData();
                             }
                             setCompletedLoading(true);
                         }
@@ -144,14 +152,6 @@ public class MoreFragment extends BaseFragment {
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
-    }
-
-    private void refreshFragment() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .detach(this)
-                .attach(this)
-                .commitAllowingStateLoss();
     }
 
     public void setCompletedLoading(boolean completedLoading) {
