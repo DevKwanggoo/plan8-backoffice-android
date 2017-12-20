@@ -7,7 +7,7 @@ package io.plan8.backoffice;
 public class Constants {
     //reservation status
     public static final String RESERVATION_STATUS_COMPLETE = "completed";
-     public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
+    public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
     public static final String RESERVATION_STATUS_CANCELED = "canceled";
 
     //change Image code
@@ -27,6 +27,6 @@ public class Constants {
     public static final String DEFAULT_TEAM_LOGO_URL = "http://assets.starshell.co/plan8/default/team.png";
 
     public static String DEFAULT_USER_AVATAR_URL(int userId) {
-        return "http://assets.starshell.co/plan8/default/avatars/" + userId % 27 + ".png";
+        return "https://starshell.blob.core.windows.net/plan8/default/avatars/" + userId % 27 + ".png";
     }
 }
