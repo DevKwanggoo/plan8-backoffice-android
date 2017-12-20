@@ -261,10 +261,11 @@ public class MainActivity extends BaseActivity {
 
     public void refreshNotificationBadgeCount() {
         if (null != badgeTabItemIcon) {
-            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
-            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
-                badgeTabItemIcon.hiddenBadge();
-            }
+            badgeTabItemIcon.showTextBadge("7");
+//            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
+//            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
+//                badgeTabItemIcon.hiddenBadge();
+//            }
             //TODO : 밖에있는 뱃지
         }
     }
