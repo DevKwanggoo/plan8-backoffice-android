@@ -15,7 +15,6 @@ import java.util.List;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
-import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Member;

@@ -52,7 +52,6 @@
                     android:scheme="plan8-backoffice" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.EditReservationActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>

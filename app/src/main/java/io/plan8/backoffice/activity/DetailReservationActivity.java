@@ -596,7 +596,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
-                Log.e("test", "test");
             }
         });
     }
@@ -622,7 +621,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             @Override
             public void onFailure(Call<Action> call, Throwable t) {
-                Log.e("failure : ", "sendAttachment");
             }
         });
     }

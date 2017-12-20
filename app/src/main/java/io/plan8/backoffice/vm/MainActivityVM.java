@@ -9,7 +9,6 @@ import android.view.View;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
-import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.activity.MainActivity;
 
 /**
