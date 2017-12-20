@@ -67,9 +67,6 @@
         <activity
             android:name=".activity.PreviewActivity"
             android:theme="@style/darkStatusBar" />
-        <activity
-            android:name=".activity.EmptyTeamActivity"
-            android:theme="@style/whiteStatusBar" />
         <activity android:name=".activity.NetworkExceptionActivity"
             android:theme="@style/whiteStatusBar"/>
     </application>

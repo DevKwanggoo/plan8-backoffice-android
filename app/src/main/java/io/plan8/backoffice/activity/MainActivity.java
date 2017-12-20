@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity {
                 members = response.body();
                 ApplicationManager.getInstance().setMembers(members);
                 if (null == members || members.size() == 0) {
-                    
+
                 } else {
                     initTabAndViewPager();
                 }
