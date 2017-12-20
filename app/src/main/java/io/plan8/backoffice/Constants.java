@@ -7,7 +7,7 @@ package io.plan8.backoffice;
 public class Constants {
     //reservation status
     public static final String RESERVATION_STATUS_COMPLETE = "completed";
-    public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
+     public static final String RESERVATION_STATUS_INCOMPLETE = "incomplete";
     public static final String RESERVATION_STATUS_CANCELED = "canceled";
 
     //change Image code
@@ -22,7 +22,6 @@ public class Constants {
     public static final int PAGINATION_ACTION_COUNT = 15;
     public static final int PAGINATION_NOTIFICATION_COUNT = 15;
     public static final int PAGINATION_RESERVATION_COUNT = 15;
-
 
     //default logo
     public static final String DEFAULT_TEAM_LOGO_URL = "http://assets.starshell.co/plan8/default/team.png";

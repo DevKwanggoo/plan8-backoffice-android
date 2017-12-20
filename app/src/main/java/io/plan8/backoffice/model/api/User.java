@@ -139,6 +139,7 @@ public class User implements BaseModel, Mentionable {
     }
 
     public String getAvatar() {
+        avatar = null;
         if (null == avatar || avatar.equals("")) {
             return Constants.DEFAULT_USER_AVATAR_URL(id);
         }
