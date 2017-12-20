@@ -87,6 +87,9 @@ public interface ApiService {
                                               @Query("take") int take,
                                               @Query("skip") int skip);
 
+    @GET("1/users/me/notifications/count")
+    Call<List<Notification>> getNotificationCount(@Header("authorization") String auth, @FieldMap Map<String, Boolean> readMap);
+
     @FormUrlEncoded
     @PUT("1/notifications/{id}")
     Call<Notification> readNotification(@Header("authorization") String auth, @Path("id") int notificationId, @FieldMap Map<String, Boolean> readMap);

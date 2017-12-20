@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity {
     private List<Member> members;
     private ReservationFragment reservationFragment;
     private NotificationFragment notificationFragment;
+    private BGABadgeImageView badgeTabItemIcon;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -84,16 +86,21 @@ public class MainActivity extends BaseActivity {
     private void initTabAndViewPager() {
         for (int i = 0; i < 3; i++) {
             TabLayout.Tab tab = binding.mainTabLayout.newTab();
+            if (i == 1) {
+                tab.setCustomView(R.layout.item_badge_tab);
+            } else {
+                tab.setCustomView(R.layout.item_main_tab);
+            }
             binding.mainTabLayout.setSelectedTabIndicatorHeight(0);
-            tab.setCustomView(R.layout.item_main_tab);
 
             if (null != tab.getCustomView()) {
-                AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
                 AppCompatTextView tabItemTitle = tab.getCustomView().findViewById(R.id.mainTabItemTitle);
+                badgeTabItemIcon = tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView);
+                AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
+
                 if (i == 0) {
                     tabItemIcon.setImageResource(R.drawable.ic_line_calendar);
                     tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
-
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                     tabItemTitle.setText("예약");
 
@@ -102,8 +109,9 @@ public class MainActivity extends BaseActivity {
                     reservationFragment.setArguments(bundle);
                     fragments.add(reservationFragment);
                 } else if (i == 1) {
-                    tabItemIcon.setImageResource(R.drawable.ic_line_alarm);
-                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    badgeTabItemIcon.setImageResource(R.drawable.ic_line_alarm);
+                    badgeTabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    refreshNotificationBadgeCount();
                     tabItemTitle.setText("알림");
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
 
@@ -151,7 +159,12 @@ public class MainActivity extends BaseActivity {
                 currentTabPosition = tab.getPosition();
                 binding.mainViewPager.setCurrentItem(tab.getPosition());
                 if (tab.getCustomView() != null) {
-                    ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    if (null != tab.getCustomView().findViewById(R.id.mainTabItemIcon)) {
+                        ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    }
+                    if (null != tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)) {
+                        ((BGABadgeImageView) tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    }
                     ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                 }
             }
@@ -159,8 +172,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 if (tab != null) {
-                    ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
-                    ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    if (tab.getCustomView() != null) {
+                        if (null != tab.getCustomView().findViewById(R.id.mainTabItemIcon)) {
+                            ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                        }
+                        if (null != tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)) {
+                            ((BGABadgeImageView) tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                        }
+                        ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    }
                 }
             }
 
@@ -237,5 +257,15 @@ public class MainActivity extends BaseActivity {
 
     public NotificationFragment getNotificationFragment() {
         return notificationFragment;
+    }
+
+    public void refreshNotificationBadgeCount() {
+        if (null != badgeTabItemIcon) {
+            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
+            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
+                badgeTabItemIcon.hiddenBadge();
+            }
+            //TODO : 밖에있는 뱃지
+        }
     }
 }

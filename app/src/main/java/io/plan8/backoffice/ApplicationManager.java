@@ -2,14 +2,22 @@ package io.plan8.backoffice;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import io.plan8.backoffice.activity.MainActivity;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.PushManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -17,13 +25,14 @@ import io.plan8.backoffice.util.PushManager;
 
 public class ApplicationManager {
     private static final String BASE_SERVER_URL = "https://api-sandbox.plan8.io";
-//    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
+    //    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
     private Context context;
     private static volatile ApplicationManager instance = null;
     private User user;
     private List<Member> members;
     private MainActivity mainActivity;
     private String serverTimeOffset;
+    private int notificationCount = 0;
 
     public static ApplicationManager getInstance() {
         if (null == instance) {
@@ -85,5 +94,41 @@ public class ApplicationManager {
 
     public void setServerTimeOffset(String serverTimeOffset) {
         this.serverTimeOffset = serverTimeOffset;
+    }
+
+    public int getNotificationCount() {
+        return notificationCount;
+    }
+
+    public void refreshNotificationCount() {
+        Log.e("wtf", "wtf");
+        Map<String, Boolean> readMap = new HashMap<String, Boolean>();
+        readMap.put("read", false);
+        Call<List<Notification>> notificationCountCall = RestfulAdapter.getInstance().getServiceApi().getNotificationCount("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), readMap);
+        notificationCountCall.enqueue(new Callback<List<Notification>>() {
+            @Override
+            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+                List<Notification> result = response.body();
+                if (null != result) {
+                    setNotificationCount(result.size());
+                } else {
+                    setNotificationCount(0);
+                }
+                if (null != mainActivity) {
+                    mainActivity.refreshNotificationBadgeCount();
+                }
+                Log.e("wtf", "wtf");
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Notification>> call, Throwable t) {
+                Log.e("wtf", "wtf");
+            }
+        });
+    }
+
+    public void setNotificationCount(int notificationCount) {
+        this.notificationCount = notificationCount;
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <RelativeLayout
+            android:id="@+id/mainTabBadgeItemIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <cn.bingoogolapple.badgeview.BGABadgeImageView
+                android:id="@+id/mainTabBadgeItemImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="4dp"
+                android:paddingRight="4dp"
+                app:badge_bgColor="@color/colorAccent"
+                app:badge_dragable="false"
+                app:badge_gravity="rightTop"
+                app:badge_horizontalMargin="0dp"
+                app:badge_textColor="#ffffff"
+                app:badge_textSize="8dp"
+                app:badge_verticalMargin="0dp" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/mainTabItemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainTabBadgeItemIcon"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="3dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/unselectTabItem"
+            android:textSize="10dp" />
+    </RelativeLayout>
+</RelativeLayout>

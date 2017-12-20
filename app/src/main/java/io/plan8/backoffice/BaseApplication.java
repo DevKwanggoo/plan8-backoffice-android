@@ -14,7 +14,6 @@ import io.plan8.backoffice.util.OneSignalNotificationReciever;
  */
 
 public class BaseApplication extends MultiDexApplication {
-
     @Override
     public void onCreate() {
         super.onCreate();

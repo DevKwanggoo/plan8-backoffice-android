@@ -12,6 +12,7 @@ import io.plan8.backoffice.ApplicationManager;
 public class OneSignalNotificationReciever implements OneSignal.NotificationReceivedHandler {
     @Override
     public void notificationReceived(OSNotification notification) {
+        ApplicationManager.getInstance().refreshNotificationCount();
         //refresh notification fragment
         if (null != ApplicationManager.getInstance().getMainActivity()
                 && null != ApplicationManager.getInstance().getMainActivity().getNotificationFragment()) {
