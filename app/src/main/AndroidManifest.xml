@@ -37,6 +37,7 @@
         <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.LoginAuthorizationActivity"
+            android:theme="@style/whiteStatusBar"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name=".activity.DetailReservationActivity"
@@ -52,6 +53,9 @@
                     android:scheme="plan8-backoffice" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:theme="@style/whiteStatusBar" />
         <activity android:name=".activity.EditReservationActivity" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -63,6 +67,9 @@
         <activity
             android:name=".activity.PreviewActivity"
             android:theme="@style/darkStatusBar" />
+        <activity
+            android:name=".activity.NetworkExceptionActivity"
+            android:theme="@style/whiteStatusBar" />
     </application>
 
 </manifest>

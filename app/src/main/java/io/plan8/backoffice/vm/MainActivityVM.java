@@ -9,6 +9,7 @@ import android.view.View;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.activity.MainActivity;
 
 /**
@@ -17,13 +18,13 @@ import io.plan8.backoffice.activity.MainActivity;
 
 public class MainActivityVM extends ActivityVM {
     private boolean emptyTeamFlag = false;
+
     private MainActivity activity;
 
     public MainActivityVM(Activity activity, Bundle savedInstanceState) {
         super(activity, savedInstanceState);
         this.activity = (MainActivity) activity;
     }
-
     @Bindable
     public boolean getEmptyTeamFlag() {
         return emptyTeamFlag;
@@ -40,6 +41,6 @@ public class MainActivityVM extends ActivityVM {
         activity.startActivity(loginIntent);
         activity.finish();
         activity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-//        setEmptyTeamFlag(false);
     }
+
 }

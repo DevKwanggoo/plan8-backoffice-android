@@ -5,6 +5,8 @@ import android.support.multidex.MultiDexApplication;
 import com.google.firebase.FirebaseApp;
 import com.onesignal.OneSignal;
 
+import io.plan8.backoffice.adapter.RestfulAdapter;
+import io.plan8.backoffice.util.NetworkUtil;
 import io.plan8.backoffice.util.OneSignalNotificationOpenedHandler;
 import io.plan8.backoffice.util.OneSignalNotificationReciever;
 
@@ -18,6 +20,7 @@ public class BaseApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         ApplicationManager.getInstance().setContext(getApplicationContext());
+        RestfulAdapter.getInstance().setContext(getApplicationContext());
         FirebaseApp.initializeApp(getApplicationContext());
 
         OneSignal.startInit(this)

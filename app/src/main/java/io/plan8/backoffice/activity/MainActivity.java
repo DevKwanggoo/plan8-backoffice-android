@@ -70,8 +70,8 @@ public class MainActivity extends BaseActivity {
                 if (null == members || members.size() == 0) {
                     vm.setEmptyTeamFlag(true);
                 } else {
-                    vm.setEmptyTeamFlag(false);
                     initTabAndViewPager();
+                    vm.setEmptyTeamFlag(false);
                 }
             }
 
@@ -99,7 +99,6 @@ public class MainActivity extends BaseActivity {
 
                     reservationFragment = new ReservationFragment();
                     Bundle bundle = new Bundle();
-//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
                     reservationFragment.setArguments(bundle);
                     fragments.add(reservationFragment);
                 } else if (i == 1) {
@@ -110,7 +109,6 @@ public class MainActivity extends BaseActivity {
 
                     notificationFragment = new NotificationFragment();
                     Bundle bundle = new Bundle();
-//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
                     notificationFragment.setArguments(bundle);
                     fragments.add(notificationFragment);
                 } else {
@@ -177,7 +175,7 @@ public class MainActivity extends BaseActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 reservationFragment.setSwipeFlag(false);
                 notificationFragment.setSwipeFlag(false);
-                switch (motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_UP:
                         reservationFragment.setSwipeFlag(true);
                         notificationFragment.setSwipeFlag(true);
@@ -235,10 +233,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    public void setEmptyFlag(boolean flag) {
-        vm.setEmptyTeamFlag(flag);
     }
 
     public NotificationFragment getNotificationFragment() {
