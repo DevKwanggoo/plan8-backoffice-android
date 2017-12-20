@@ -24,13 +24,12 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
@@ -39,7 +38,8 @@
         <activity
             android:name=".activity.LoginAuthorizationActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".activity.DetailReservationActivity"
+        <activity
+            android:name=".activity.DetailReservationActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
