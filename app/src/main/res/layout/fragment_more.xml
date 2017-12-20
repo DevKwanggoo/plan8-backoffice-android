@@ -37,21 +37,27 @@
             android:layout_below="@+id/moreFragmentToolbar"
             android:background="@color/grayLabelColor">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/moreFragmentBody"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/moreFragmentRefresh"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adapter="@{vm.adapter}"
-                android:background="@color/white"
-                android:layoutManager="@{vm.layoutManager}"
-                android:overScrollMode="never" />
+                android:layout_height="match_parent"
+                commonViewAdapter:setEnabled="@{vm.swipeFlag}">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adapter="@{vm.adapter}"
+                    android:background="@color/white"
+                    android:layoutManager="@{vm.layoutManager}"
+                    android:overScrollMode="never" />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/moreFragmentBody"
-                android:clickable="true"
+                android:layout_below="@+id/moreFragmentRefresh"
                 android:background="@color/white"
+                android:clickable="true"
                 android:onClick="@{vm::logout}"
                 android:orientation="vertical">
 
@@ -76,11 +82,12 @@
                     android:background="@color/borderColor" />
             </LinearLayout>
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00ffffff"
             android:layout_below="@+id/moreFragmentToolbar"
+            android:background="#00ffffff"
             commonViewAdapter:fadeout="@{vm.completedLoading}">
 
             <ProgressBar

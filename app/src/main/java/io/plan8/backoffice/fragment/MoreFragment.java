@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
+import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.model.api.Member;
@@ -41,8 +43,14 @@ import retrofit2.Response;
  */
 
 public class MoreFragment extends BaseFragment {
+    private final int GET_USER = 1;
+    private final int GET_MEMBERS = 2;
+    private boolean isCompletedGetUser = false;
+    private boolean isCompletedGetMembers = false;
     private FragmentMoreBinding binding;
     private MoreFragmentVM vm;
+    private List<BaseModel> moreFragmentData;
+    private EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
     @Nullable
     @Override
@@ -57,6 +65,23 @@ public class MoreFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore(int currentPage) {
+                refreshMoreFragmentData();
+            }
+        };
+
+        binding.moreFragmentRefresh.setColorSchemeResources(R.color.colorAccent);
+        binding.moreFragmentRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                moreFragmentData.clear();
+                endlessRecyclerOnScrollListener.initPrevItemCount();
+                refreshMoreFragmentData();
+                binding.moreFragmentRefresh.setRefreshing(false);
+            }
+        });
         refreshMoreFragmentData();
     }
 
@@ -68,32 +93,76 @@ public class MoreFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    public void refreshMoreFragmentData() {
-        setCompletedLoading(false);
-        List<BaseModel> moreFragmentData = new ArrayList<>();
-
-        moreFragmentData.add(new LabelItem("내 프로필"));
-        if (ApplicationManager.getInstance().getUser() != null) {
-            moreFragmentData.add(ApplicationManager.getInstance().getUser());
+    private void completeRefreshData(int apiFlag) {
+        if (null == moreFragmentData) {
+            moreFragmentData = new ArrayList<>();
         }
-        moreFragmentData.add(new LabelItem("내가 속한 팀"));
+        if (apiFlag == GET_USER) {
+            isCompletedGetUser = true;
+        }
+        if (apiFlag == GET_MEMBERS) {
+            isCompletedGetMembers = true;
+        }
 
-        if (null != ApplicationManager.getInstance().getMembers()) {
-            List<Member> members = new ArrayList<>();
-            for (Member m : ApplicationManager.getInstance().getMembers()) {
-                if (null != m) {
-                    members.add(m);
+        if (isCompletedGetMembers && isCompletedGetUser) {
+            moreFragmentData = new ArrayList<>();
+
+            moreFragmentData.add(new LabelItem("내 프로필"));
+            if (ApplicationManager.getInstance().getUser() != null) {
+                moreFragmentData.add(ApplicationManager.getInstance().getUser());
+            }
+            moreFragmentData.add(new LabelItem("내가 속한 팀"));
+
+            if (null != ApplicationManager.getInstance().getMembers()) {
+                List<Member> members = new ArrayList<>();
+                for (Member m : ApplicationManager.getInstance().getMembers()) {
+                    if (null != m) {
+                        members.add(m);
+                    }
+                }
+
+                if (members.size() > 0) {
+                    moreFragmentData.addAll(members);
                 }
             }
+            moreFragmentData.add(new EmptySpaceItem(0));
 
-            if (members.size() > 0) {
-                moreFragmentData.addAll(members);
-            }
+            vm.setData(moreFragmentData);
         }
-        moreFragmentData.add(new EmptySpaceItem(0));
-
-        vm.setData(moreFragmentData);
         setCompletedLoading(true);
+    }
+
+    public void refreshMoreFragmentData() {
+        setCompletedLoading(false);
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), ApplicationManager.getInstance().getUser().getId());
+        getUserMembersCall.enqueue(new Callback<List<Member>>() {
+            @Override
+            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                List<Member> members = response.body();
+                ApplicationManager.getInstance().setMembers(members);
+                completeRefreshData(GET_MEMBERS);
+            }
+
+            @Override
+            public void onFailure(Call<List<Member>> call, Throwable t) {
+                completeRefreshData(GET_MEMBERS);
+            }
+        });
+
+        Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()));
+        meCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+                ApplicationManager.getInstance().setUser(user);
+                completeRefreshData(GET_USER);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                completeRefreshData(GET_USER);
+            }
+        });
     }
 
     public void uploadImage(Uri data) {

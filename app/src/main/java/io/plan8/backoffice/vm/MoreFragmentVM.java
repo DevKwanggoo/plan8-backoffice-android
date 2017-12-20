@@ -36,6 +36,7 @@ public class MoreFragmentVM extends FragmentVM {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private List<BaseModel> moreItemList = new ArrayList<>();
     private boolean completedLoading;
+    private boolean swipeFlag = true;
 
     public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
@@ -96,8 +97,19 @@ public class MoreFragmentVM extends FragmentVM {
     public boolean isCompletedLoading() {
         return completedLoading;
     }
+
     public void setCompletedLoading(boolean compltedLoading) {
         this.completedLoading = compltedLoading;
         notifyPropertyChanged(BR.completedLoading);
+    }
+
+    @Bindable
+    public boolean getSwipeFlag() {
+        return swipeFlag;
+    }
+
+    public void setSwipeFlag(boolean flag) {
+        swipeFlag = flag;
+        notifyPropertyChanged(BR.swipeFlag);
     }
 }
