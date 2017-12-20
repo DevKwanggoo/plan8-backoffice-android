@@ -112,9 +112,9 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
 
     @Bindable
     public String getCustomerTeamName() {
-        if (null == reservation) {
+        if (null == reservation || null == reservation.getTeam()) {
             return "";
         }
-        return "픽스나우";
+        return reservation.getTeam().getName();
     }
 }

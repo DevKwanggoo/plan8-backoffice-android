@@ -63,16 +63,25 @@ public class NotificationItemVM extends FragmentVM {
 
     @Bindable
     public String getTeamNameAndLastModified() {
-        String teamName = "픽스나우";
+        String teamName = "";
         String lastModified = "";
 
-        if (null == notification) {
-            lastModified = "";
-        } else {
-            lastModified = DateUtil.getInstance().getChatTime(notification.getAdded());
+        if (null != notification) {
+            if (null != notification.getAdded()) {
+                lastModified = DateUtil.getInstance().getChatTime(notification.getAdded());
+            }
+            if (null != notification.getAction()
+                    && null != notification.getAction().getReservation()
+                    && null != notification.getAction().getReservation().getTeam()) {
+                teamName = notification.getAction().getReservation().getTeam().getName();
+            }
         }
 
-        return teamName + "ㆍ" + lastModified;
+        if (lastModified.equals("")) {
+            return teamName;
+        } else {
+            return teamName + "ㆍ" + lastModified;
+        }
     }
 
     public void detailNotification(View view) {

@@ -35,18 +35,25 @@ public class ReservationItemVM extends FragmentVM {
     @Bindable
     public String getCustomerAndTeamName() {
         String customerName = "";
-        String teamName = "픽스나우";
-        if (null == reservation
-                || null == reservation.getUser()
-                || null == reservation.getUser().getName()
-                || reservation.getUser().getName().equals("")) {
+        String teamName = "";
 
-            customerName = "고객명 없음";
-        } else {
-            customerName = reservation.getUser().getName();
+        if (null != reservation) {
+            if (null != reservation.getUser()) {
+                customerName = reservation.getUser().getName();
+            } else {
+                customerName = "고객명 없음";
+            }
+
+            if (null != reservation.getTeam()
+                    && null != reservation.getTeam()) {
+                teamName = reservation.getTeam().getName();
+            }
         }
-
-        return customerName + "ㆍ" + teamName;
+        if (teamName.equals("")) {
+            return customerName;
+        } else {
+            return customerName + "ㆍ" + teamName;
+        }
     }
 
     @Bindable
