@@ -47,6 +47,9 @@
                     android:layout_height="wrap_content"
                     android:text="@{vm.profileName}"
                     android:fontFamily="sans-serif"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/defaultDarkColor"
                     android:textSize="14dp" />
 
@@ -55,6 +58,9 @@
                     android:layout_height="wrap_content"
                     android:text="@{vm.profileUserName}"
                     android:textColor="@color/grayColor"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif"
                     android:textSize="14dp" />
             </LinearLayout>

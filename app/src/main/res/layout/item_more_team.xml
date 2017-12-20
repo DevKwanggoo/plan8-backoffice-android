@@ -52,6 +52,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text="@{vm.teamName}"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/defaultDarkColor"
                     android:textSize="14dp" />
 
@@ -60,6 +63,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text="@{vm.teamPosition}"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/grayColor"
                     android:textSize="14dp" />
 
