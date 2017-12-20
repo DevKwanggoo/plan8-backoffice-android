@@ -53,7 +53,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@{vm.teamName}"
                     android:textColor="@color/defaultDarkColor"
-                    android:textSize="14dp" /> 
+                    android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
