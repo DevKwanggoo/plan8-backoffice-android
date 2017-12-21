@@ -121,4 +121,16 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
         }
         return reservation.getTeam().getName();
     }
+
+    @Bindable
+    public boolean getStateFlag(){
+        if (reservation != null && reservation.getStatus() != null) {
+            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED) || reservation.getStatus().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return true;
+    }
 }

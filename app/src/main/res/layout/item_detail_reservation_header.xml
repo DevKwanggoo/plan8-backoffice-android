@@ -3,7 +3,7 @@
     xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="vm"
             type="io.plan8.backoffice.vm.item.DetailReservationHeaderItemVM" />
@@ -260,7 +260,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="5dp"
                             android:src="@drawable/ic_line_chevron_right"
-                            android:tint="@color/grayTintColor" />
+                            android:tint="@color/grayTintColor"
+                            android:visibility="@{vm.stateFlag ? View.VISIBLE : View.GONE}"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
