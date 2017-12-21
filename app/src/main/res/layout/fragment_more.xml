@@ -43,44 +43,50 @@
                 android:layout_height="match_parent"
                 commonViewAdapter:setEnabled="@{vm.swipeFlag}">
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adapter="@{vm.adapter}"
-                    android:background="@color/white"
-                    android:layoutManager="@{vm.layoutManager}"
-                    android:overScrollMode="never" />
-            </android.support.v4.widget.SwipeRefreshLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/moreFragmentRefresh"
-                android:background="@color/white"
-                android:clickable="true"
-                android:onClick="@{vm::logout}"
-                android:orientation="vertical">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:background="@drawable/selectable_item_background">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/moreRecycler"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="sans-serif"
-                        android:text="로그아웃"
-                        android:textColor="@color/blueColor"
-                        android:textSize="16dp" />
-                </RelativeLayout>
+                        android:adapter="@{vm.adapter}"
+                        android:background="@color/white"
+                        android:layoutManager="@{vm.layoutManager}"
+                        android:overScrollMode="never" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/borderColor" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/moreRecycler"
+                        android:background="@color/white"
+                        android:clickable="true"
+                        android:onClick="@{vm::logout}"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/selectable_item_background">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:fontFamily="sans-serif"
+                                android:text="로그아웃"
+                                android:textColor="@color/blueColor"
+                                android:textSize="16dp" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/borderColor" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v4.widget.SwipeRefreshLayout>
         </RelativeLayout>
 
         <RelativeLayout
