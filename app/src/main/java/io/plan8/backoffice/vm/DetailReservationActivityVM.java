@@ -4,19 +4,30 @@ import android.app.Activity;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import java.util.HashMap;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
+import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Action;
@@ -30,6 +41,9 @@ import io.plan8.backoffice.vm.item.DetailReservationActionReplaceItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationHeaderItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationMoreButtonItemVM;
 import io.plan8.backoffice.vm.item.MentionItemVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -302,15 +316,27 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
         plan8BottomSheetDialog.hide();
-        if (view.getId() == R.id.bottomSheetFirstItem) {
-            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_COMPLETE);
-        } else if (view.getId() == R.id.bottomSheetSecondItem) {
-            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_INCOMPLETE);
-        } else {
-            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_CANCELED);
-        }
+        new MaterialDialog.Builder(getActivity())
+                .title("정말로 상태 변경을 하시겠습니까?")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .positiveText("변경")
+                .negativeText("취소")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (view.getId() == R.id.bottomSheetFirstItem) {
+                            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_COMPLETE);
+                        } else if (view.getId() == R.id.bottomSheetSecondItem) {
+                            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_INCOMPLETE);
+                        } else {
+                            ((DetailReservationActivity) getActivity()).editReservationStatus(Constants.RESERVATION_STATUS_CANCELED);
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Bindable
