@@ -63,7 +63,11 @@ public class MainActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), ApplicationManager.getInstance().getUser().getId());
+        int userId = -1;
+        if (null != ApplicationManager.getInstance().getUser()) {
+            userId = ApplicationManager.getInstance().getUser().getId();
+        }
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), userId);
         getUserMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {

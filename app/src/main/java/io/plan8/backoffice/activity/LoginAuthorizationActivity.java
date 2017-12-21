@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
-import io.plan8.backoffice.BaseApplication;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
@@ -213,7 +212,6 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                 }
             }
         };
-
 
         authoEditText.addTextChangedListener(textWatcher);
         authoEditText.setFocusableInTouchMode(true);

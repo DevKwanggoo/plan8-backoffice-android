@@ -7,7 +7,7 @@ import com.onesignal.OneSignal;
 
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.util.OneSignalNotificationOpenedHandler;
-import io.plan8.backoffice.util.OneSignalNotificationReciever;
+import io.plan8.backoffice.util.OneSignalNotificationReceiver;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..
@@ -23,7 +23,7 @@ public class BaseApplication extends MultiDexApplication {
 
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                .setNotificationReceivedHandler(new OneSignalNotificationReciever())
+                .setNotificationReceivedHandler(new OneSignalNotificationReceiver())
                 .setNotificationOpenedHandler(new OneSignalNotificationOpenedHandler(getApplicationContext()))
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();

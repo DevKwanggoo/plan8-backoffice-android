@@ -125,9 +125,8 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/border_edittext">
 
-                    <com.linkedin.android.spyglass.ui.MentionsEditText
+                    <EditText
                         android:id="@+id/mentionEditText"
-                        detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -142,6 +141,7 @@
                         android:textColorHint="#acb4bf"
                         android:textSize="14dp"
                         commonViewAdapter:selection="@{vm.textLength}" />
+                    <!--detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}"-->
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>

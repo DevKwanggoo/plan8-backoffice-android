@@ -6,8 +6,11 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import com.twitter.Extractor;
 
 import java.util.List;
 
@@ -220,12 +223,34 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         }
     }
 
+    private Extractor mentionExtractor;
+
     public OnTextChangeListener getTextChangeListener() {
         if (null == onTextChangeListener) {
             onTextChangeListener = new OnTextChangeListener() {
                 @Override
                 public void onChange(EditText editText, CharSequence charSequence, int charIndex, boolean isBackpress) {
+                    if (null == mentionExtractor) {
+                        mentionExtractor = new Extractor();
+                    }
                     currentText = editText.getText().toString();
+
+                    List<Extractor.Entity> mentions = mentionExtractor.extractMentionedScreennamesWithIndices(currentText);
+                    for (Extractor.Entity m : mentions) {
+//                        if (null != m
+//                                && m.getStart() >) {
+//
+//                        }
+                        if (null != m) {
+                            Log.e("wtf", "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")");
+                            Log.e("wtftext", "" + currentText.charAt(currentTextIndex+1) + "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")" + currentText.charAt(m.getStart()) + "  ::  " + currentText.charAt(m.getEnd() - 1));
+                        }
+                        //TODO : 만약, currentTextIndex가 start와 end 사이에 있으면 start부터 currentTextIndex까지 뽑아서 추천 mentionList를 만든다
+                        //TODO : activity로
+                        //TODO : mentionList를 클릭하면 start position 전까지 + @username +  substring endPosition까지 합쳐서 다시 set Text
+
+                        //TODO : 비교할때 다 대문자로 바꿔서 비교해야하며 기준은 contains()!!
+                    }
 
                     if (isBackpress) {
                         currentTextIndex = charIndex - 1;
@@ -241,7 +266,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                     if (currentText.length() <= 0
                             || !currentText.contains("@")
                             || editText.getText().toString().substring(editText.getText().length() - 1).equals(" ")) {
-                        setEmptyMentionList(true);
+//                        setEmptyMentionList(true);
                     }
                 }
             };
@@ -288,7 +313,20 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " ");
+        Log.e("hoho1", "" + currentText + "  ::  " + index);
+
+//        int testIndex = 0;
+//        if (index == '@') {
+//            testIndex = index;
+//        } else {
+//            testIndex =
+//        }
+        Log.e("hoho3", "" + currentText.substring(0, index));
+        Log.e("hoho3", "" + "@" + user.getUsername());
+        Log.e("hoho3", "" + currentText.substring(index + 1, currentText.length()));
+        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " " + currentText.substring(index + 1, currentText.length()));
+        Log.e("hoho2", "" + currentText + "  ::  " + index + "  ::  " + currentText.length());
+//        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " ");
         setSelection();
     }
 

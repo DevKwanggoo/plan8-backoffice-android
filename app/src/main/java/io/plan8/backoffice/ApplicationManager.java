@@ -1,25 +1,20 @@
 package io.plan8.backoffice;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Member;
-import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.util.PushManager;
 import okhttp3.ResponseBody;

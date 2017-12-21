@@ -18,6 +18,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -28,16 +30,11 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.linkedin.android.spyglass.suggestions.SuggestionsResult;
 import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsResultListener;
-import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsVisibilityManager;
-import com.linkedin.android.spyglass.tokenization.QueryToken;
-import com.linkedin.android.spyglass.tokenization.impl.WordTokenizer;
 import com.linkedin.android.spyglass.tokenization.impl.WordTokenizerConfig;
-import com.linkedin.android.spyglass.tokenization.interfaces.QueryTokenReceiver;
 import com.linkedin.android.spyglass.ui.MentionsEditText;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +84,8 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
-            .setMaxNumKeywords(1)
+            .setWordBreakChars(" ")
+//            .setMaxNumKeywords(1)
             .build();
 
     public static Intent buildIntent(Context context, int reservationId) {
@@ -114,6 +112,24 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
+        MentionsEditText mentionsEditText = findViewById(R.id.mentionEditText);
+        mentionsEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.e("wtf", "wtf1");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.e("wtf", "wtf2");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.e("wtf", "wtf3");
+            }
+        });
+
         refreshReservation();
         initHandler();
 
@@ -127,7 +143,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         });
     }
 
-    private void setMentionEditText(int teamId) {
+    private void getMembers(int teamId) {
         Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getServiceApi().getMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), teamId);
         currentTeamMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
@@ -138,37 +154,38 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     for (Member m : result) {
                         if (null != m
                                 && null != m.getUser()
+                                && null != ApplicationManager.getInstance().getUser()
                                 && m.getUser().getId() != ApplicationManager.getInstance().getUser().getId()) {
                             userList.add(m.getUser());
                         }
                     }
 
-                    userLoader = new User.UserLoader(userList);
-                    mentionsEditText = findViewById(R.id.mentionEditText);
-                    mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
-                    mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
-                        @Override
-                        public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-                            List<String> buckets = Arrays.asList(BUCKET);
-                            List<User> suggestions = userLoader.getSuggestions(queryToken);
-                            SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
-                            // Have suggestions, now call the listener (which is this activity)
-                            onReceiveSuggestionsResult(result, BUCKET);
-                            return buckets;
-                        }
-                    });
-
-                    mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
-                        @Override
-                        public void displaySuggestions(boolean display) {
-
-                        }
-
-                        @Override
-                        public boolean isDisplayingSuggestions() {
-                            return false;
-                        }
-                    });
+//                    userLoader = new User.UserLoader(userList);
+//                    mentionsEditText = findViewById(R.id.mentionEditText);
+//                    mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
+//                    mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+//                        @Override
+//                        public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+//                            List<String> buckets = Arrays.asList(BUCKET);
+//                            List<User> suggestions = userLoader.getSuggestions(queryToken);
+//                            SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
+//                            // Have suggestions, now call the listener (which is this activity)
+//                            onReceiveSuggestionsResult(result, BUCKET);
+//                            return buckets;
+//                        }
+//                    });
+//
+//                    mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
+//                        @Override
+//                        public void displaySuggestions(boolean display) {
+//
+//                        }
+//
+//                        @Override
+//                        public boolean isDisplayingSuggestions() {
+//                            return false;
+//                        }
+//                    });
                 }
             }
 
@@ -185,6 +202,10 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             return;
         }
         List<User> userList = (List<User>) result.getSuggestions();
+        int count = 0;
+        if (null != userList) {
+            count = userList.size();
+        }
         vm.setAutoCompleteMentionData(userList);
     }
 
@@ -476,7 +497,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
                 reservation = response.body();
                 if (null != reservation) {
-                    setMentionEditText(reservation.getTeam().getTeamId());
+                    getMembers(reservation.getTeam().getTeamId());
 
                     if (detailReservations.size() <= 0) {
                         detailReservations.add(0, reservation);
