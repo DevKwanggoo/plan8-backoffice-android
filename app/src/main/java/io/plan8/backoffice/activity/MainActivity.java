@@ -268,15 +268,6 @@ public class MainActivity extends BaseActivity {
             if (ApplicationManager.getInstance().getNotificationCount() == 0) {
                 badgeTabItemIcon.hiddenBadge();
             }
-            refreshAppBadgeCount(ApplicationManager.getInstance().getNotificationCount());
         }
-    }
-
-    public void refreshAppBadgeCount(int count) {
-        Intent badgeIntent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
-        badgeIntent.putExtra("badge_count", count);
-        badgeIntent.putExtra("badge_count_pakage_name", getPackageName());
-        badgeIntent.putExtra("badge_count_class_name", "io.plan8.backoffice.activity.SplashActivity");
-        sendBroadcast(badgeIntent);
     }
 }
