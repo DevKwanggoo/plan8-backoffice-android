@@ -105,8 +105,12 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     }
 
     public void editReservationStatus(View view) {
-        if (getActivity() instanceof DetailReservationActivity) {
-            ((DetailReservationActivity) getActivity()).showBottomSheet();
+        if (reservation != null && reservation.getStatus() != null) {
+            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
+                if (getActivity() instanceof DetailReservationActivity) {
+                    ((DetailReservationActivity) getActivity()).showBottomSheet();
+                }
+            }
         }
     }
 
