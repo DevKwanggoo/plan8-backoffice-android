@@ -27,6 +27,7 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     private final String SAVE_FOLDER = "/plan8-download";
     private Activity activity;
     private Attachment attachment;
+    private String savePath;
 
     public FileDownloader(Activity activity, Attachment attachment) {
         this.activity = activity;
@@ -36,7 +37,7 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         //다운로드 경로를 지정
-        String savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
+        savePath = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
         File dir = new File(savePath);
 
         //상위 디렉토리가 존재하지 않을 경우 생성
@@ -45,7 +46,7 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
         }
 
         //파일 이름 :날짜_시간
-        if (attachment.getName() != null){
+        if (attachment.getName() != null) {
             fileName = attachment.getName();
         } else {
             Date day = new Date();
@@ -108,7 +109,7 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
 
-        if (attachment.getMimetype().contains("image")){
+        if (attachment.getMimetype().contains("image")) {
             String targetDir = Environment.getExternalStorageDirectory().toString() + SAVE_FOLDER;
             File file = new File(targetDir + "/" + fileName);
 
@@ -116,6 +117,6 @@ public class FileDownloader extends AsyncTask<String, Void, Void> {
             activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         }
 
-        Toast.makeText(activity, "다운로드 완료", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "다운로드 완료 : " + savePath, Toast.LENGTH_SHORT).show();
     }
 }
