@@ -108,7 +108,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                     .input("다른 사람에게 표시될 프로필명을 입력하세요.", user.getName(), new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                            if (!input.equals("")) {
+                            if (!input.toString().trim().equals("")) {
                                 ((MoreFragment) getFragment()).setCompletedLoading(false);
                                 HashMap<String, String> putMap = new HashMap<String, String>();
                                 putMap.put("name", input.toString());
@@ -129,6 +129,8 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                         ((MoreFragment) getFragment()).setCompletedLoading(true);
                                     }
                                 });
+                            } else {
+                                Toast.makeText(getFragment().getContext(), "변경할 프로필명을 한 글자 이상 입력하세요.", Toast.LENGTH_SHORT).show();
                             }
                             dialog.dismiss();
                         }
@@ -143,7 +145,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                     .input("다른 사람에게 표시될 아이디를 입력하세요.", user.getUsername(), new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                            if (!input.equals("")) {
+                            if (!input.toString().trim().equals("")) {
                                 matcher = usernamePattern.matcher(input.toString());
                                 if (matcher.find()) {
                                     ((MoreFragment) getFragment()).setCompletedLoading(false);
@@ -172,6 +174,8 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                 } else {
                                     Toast.makeText(getFragment().getContext(), "중복된 아이디가 있거나 사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show();
                                 }
+                            } else {
+                                Toast.makeText(getFragment().getContext(), "변경할 아이디를 한 글자 이상 입력하세요.", Toast.LENGTH_SHORT).show();
                             }
                             dialog.dismiss();
                         }
