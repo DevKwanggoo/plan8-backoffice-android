@@ -38,13 +38,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'boolean', 'IS_RELEASE', 'true'
-            manifestPlaceholders = [appName: "플랜에잇 백오피스"]
+            manifestPlaceholders = [appName: "백오피스"]
         }
 
         debug {
             minifyEnabled false
             buildConfigField 'boolean', 'IS_RELEASE', 'false'
-            manifestPlaceholders = [appName: "플랜에잇 백오피스(개발용)"]
+            manifestPlaceholders = [appName: "백오피스(개발용)"]
         }
     }
     dataBinding {
