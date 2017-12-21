@@ -30,7 +30,7 @@ public class MoreTeamItemVM extends FragmentVM {
 
     @Bindable
     public String getTeamLogo() {
-        if (null == member || null == member.getTeam()) {
+        if (null == member || null == member.getTeam() || null == member.getTeam().getLogo()) {
             return Constants.DEFAULT_TEAM_LOGO_URL;
         }
         return member.getTeam().getLogo();
