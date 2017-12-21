@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.api.ApiService;
 import io.plan8.backoffice.util.ConnectivityInterceptor;
+import io.plan8.backoffice.util.NullOnEmptyConverterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -67,6 +68,7 @@ public class RestfulAdapter {
             newApiService = new Retrofit.Builder()
                     .baseUrl(ApplicationManager.getInstance().getServerUrl())
                     .client(client)
+                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build().create(ApiService.class); //인터페이스 연결
 

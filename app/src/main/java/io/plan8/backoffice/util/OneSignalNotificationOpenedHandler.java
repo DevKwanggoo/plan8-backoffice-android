@@ -53,7 +53,7 @@ public class OneSignalNotificationOpenedHandler implements OneSignal.Notificatio
             readNotificationCall.enqueue(new Callback<Notification>() {
                 @Override
                 public void onResponse(Call<Notification> call, Response<Notification> response) {
-
+                    ApplicationManager.getInstance().refreshNotificationCount();
                 }
 
                 @Override

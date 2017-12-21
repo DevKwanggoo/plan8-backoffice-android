@@ -6,7 +6,6 @@ import com.google.firebase.FirebaseApp;
 import com.onesignal.OneSignal;
 
 import io.plan8.backoffice.adapter.RestfulAdapter;
-import io.plan8.backoffice.util.NetworkUtil;
 import io.plan8.backoffice.util.OneSignalNotificationOpenedHandler;
 import io.plan8.backoffice.util.OneSignalNotificationReciever;
 
@@ -15,7 +14,6 @@ import io.plan8.backoffice.util.OneSignalNotificationReciever;
  */
 
 public class BaseApplication extends MultiDexApplication {
-
     @Override
     public void onCreate() {
         super.onCreate();

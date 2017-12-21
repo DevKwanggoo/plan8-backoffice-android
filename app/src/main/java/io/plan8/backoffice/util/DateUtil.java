@@ -54,8 +54,6 @@ public class DateUtil {
     }
 
     public String getChatTime(String stringDate) {
-        //TODO : 핸들러 돌리고, 꼭 닫아주기
-
         int minute = (int) ((getCurrentDateLongFormat() + Long.parseLong(ApplicationManager.getInstance().getServerTimeOffset()) - getTZFormatToMiliseconds(stringDate)) / 60000.0f);
 
         if (minute < 60) {

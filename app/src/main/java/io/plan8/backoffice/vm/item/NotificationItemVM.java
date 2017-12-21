@@ -11,9 +11,11 @@ import com.android.databinding.library.baseAdapters.BR;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.DateUtil;
@@ -63,16 +65,25 @@ public class NotificationItemVM extends FragmentVM {
 
     @Bindable
     public String getTeamNameAndLastModified() {
-        String teamName = "픽스나우";
+        String teamName = "";
         String lastModified = "";
 
-        if (null == notification) {
-            lastModified = "";
-        } else {
-            lastModified = DateUtil.getInstance().getChatTime(notification.getAdded());
+        if (null != notification) {
+            if (null != notification.getAdded()) {
+                lastModified = DateUtil.getInstance().getChatTime(notification.getAdded());
+            }
+            if (null != notification.getAction()
+                    && null != notification.getAction().getReservation()
+                    && null != notification.getAction().getReservation().getTeam()) {
+                teamName = notification.getAction().getReservation().getTeam().getName();
+            }
         }
 
-        return teamName + "ㆍ" + lastModified;
+        if (lastModified.equals("")) {
+            return teamName;
+        } else {
+            return teamName + "ㆍ" + lastModified;
+        }
     }
 
     public void detailNotification(View view) {
@@ -87,6 +98,7 @@ public class NotificationItemVM extends FragmentVM {
             readNotificationCall.enqueue(new Callback<Notification>() {
                 @Override
                 public void onResponse(Call<Notification> call, Response<Notification> response) {
+                    ApplicationManager.getInstance().refreshNotificationCount();
                 }
 
                 @Override
@@ -95,6 +107,7 @@ public class NotificationItemVM extends FragmentVM {
             });
             setRead(true);
         }
+
         Intent detailTaskIntent = DetailReservationActivity.buildIntent(getFragment().getContext(), notification.getAction().getReservation().getId());
         getFragment().startActivity(detailTaskIntent);
         getFragment().getActivity().overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
