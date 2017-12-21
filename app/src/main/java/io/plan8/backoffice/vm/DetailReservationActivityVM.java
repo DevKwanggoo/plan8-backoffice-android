@@ -215,8 +215,10 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     public void sendComment(View view) {
         ViewUtil.getInstance().hideKeyboard(getActivity().getApplicationContext());
         if (getActivity() instanceof DetailReservationActivity) {
-            if (null != currentText && currentText.length() > 0) {
+            if (null != currentText && currentText.length() > 0 && !currentText.trim().equals("")) {
                 ((DetailReservationActivity) getActivity()).sendAction(currentText);
+            } else {
+                Toast.makeText(getActivity(), "댓글 내용을 한 글자 이상 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
     }
