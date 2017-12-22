@@ -15,34 +15,21 @@ public class DetailReservationViewAdapter {
     @BindingAdapter("detailReservationViewAdapter:onTextChange")
     public static void onTextChange(final EditText view, final OnTextChangeListener listener) {
         view.addTextChangedListener(new TextWatcher() {
-            int prevIndex = 0;
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int index, int eventCode, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int index, int eventCode, int i2) {
+                boolean isBackPress = false;
+                if (eventCode == 1) {
+                    isBackPress = true;
+                }
+                listener.onChange(view, charSequence, index, isBackPress);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                int currentIndex;
-                boolean isBackpress;
-                if (editable.length() <= 0) {
-                    currentIndex = 0;
-                } else {
-                    currentIndex = editable.length()-1;
-                }
-
-                if (prevIndex > currentIndex) {
-                    isBackpress = true;
-                } else {
-                    isBackpress = false;
-                }
-
-                listener.onChange(view, editable.toString(), editable.length(), isBackpress);
-                prevIndex = editable.length();
             }
         });
     }
