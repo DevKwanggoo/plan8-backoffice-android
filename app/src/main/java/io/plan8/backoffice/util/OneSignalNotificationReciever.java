@@ -16,6 +16,7 @@ public class OneSignalNotificationReciever implements OneSignal.NotificationRece
         //refresh notification fragment
         if (null != ApplicationManager.getInstance().getMainActivity()
                 && null != ApplicationManager.getInstance().getMainActivity().getNotificationFragment()) {
+            ApplicationManager.getInstance().getMainActivity().getNotificationFragment().clearNotifications();
             ApplicationManager.getInstance().getMainActivity().getNotificationFragment().refreshNotificationList();
         }
     }

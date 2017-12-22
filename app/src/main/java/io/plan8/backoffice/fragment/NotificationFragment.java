@@ -163,4 +163,8 @@ public class NotificationFragment extends BaseFragment {
     public void setSwipeFlag(boolean flag) {
         vm.setSwipeFlag(flag);
     }
+
+    public void clearNotifications(){
+        notifications.clear();
+    }
 }

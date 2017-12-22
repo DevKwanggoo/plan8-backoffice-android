@@ -124,8 +124,10 @@ public class ApplicationManager {
 
                         if (null == count || count.equals("") || Integer.parseInt(count) == 0){
                             setNotificationCount(0);
+                            refreshAppBadgeCount(0);
                         } else {
                             setNotificationCount(Integer.parseInt(count));
+                            refreshAppBadgeCount(Integer.parseInt(count));
                         }
 
                         if (null != mainActivity) {
@@ -146,5 +148,13 @@ public class ApplicationManager {
 
     public void setNotificationCount(int notificationCount) {
         this.notificationCount = notificationCount;
+    }
+
+    public void refreshAppBadgeCount(int count) {
+        Intent badgeIntent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
+        badgeIntent.putExtra("badge_count", count);
+        badgeIntent.putExtra("badge_count_pakage_name", context.getPackageName());
+        badgeIntent.putExtra("badge_count_class_name", "io.plan8.backoffice.activity.SplashActivity");
+        context.sendBroadcast(badgeIntent);
     }
 }
