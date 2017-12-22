@@ -3,9 +3,12 @@ package io.plan8.backoffice.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
@@ -13,7 +16,9 @@ import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivitySplashBinding;
-import io.plan8.backoffice.model.api.Me;
+import io.plan8.backoffice.model.api.ServerTime;
+import io.plan8.backoffice.model.api.User;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.SplashActivityVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,27 +28,38 @@ public class SplashActivity extends BaseActivity {
     private ActivitySplashBinding binding;
     private SplashActivityVM vm;
     private RelativeLayout progressBar;
+    private SplashActivity self;
+    private boolean serverTimeFlag = false;
+    private boolean userFlag = false;
+    private String serverTimeOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         vm = new SplashActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
+//        if (BuildConfig.DEBUG) {
+//            hasTokenStep();
+//        } else {
+
         if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
             String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
 
             if (RestfulAdapter.getInstance().getServiceApi() != null) {
-                Call<Me> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
-                meCall.enqueue(new Callback<Me>() {
+
+                Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + token, DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+                getServerTime.enqueue(new Callback<ServerTime>() {
                     @Override
-                    public void onResponse(Call<Me> call, Response<Me> response) {
-                        Me me = response.body();
-                        if (me != null) {
-                            ApplicationManager.getInstance().setMe(me);
+                    public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
+                        ServerTime serverTime = response.body();
+                        serverTimeFlag = true;
+                        if (serverTime != null) {
+                            serverTimeOffset = serverTime.getOffset();
                             hasTokenStep();
                         } else {
                             loginStep();
@@ -51,8 +67,39 @@ public class SplashActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Me> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    public void onFailure(Call<ServerTime> call, Throwable t) {
+                        serverTimeFlag = true;
+                        loginStep();
+                    }
+                });
+
+                Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                meCall.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        User user = response.body();
+                        if (user != null) {
+                            ApplicationManager.getInstance().setUser(user);
+                            userFlag = true;
+                            hasTokenStep();
+                        } else {
+                            loginStep();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        MaterialDialog dialog = new MaterialDialog.Builder(self)
+                                .content("문제가 발생했어요.\n잠시 후 다시 시도해주세요.")
+                                .positiveText("닫기")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        finish();
+                                    }
+                                })
+                                .build();
+                        dialog.show();
                     }
                 });
             }
@@ -70,9 +117,12 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void hasTokenStep() {
-        binding.splashProgressBarContainer.setVisibility(View.GONE);
-        startActivity(MainActivity.buildIntent(this));
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (serverTimeFlag && userFlag) {
+            ApplicationManager.getInstance().setServerTimeOffset(serverTimeOffset);
+            binding.splashProgressBarContainer.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 }

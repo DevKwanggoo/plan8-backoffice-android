@@ -1,27 +1,35 @@
 package io.plan8.backoffice.vm;
 
 import android.content.Intent;
+import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.model.BaseModel;
+import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.LabelItem;
-import io.plan8.backoffice.model.item.MoreProfileItem;
-import io.plan8.backoffice.model.item.MoreTeamItem;
+import io.plan8.backoffice.util.PushManager;
 import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
 import io.plan8.backoffice.vm.item.LabelItemVM;
 import io.plan8.backoffice.vm.item.MoreProfileItemVM;
@@ -32,38 +40,36 @@ import io.plan8.backoffice.vm.item.MoreTeamItemVM;
  */
 
 public class MoreFragmentVM extends FragmentVM {
-    private List<BaseModel> datas;
-    private FragmentMoreBinding binding;
-    private BindingRecyclerViewAdapter adapter;
-    private List<Object> moreItemList = new ArrayList<>();
+    private BindingRecyclerViewAdapter<BaseModel> adapter;
+    private List<BaseModel> moreItemList = new ArrayList<>();
+    private boolean completedLoading;
+    private boolean swipeFlag = true;
 
-    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState, List<BaseModel> datas) {
+    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
-        this.datas = datas;
 
-        adapter = new BindingRecyclerViewAdapter() {
+        adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
-            protected int selectViewLayoutType(Object data) {
+            protected int selectViewLayoutType(BaseModel data) {
                 if (data instanceof LabelItem) {
                     return R.layout.item_more_title;
-                } else if (data instanceof MoreProfileItem) {
+                } else if (data instanceof User) {
                     return R.layout.item_more_profile;
-                } else if (data instanceof MoreTeamItem) {
+                } else if (data instanceof Member) {
                     return R.layout.item_more_team;
                 } else {
                     return R.layout.item_empty_space;
                 }
-
             }
 
             @Override
-            protected void bindVariables(ViewDataBinding binding, Object data) {
+            protected void bindVariables(ViewDataBinding binding, BaseModel data) {
                 if (data instanceof LabelItem) {
                     binding.setVariable(BR.vm, new LabelItemVM(getFragment(), savedInstanceState, (LabelItem) data));
-                } else if (data instanceof MoreProfileItem) {
-                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (MoreProfileItem) data));
-                } else if (data instanceof MoreTeamItem) {
-                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (MoreTeamItem) data));
+                } else if (data instanceof User) {
+                    binding.setVariable(BR.vm, new MoreProfileItemVM(getFragment(), savedInstanceState, (User) data));
+                } else if (data instanceof Member) {
+                    binding.setVariable(BR.vm, new MoreTeamItemVM(getFragment(), savedInstanceState, (Member) data));
                 } else {
                     binding.setVariable(BR.vm, new EmptySpaceItemVM(getFragment(), savedInstanceState));
                 }
@@ -74,33 +80,55 @@ public class MoreFragmentVM extends FragmentVM {
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollHorizontally() {
-                return true;
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return true;
-            }
-        };
-        return layoutManager;
+        return new LinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
     public RecyclerView.Adapter getAdapter() {
         return adapter;
     }
 
-    public void setData(List<Object> data) {
+    public void setData(List<BaseModel> data) {
         if (null != adapter) adapter.setData(data);
     }
 
     public void logout(View view) {
-        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
-        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
-        getFragment().getActivity().startActivity(loginIntent);
-        getFragment().getActivity().finish();
-        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        new MaterialDialog.Builder(getFragment().getContext())
+                .title("정말로 로그아웃을 하시겠습니까?")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .positiveText("확인")
+                .negativeText("취소")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
+                        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
+                        getFragment().getActivity().startActivity(loginIntent);
+                        getFragment().getActivity().finish();
+                        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+                        new PushManager().clearTag();
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    @Bindable
+    public boolean isCompletedLoading() {
+        return completedLoading;
+    }
+
+    public void setCompletedLoading(boolean compltedLoading) {
+        this.completedLoading = compltedLoading;
+        notifyPropertyChanged(BR.completedLoading);
+    }
+
+    @Bindable
+    public boolean getSwipeFlag() {
+        return swipeFlag;
+    }
+
+    public void setSwipeFlag(boolean flag) {
+        swipeFlag = flag;
+        notifyPropertyChanged(BR.swipeFlag);
     }
 }

@@ -31,6 +31,7 @@ public class SharedPreferenceManager {
 
     public void clearUserToken(Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences("plan8", Context.MODE_PRIVATE).edit();
+        editor.clear();
         editor.putString("token", "");
         editor.apply();
     }

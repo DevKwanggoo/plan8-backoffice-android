@@ -7,7 +7,10 @@ import com.google.gson.GsonBuilder;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.api.ApiService;
+import io.plan8.backoffice.util.ConnectivityInterceptor;
+import io.plan8.backoffice.util.NullOnEmptyConverterFactory;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,10 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RestfulAdapter {
-    private static RestfulAdapter instance;
-    private static ApiService retrofitServiceApi;
-    private static ApiService upLoadFileApiService;
-    private static ApiService newApiService;
+    private static volatile RestfulAdapter instance = null;
+    private ApiService newApiService;
     private Context context;
 
     public RestfulAdapter() {
@@ -30,21 +31,24 @@ public class RestfulAdapter {
     }
 
     public static RestfulAdapter getInstance() {
-        return instance;
-    }
-
-    public static synchronized RestfulAdapter build(Context context) {
-        if (instance == null) instance = new RestfulAdapter(context);
+        if (null == instance) {
+            synchronized (RestfulAdapter.class) {
+                instance = new RestfulAdapter();
+            }
+        }
         return instance;
     }
 
     public ApiService getServiceApi() {
 
         if (newApiService == null) {
-            OkHttpClient client = new OkHttpClient.Builder().build();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(new ConnectivityInterceptor(context)).build();
 
             Gson gson = new GsonBuilder()
                     .setLenient()
+                    .excludeFieldsWithoutExposeAnnotation()
                     .create();
 
             /**
@@ -64,6 +68,7 @@ public class RestfulAdapter {
             newApiService = new Retrofit.Builder()
                     .baseUrl(ApplicationManager.getInstance().getServerUrl())
                     .client(client)
+                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build().create(ApiService.class); //인터페이스 연결
 
@@ -71,5 +76,13 @@ public class RestfulAdapter {
         } else {
             return newApiService;
         }
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

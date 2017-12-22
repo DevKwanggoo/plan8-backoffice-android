@@ -36,6 +36,36 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
+    public void setDataNotifyItemRangeChanged(List<T> data) {
+        if (data != null) this.data = data;
+        else this.data = new ArrayList<>();
+        notifyItemRangeChanged(0, this.data.size());
+    }
+
+    public void addData(List<T> data, int startIndex, int dataSize){
+        if (data != null) this.data.addAll(startIndex, data);
+        else this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void addData(T data, int startIndex, int dataSize){
+        if (data != null) this.data.add(startIndex, data);
+        else this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<T> data){
+        if (data != null) this.data.addAll(data);
+        else this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void addData(T data){
+        if (data != null) this.data.add(data);
+        else this.data = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -74,5 +104,14 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
         public ViewDataBinding getBinding() {
             return binding;
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return data.get(position).hashCode();
+    }
+
+    public void removedItem() {
+        notifyItemRangeRemoved(0, data.size());
     }
 }

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:commonViewAdapter="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="io.plan8.backoffice.vm.item.DetailReservationActionFileItemVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/commentFileContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="99dp"
+            android:orientation="vertical">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/commentFileProfile"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:scaleType="centerCrop"
+                app:riv_border_color="@color/roundedBorderColor"
+                app:riv_border_width="1dp"
+                app:riv_mutate_background="true"
+                app:riv_oval="true"
+                commonViewAdapter:glide="@{vm.authAvatar}" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/commentFileProfile"
+                android:background="@drawable/border_history"
+                android:minHeight="84dp"
+                android:onClick="@{vm::fileDownload}"
+                android:visibility="@{vm.image ? View.GONE : View.VISIBLE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{vm.authName}"
+                    android:textColor="@color/defaultDarkColor"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/item_rounded_border">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/ic_line_file"
+                        android:tint="#6d848f" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@{vm.fileName}"
+                        android:textColor="@color/defaultDarkColor"
+                        android:textSize="14dp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="249dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="21dp"
+                android:layout_toRightOf="@+id/commentFileProfile"
+                android:visibility="@{vm.image ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@{vm.authName}"
+                    android:textColor="@color/defaultDarkColor"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="37dp"
+                    android:background="#f4f4f4"
+                    android:clickable="true"
+                    android:onClick="@{vm::previewImage}"
+                    android:scaleType="centerCrop"
+                    app:riv_border_color="@color/roundedBorderColor"
+                    app:riv_border_width="1dp"
+                    app:riv_corner_radius="16dp"
+                    app:riv_mutate_background="true"
+                    commonViewAdapter:glide="@{vm.imageUrl}" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/commentFileContainer"
+            android:layout_marginLeft="69dp"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@{vm.createdDate}"
+                android:textColor="@color/grayColor"
+                android:textSize="12dp" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

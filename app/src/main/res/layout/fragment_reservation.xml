@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:commonViewAdapter="http://schemas.android.com/tools"
+    xmlns:reservationViewAdapter="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="io.plan8.backoffice.vm.ReservationFragmentVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/reservationRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/reservationToolbar"
+            commonViewAdapter:setEnabled="@{vm.swipeFlag}">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reservationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adapter="@{vm.adapter}"
+                android:layoutManager="@{vm.layoutManager}"
+                android:overScrollMode="never" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ffffff"
+            android:layout_below="@+id/reservationToolbar"
+            commonViewAdapter:fadeout="@{vm.completedLoading}">
+
+            <ProgressBar
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorAccent"
+                android:indeterminateTintMode="src_in"
+                commonViewAdapter:fadeout="@{vm.completedLoading}" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/reservationToolbar"
+            android:visibility="@{vm.emptyFlag ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif"
+                android:text="이 날짜에 해당하는 예약 없음"
+                android:textColor="@color/grayTextColor"
+                android:textSize="20dp" />
+        </RelativeLayout>
+
+        <io.plan8.backoffice.view.BlurView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/reservationToolbar"
+            android:background="#80000000"
+            android:clickable="true"
+            android:onClick="@{vm::changeDate}"
+            android:orientation="vertical"
+            reservationViewAdapter:fadeout="@{vm.openedCalendar}" />
+
+        <io.plan8.backoffice.view.Plan8ReservationCalendarView
+            android:id="@+id/reservationCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reservationToolbar"
+            android:background="#ffffff"
+            app:mcv_arrowColor="#6D848F"
+            app:mcv_leftArrowMask="@drawable/ic_line_chevron_left"
+            app:mcv_rightArrowMask="@drawable/ic_line_chevron_right"
+            app:mcv_selectionColor="@color/colorPrimary"
+            app:mcv_showOtherDates="all"
+            reservationViewAdapter:displayCalendar="@{vm.openedCalendar}"
+            reservationViewAdapter:initCalendar="@{vm.openedCalendar}" />
+
+        <RelativeLayout
+            android:id="@+id/reservationToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorPrimary">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="@{vm::changeDate}"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@{vm.toolbarTitle}"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:src="@{vm.openedCalendar? @drawable/ic_line_chevron_up : @drawable/ic_line_chevron_down}"
+                    android:tint="#ffffff" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

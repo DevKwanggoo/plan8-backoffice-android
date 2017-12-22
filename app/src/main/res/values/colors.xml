@@ -10,12 +10,11 @@
     <color name="defaultDarkColor">#FF3C4858</color>
     <color name="grayColor">#FF8492A6</color>
     <color name="blueColor">#FF3F89DE</color>
+    <color name="darkColor">#000000</color>
 
-    <color name="taskStatusBlue">#2979ff</color>
-    <color name="taskStatusOrange">#FFB229</color>
-    <color name="taskStatusRed">#FF2936</color>
-    <color name="taskStatusGreen">#44ce00</color>
-    <color name="taskStatusGray">#d8dfe4</color>
+    <color name="reservationComplte">#44ce00</color>
+    <color name="reservationIncomplte">#d8dfe4</color>
+    <color name="reservationCanceled">#ff2936</color>
 
     <color name="defaultRipple">#20000000</color>
     <color name="whiteRipple">#80ffffff</color>
@@ -25,10 +24,14 @@
 
     <color name="grayLabelColor">#FBFBFB</color>
     <color name="borderColor">#1A000000</color>
+    <color name="roundedBorderColor">#26000000</color>
 
     <color name="grayTextColor">#acb4bf</color>
 
     <color name="lineViewColor">#d8dfe4</color>
+    <color name="inActiveViewColor">#d8dfe4</color>
 
     <color name="grayTintColor">#6d848f</color>
+
+    <color name="activeNotification">#EBF2F7</color>
 </resources>

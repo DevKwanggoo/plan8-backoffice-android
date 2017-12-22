@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:moreViewAdapter="http://schemas.android.com/tools">
+    xmlns:commonViewAdapter="http://schemas.android.com/tools">
 
     <data>
 
@@ -27,10 +27,11 @@
                 android:layout_height="36dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:background="#ff0f"
-                moreViewAdapter:glide="@{vm.testUri}"
                 android:scaleType="centerCrop"
+                commonViewAdapter:glide="@{vm.avatar}"
                 app:riv_mutate_background="true"
+                app:riv_border_color="#26000000"
+                app:riv_border_width="1dp"
                 app:riv_oval="true" />
 
             <LinearLayout
@@ -45,14 +46,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{vm.profileName}"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/defaultDarkColor"
                     android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.profilePhoneNumber}"
+                    android:text="@{vm.profileUserName}"
                     android:textColor="@color/grayColor"
+                    android:layout_marginRight="15dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
                     android:textSize="14dp" />
             </LinearLayout>
         </RelativeLayout>

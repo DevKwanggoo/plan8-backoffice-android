@@ -1,11 +1,18 @@
 package io.plan8.backoffice.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,14 +20,26 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.BaseApplication;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityLoginAuthorizationBinding;
+import io.plan8.backoffice.model.api.Auth;
+import io.plan8.backoffice.model.api.ServerTime;
+import io.plan8.backoffice.model.api.User;
+import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
 import io.plan8.backoffice.vm.LoginAuthorizationActivityVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginAuthorizationActivity extends BaseActivity implements TextView.OnEditorActionListener, View.OnClickListener {
     private ActivityLoginAuthorizationBinding binding;
@@ -37,6 +56,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private TextView sixthInput;
     private LinearLayout inputField;
     private EditText authoEditText;
+    private boolean userFlag = false;
+    private boolean serverTimeFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +70,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         String phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         authoTitle = binding.authorizationTitle;
-        authoTitle.setText("'$phoneNumber’ 번호로\n인증번호 문자메시지가 발송되었습니다.\n4자리 인증번호를 입력해주세요.");
+        authoTitle.setText("'" + phoneNumber + "' 번호로 발송된\n6자리 인증번호를 입력해주세요.");
         authoEditText = binding.authorizationCodeInputEditText;
         authoEditText.setOnEditorActionListener(this);
 
@@ -66,7 +87,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         binding.authNextStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (authoEditText.getText().length() >= 6) nextStep();
+                if (authoEditText.getText().length() >= 6) authStep("");
             }
         });
         binding.authPrevStep.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +193,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                             focusLineList.get(i).setVisibility(View.GONE);
                         }
                         if (s.length() == 6) {
-                            nextStep();
+                            authStep("");
                         }
                     }
                 } else {
@@ -198,95 +219,151 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         authoEditText.setFocusableInTouchMode(true);
         authoEditText.requestFocus();
         ViewUtil.getInstance().showKeyboard(authoEditText);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_DENIED) {
+            registerSMSReceiver();
+        }
     }
 
-    //TODO : 문자인증번호 파싱 리시버 로직임. 필요할때 주석제거
-//    private fun registerSMSReceiver() {
-//        val action = "android.provider.Telephony.SMS_RECEIVED"
-//        val logTag = "SmsReceiver"
-//
-//        val intentFilter = IntentFilter()
-//        intentFilter.addAction(action)
-//        broadcastReceiver = object : BroadcastReceiver() {
-//            override fun onReceive(context: Context, intent: Intent) {
-//                if (intent.action == action) {
-//                    //Bundel 널 체크
-//                    val bundle = intent.extras ?: return
-//
-//                    //pdu 객체 널 체크
-//                    val pdusObj = bundle.get("pdus") as Array<Any> ?: return
-//
-//                    //message 처리
-//                    val smsMessages = arrayOfNulls<SmsMessage>(pdusObj.size)
-//                    for (i in pdusObj.indices) {
-//                        smsMessages[i] = SmsMessage.createFromPdu(pdusObj[i] as ByteArray)
-//                        Log.e(logTag, "NEW SMS " + i + "th")
-//                        Log.e(logTag, "DisplayOriginatingAddress : " + smsMessages[i].getDisplayOriginatingAddress())
-//                        Log.e(logTag, "DisplayMessageBody : " + smsMessages[i].getDisplayMessageBody())
-//                        Log.e(logTag, "EmailBody : " + smsMessages[i].getEmailBody())
-//                        Log.e(logTag, "EmailFrom : " + smsMessages[i].getEmailFrom())
-//                        Log.e(logTag, "OriginatingAddress : " + smsMessages[i].getOriginatingAddress())
-//                        Log.e(logTag, "MessageBody : " + smsMessages[i].getMessageBody())
-//                        Log.e(logTag, "ServiceCenterAddress : " + smsMessages[i].getServiceCenterAddress())
-//                        Log.e(logTag, "TimestampMillis : " + smsMessages[i].getTimestampMillis())
-//
-//                        val noSpaceStr = smsMessages[i].getMessageBody()
-//                        noSpaceStr.replace("\\p{Z}", "")
-//                        val authoNumber = smsMessages[i].getMessageBody().split("인증번호:".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].split("\\(3분간 유효합니다\\)".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-//
-//                        if (authoNumber != null && (context.applicationContext as BaseApplication).getLoginAuthorizationActivity() != null) {
-//                            progressBar!!.visibility = View.VISIBLE
-//                            requestOAuth(authoNumber)
-//                        }
-//
-//                        Log.e("message", smsMessages[i].getMessageBody())
-//                    }
-//                }
-//            }
-//        }
-//
-//        registerReceiver(broadcastReceiver, intentFilter)
-//    }
+    //TODO : 문자 가이드 생기면 가이드대로 정규식 만들어야함.
+    private void registerSMSReceiver() {
+        final String action = "android.provider.Telephony.SMS_RECEIVED";
+        final String logTag = "SmsReceiver";
 
-    private void nextStep() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(action);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(action)) {
+                    //Bundel 널 체크
+                    Bundle bundle = intent.getExtras();
+                    if (bundle == null) {
+                        return;
+                    }
+
+                    //pdu 객체 널 체크
+                    Object[] pdusObj = (Object[]) bundle.get("pdus");
+                    if (pdusObj == null) {
+                        return;
+                    }
+
+                    //message 처리
+                    SmsMessage[] smsMessages = new SmsMessage[pdusObj.length];
+                    for (int i = 0; i < pdusObj.length; i++) {
+                        smsMessages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
+                        Log.e(logTag, "NEW SMS " + i + "th");
+                        Log.e(logTag, "DisplayOriginatingAddress : "
+                                + smsMessages[i].getDisplayOriginatingAddress());
+                        Log.e(logTag, "DisplayMessageBody : "
+                                + smsMessages[i].getDisplayMessageBody());
+                        Log.e(logTag, "EmailBody : "
+                                + smsMessages[i].getEmailBody());
+                        Log.e(logTag, "EmailFrom : "
+                                + smsMessages[i].getEmailFrom());
+                        Log.e(logTag, "OriginatingAddress : "
+                                + smsMessages[i].getOriginatingAddress());
+                        Log.e(logTag, "MessageBody : "
+                                + smsMessages[i].getMessageBody());
+                        Log.e(logTag, "ServiceCenterAddress : "
+                                + smsMessages[i].getServiceCenterAddress());
+                        Log.e(logTag, "TimestampMillis : "
+                                + smsMessages[i].getTimestampMillis());
+
+                        String noSpaceStr = (smsMessages[i].getMessageBody());
+                        noSpaceStr.replaceAll(" ", "");
+                        String authoNumber = noSpaceStr.split("인증번호:")[1];
+
+                        if (authoNumber != null && !authoNumber.equals("") && authoNumber.length() == 6) {
+                            authStep(authoNumber);
+                        }
+
+                        Log.e("message", smsMessages[i].getMessageBody());
+                    }
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private void authStep(String authNumber) {
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
-//        if (RestfulAdapter.instance!!.serviceApi != null) {
-//            RestfulAdapter.instance!!.serviceApi!!.getAuthInfo(intent.getStringExtra("code"), authoEditText!!.text.toString()).enqueue(object : Callback<AuthInfo> {
-//                override fun onFailure(call: Call<AuthInfo>?, t: Throwable?) {
-//                    Toast.makeText(applicationContext, "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show()
-//                    progressBar!!.visibility = View.GONE
-//                    onBackPressed()
-//                }
-//
-//                override fun onResponse(call: Call<AuthInfo>?, response: Response<AuthInfo>?) {
-//                    if (response?.body() != null) {
-//                        SharedPreferenceManager(applicationContext).userToken = response.body()!!.token
-//
-//                        RestfulAdapter.instance!!.serviceApi!!.getMe("Bearer " + response.body()!!.token).enqueue(object : Callback<Me> {
-//                            override fun onResponse(call: Call<Me>?, response: Response<Me>?) {
-//                                if (response?.body() != null) {
-//                                    Constants.me = response.body()!!
-//                                            nextActivity()
-//                                }
-//                            }
-//
-//                            override fun onFailure(call: Call<Me>?, t: Throwable?) {
-//                                Toast.makeText(applicationContext, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//                            }
-//
-//                        })
-//                    }
-//                }
-//            })
-//        }
+        unregisterReceiver(broadcastReceiver);
+
+        if (authNumber == null || authNumber.equals("")) {
+            authNumber = authoEditText.getText().toString();
+        }
+
+        Call<Auth> authCall = RestfulAdapter.getInstance().getServiceApi().getAuthIfo(getIntent().getStringExtra("code"), authNumber);
+        authCall.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(Call<Auth> call, Response<Auth> response) {
+                if (response.body() != null) {
+                    SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), response.body().getToken());
+
+                    Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+                    meCall.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.body() != null) {
+                                ApplicationManager.getInstance().setUser(response.body());
+                                userFlag = true;
+                                //TODO : 푸시 매니저에
+                                nextActivity();
+                            } else {
+                                isApiError();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            isApiError();
+                        }
+                    });
+
+                    Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+                    getServerTime.enqueue(new Callback<ServerTime>() {
+                        @Override
+                        public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
+                            ServerTime serverTime = response.body();
+                            if (serverTime != null && serverTime.getOffset() != null) {
+                                ApplicationManager.getInstance().setServerTimeOffset(serverTime.getOffset());
+                                serverTimeFlag = true;
+                                nextActivity();
+                            } else {
+                                isApiError();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ServerTime> call, Throwable t) {
+                            isApiError();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    onBackPressed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Auth> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                onBackPressed();
+            }
+        });
     }
 
     private void nextActivity() {
-        progressBar.setVisibility(View.GONE);
-        startActivity(MainActivity.buildIntent(this));
-        finish();
-        overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (userFlag && serverTimeFlag) {
+            progressBar.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        }
     }
 
     @Override
@@ -300,7 +377,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     @Override
     public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
         if (v.getId() == authoEditText.getId() && i == EditorInfo.IME_ACTION_DONE) {
-            nextStep();
+            nextActivity();
         }
         return false;
     }
@@ -313,5 +390,11 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             authoEditText.setFocusableInTouchMode(true);
             ViewUtil.getInstance().showKeyboard(authoEditText);
         }
+    }
+
+    public void isApiError() {
+        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
+        onBackPressed();
     }
 }

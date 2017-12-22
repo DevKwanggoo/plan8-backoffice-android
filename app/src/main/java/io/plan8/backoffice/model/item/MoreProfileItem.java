@@ -15,7 +15,6 @@ public class MoreProfileItem implements BaseModel {
         this.phoneNumber = phoneNumber;
     }
 
-
     public String getName() {
         return name;
     }

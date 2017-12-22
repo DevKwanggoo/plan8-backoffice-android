@@ -8,16 +8,17 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:tint="@color/unselectTabItem"/>
+        android:layout_centerHorizontal="true" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/mainTabItemTitle"
         android:layout_below="@+id/mainTabItemIcon"
+        android:layout_marginTop="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:fontFamily="sans-serif"
         android:textColor="@color/unselectTabItem"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="2dp"
         android:textSize="10dp" />
 </RelativeLayout>

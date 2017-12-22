@@ -35,6 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
+                    android:fontFamily="sans-serif"
                     android:layout_marginLeft="16dp"
                     android:layout_centerVertical="true"
                     android:textColor="@color/grayColor"/>
@@ -44,7 +45,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -65,10 +65,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
+                    android:fontFamily="sans-serif"
                     android:layout_marginLeft="16dp"
                     android:layout_centerVertical="true"
                     android:textColor="@color/grayColor"/>
             </RelativeLayout>
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottomSheetThirdItemContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/bottomSheetThirdItem"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/selectable_item_background">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/bottomSheetThirdIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/bottomSheetThirdTitle"
+                    android:layout_toRightOf="@+id/bottomSheetThirdIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginLeft="16dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/grayColor"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 </RelativeLayout>

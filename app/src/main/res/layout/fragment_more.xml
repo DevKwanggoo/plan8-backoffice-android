@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:commonViewAdapter="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -26,61 +27,83 @@
                 android:layout_centerInParent="true"
                 android:text="더보기"
                 android:textColor="#ffffff"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/moreFragmentBody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/moreFragmentToolbar"
-            android:adapter="@{vm.adapter}"
-            android:overScrollMode="never"
-            android:layoutManager="@{vm.layoutManager}" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/moreFragmentBody"
-            android:clickable="true"
-            android:onClick="@{vm::logout}"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@drawable/selectable_item_background">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:textColor="@color/blueColor"
-                    android:text="로그아웃"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/borderColor" />
-        </LinearLayout>
-
         <RelativeLayout
-            android:id="@+id/moreMenuProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:background="#97ffffff"
-            android:clickable="true"
-            android:visibility="gone">
+            android:layout_below="@+id/moreFragmentToolbar"
+            android:background="@color/grayLabelColor">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/moreFragmentRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                commonViewAdapter:setEnabled="@{vm.swipeFlag}">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/moreRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adapter="@{vm.adapter}"
+                        android:background="@color/white"
+                        android:layoutManager="@{vm.layoutManager}"
+                        android:overScrollMode="never" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/moreRecycler"
+                        android:background="@color/white"
+                        android:clickable="true"
+                        android:onClick="@{vm::logout}"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/selectable_item_background">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:fontFamily="sans-serif"
+                                android:text="로그아웃"
+                                android:textColor="@color/blueColor"
+                                android:textSize="16dp" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/borderColor" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/moreFragmentToolbar"
+            android:background="#00ffffff"
+            commonViewAdapter:fadeout="@{vm.completedLoading}">
 
             <ProgressBar
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_centerInParent="true"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/colorAccent"
-                android:indeterminateTintMode="src_in" />
+                android:indeterminateTintMode="src_in"
+                commonViewAdapter:fadeout="@{vm.completedLoading}" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

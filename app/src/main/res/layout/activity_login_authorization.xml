@@ -21,7 +21,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="48dp">
 
                 <RelativeLayout
                     android:id="@+id/authPrevStep"
@@ -33,7 +33,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:tint="@color/grayColor"
                         android:src="@drawable/ic_line_chevron_left" />
                 </RelativeLayout>
@@ -48,8 +49,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="15dp"
                         android:text="들어가기"
+                        android:textStyle="bold"
                         android:textColor="@color/blueColor"
                         android:textSize="16dp" />
                 </RelativeLayout>
@@ -60,7 +62,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="54dp"
+                android:fontFamily="sans-serif"
                 android:textColor="@color/grayColor"
                 android:textSize="20dp" />
 
@@ -70,7 +73,7 @@
                 android:layout_height="64dp"
                 android:clickable="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="82dp">
+                android:layout_marginTop="76dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -84,6 +87,7 @@
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
                         android:gravity="center"
+                        android:fontFamily="sans-serif"
                         android:textSize="36dp" />
 
                     <View
@@ -106,6 +110,7 @@
                         android:layout_width="51dp"
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="36dp" />
 
@@ -130,6 +135,7 @@
                         android:layout_width="51dp"
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="36dp" />
 
@@ -154,6 +160,7 @@
                         android:layout_width="51dp"
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="36dp" />
 
@@ -178,6 +185,7 @@
                         android:layout_width="51dp"
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="36dp" />
 
@@ -202,6 +210,7 @@
                         android:layout_width="51dp"
                         android:layout_height="51dp"
                         android:background="@drawable/item_rounded_border"
+                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="36dp" />
 

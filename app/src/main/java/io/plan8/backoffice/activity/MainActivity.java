@@ -14,19 +14,30 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
-import io.plan8.backoffice.fragment.TaskFragment;
+import io.plan8.backoffice.fragment.NotificationFragment;
+import io.plan8.backoffice.fragment.ReservationFragment;
+import io.plan8.backoffice.model.api.Member;
+import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.vm.MainActivityVM;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -34,6 +45,10 @@ public class MainActivity extends BaseActivity {
     private FragmentManager fragmentManager;
     private int currentTabPosition = 0;
     private List<Fragment> fragments = new ArrayList<>();
+    private List<Member> members;
+    private ReservationFragment reservationFragment;
+    private NotificationFragment notificationFragment;
+    private BGABadgeImageView badgeTabItemIcon;
 
     public static Intent buildIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -41,45 +56,76 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         vm = new MainActivityVM(this, savedInstanceState);
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        if (ApplicationManager.getInstance().getMe().getTeams() != null && ApplicationManager.getInstance().getMe().getTeams().size() > 0) {
-            vm.setEmptyTeamFlag(false);
-        }
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), ApplicationManager.getInstance().getUser().getId());
+        getUserMembersCall.enqueue(new Callback<List<Member>>() {
+            @Override
+            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                members = response.body();
+                ApplicationManager.getInstance().setMembers(members);
+                if (null == members || members.size() == 0) {
+                    vm.setEmptyTeamFlag(true);
+                } else {
+                    initTabAndViewPager();
+                    vm.setEmptyTeamFlag(false);
+                }
+            }
 
-        initTabAndViewPager();
+            @Override
+            public void onFailure(Call<List<Member>> call, Throwable t) {
+            }
+        });
     }
 
     private void initTabAndViewPager() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             TabLayout.Tab tab = binding.mainTabLayout.newTab();
+            if (i == 1) {
+                tab.setCustomView(R.layout.item_badge_tab);
+            } else {
+                tab.setCustomView(R.layout.item_main_tab);
+            }
             binding.mainTabLayout.setSelectedTabIndicatorHeight(0);
-            tab.setCustomView(R.layout.item_main_tab);
 
             if (null != tab.getCustomView()) {
-                Log.e("test", "testtttt " + i);
-                AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
                 AppCompatTextView tabItemTitle = tab.getCustomView().findViewById(R.id.mainTabItemTitle);
+                if (tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView) != null) {
+                    badgeTabItemIcon = tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView);
+                }
+                AppCompatImageView tabItemIcon = tab.getCustomView().findViewById(R.id.mainTabItemIcon);
+
                 if (i == 0) {
                     tabItemIcon.setImageResource(R.drawable.ic_line_calendar);
                     tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
-
                     tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                     tabItemTitle.setText("예약");
 
-                    TaskFragment taskFragment = new TaskFragment();
+                    reservationFragment = new ReservationFragment();
                     Bundle bundle = new Bundle();
-//        bundle.putSerializable("dynamicUiConfiguration", dynamicUiConfigurations.get(i))
-                    taskFragment.setArguments(bundle);
-                    fragments.add(taskFragment);
+                    reservationFragment.setArguments(bundle);
+                    fragments.add(reservationFragment);
+                } else if (i == 1) {
+                    badgeTabItemIcon.setImageResource(R.drawable.ic_line_alarm);
+                    badgeTabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    tabItemTitle.setText("알림");
+                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+
+                    notificationFragment = new NotificationFragment();
+                    Bundle bundle = new Bundle();
+                    notificationFragment.setArguments(bundle);
+                    fragments.add(notificationFragment);
+                    ApplicationManager.getInstance().refreshNotificationCount();
                 } else {
                     tabItemIcon.setImageResource(R.drawable.ic_solid_more);
+                    tabItemIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
                     tabItemTitle.setText("더보기");
+                    tabItemTitle.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
 
                     MoreFragment moreFragment = new MoreFragment();
                     Bundle bundle = new Bundle();
@@ -95,6 +141,7 @@ public class MainActivity extends BaseActivity {
 
         binding.mainViewPager.setOffscreenPageLimit(fragments.size());
 
+        fragmentManager = getSupportFragmentManager();
         FragmentStatePagerAdapter pagerAdapter = new FragmentStatePagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
@@ -114,22 +161,49 @@ public class MainActivity extends BaseActivity {
                 currentTabPosition = tab.getPosition();
                 binding.mainViewPager.setCurrentItem(tab.getPosition());
                 if (tab.getCustomView() != null) {
-                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
-                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    if (null != tab.getCustomView().findViewById(R.id.mainTabItemIcon)) {
+                        ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    }
+                    if (null != tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)) {
+                        ((BGABadgeImageView) tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
+                    }
+                    ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.selectTabItem));
                 }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 if (tab != null) {
-                    ((AppCompatImageView)tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
-                    ((AppCompatTextView)tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    if (tab.getCustomView() != null) {
+                        if (null != tab.getCustomView().findViewById(R.id.mainTabItemIcon)) {
+                            ((AppCompatImageView) tab.getCustomView().findViewById(R.id.mainTabItemIcon)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                        }
+                        if (null != tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)) {
+                            ((BGABadgeImageView) tab.getCustomView().findViewById(R.id.mainTabBadgeItemImageView)).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                        }
+                        ((AppCompatTextView) tab.getCustomView().findViewById(R.id.mainTabItemTitle)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.unselectTabItem));
+                    }
                 }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        binding.mainViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                reservationFragment.setSwipeFlag(false);
+                notificationFragment.setSwipeFlag(false);
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        reservationFragment.setSwipeFlag(true);
+                        notificationFragment.setSwipeFlag(true);
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -140,14 +214,20 @@ public class MainActivity extends BaseActivity {
         switch (resultCode) {
             case RESULT_OK:
                 if (data.getAction() == null) {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
-                        ((MoreFragment) fragments.get(1)).uploadImage(data.getData());
+                    if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(2)).uploadImage(data.getData());
                     }
                 } else {
-                    if (null != fragments && null != fragments.get(1) && fragments.get(1) instanceof MoreFragment) {
-                        ((MoreFragment) fragments.get(1)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
+                    if (null != fragments && null != fragments.get(2) && fragments.get(2) instanceof MoreFragment) {
+                        ((MoreFragment) fragments.get(2)).uploadImage(getImageUri(getApplicationContext(), (Bitmap) data.getExtras().get("data")));
                     }
                 }
+                break;
+            case Constants.REFRESH_RESERVATION_FRAGMENT:
+                refreshNotificationBadgeCount();
+                reservationFragment.setEditFlag(true);
+                reservationFragment.editItem((Reservation) data.getSerializableExtra("reservation"));
+                break;
             default:
                 break;
         }
@@ -163,6 +243,31 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         binding.unbind();
+        ApplicationManager.getInstance().setMainActivity(null);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        ApplicationManager.getInstance().setMainActivity(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    public NotificationFragment getNotificationFragment() {
+        return notificationFragment;
+    }
+
+    public void refreshNotificationBadgeCount() {
+        if (null != badgeTabItemIcon) {
+            badgeTabItemIcon.showTextBadge("" + ApplicationManager.getInstance().getNotificationCount());
+            if (ApplicationManager.getInstance().getNotificationCount() == 0) {
+                badgeTabItemIcon.hiddenBadge();
+            }
+        }
     }
 }
