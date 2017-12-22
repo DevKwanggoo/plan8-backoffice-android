@@ -71,26 +71,54 @@ public class ViewUtil {
     }
 
     public String getActionItemText(Action action) {
+        String creatorName = "";
         if (null == action) {
-            return "";
+            return "알림 내용 없음";
         }
 
-        if (action.getType().equals("comment")) {
-            return action.getCreator().getName() + "님이 작업 댓글을 추가하였습니다.";
-        } else if (action.getType().equals("statusChanged")) {
-            return action.getCreator().getName() + "님이 작업 상태를 수정하였습니다.";
-        } else if (action.getType().equals("phoneNumberChanged")) {
-            return action.getCreator().getName() + "님이 고객 연락처를 수정하였습니다.";
-        } else if (action.getType().equals("emailChanged")) {
-            return action.getCreator().getName() + "님이 이메일을 수정하였습니다.";
-        } else if (action.getType().equals("totalPriceChanged")) {
-            return action.getCreator().getName() + "님이 상품 가격을 수정하였습니다.";
-        } else if (action.getType().equals("additionalRequestsChanged")) {
-            return action.getCreator().getName() + "님이 추가요청 사항을 수정하였습니다.";
-        } else if (action.getType().equals("action")) {
-            return action.getCreator().getName() + "님이 action을 수정하였습니다.";
+        if (action.getType() != null && action.getCreator() != null) {
+            if (null != action.getCreator().getName()){
+                creatorName = action.getCreator().getName();
+            } else {
+                creatorName = "(알 수 없음)";
+            }
+
+            if (action.getType().equals("comment")) {
+                return creatorName + "님이 댓글을 달았습니다.";
+            } else if (action.getType().equals("statusChanged")) {
+                String status = "알 수 없음";
+                String customerName = "고객명 없음";
+
+                if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_COMPLETE)){
+                    status = "완료 처리 하였";
+                } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_CANCELED)) {
+                    status = "취소 하였";
+                } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_INCOMPLETE)){
+                    status = "대기 상태로 변경하였";
+                }
+
+                if (action.getReservation() != null && action.getReservation().getUser() != null && action.getReservation().getUser().getName() != null){
+                    customerName = action.getReservation().getUser().getName();
+                }
+
+                return creatorName + "님이 "
+                        + customerName + " 고객님의 " + DateUtil.getInstance().getReservationDate(action.getReservation().getStart()) + " 예약을 "
+                        + status +"습니다.";
+            } else if (action.getType().equals("phoneNumberChanged")) {
+                return creatorName + "님이 고객 전화번호를 변경하였습니다.";
+            } else if (action.getType().equals("emailChanged")) {
+                return creatorName + "님이 고객 이메일을 변경하였습니다.";
+            } else if (action.getType().equals("totalPriceChanged")) {
+                return creatorName + "님이 상품 가격을 변경하였습니다.";
+            } else if (action.getType().equals("additionalRequestsChanged")) {
+                return creatorName + "님이 추가 요청 사항을 수정하였습니다.";
+            } else if (action.getType().equals("action")) {
+                return creatorName + "님이 action을 수정하였습니다.";
+            } else {
+                return "알림 내용 없음";
+            }
         } else {
-            return "";
+            return "알림 내용 없음";
         }
     }
 
