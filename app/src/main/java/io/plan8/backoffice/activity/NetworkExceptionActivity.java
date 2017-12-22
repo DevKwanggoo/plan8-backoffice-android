@@ -3,7 +3,6 @@ package io.plan8.backoffice.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import io.plan8.backoffice.BR;

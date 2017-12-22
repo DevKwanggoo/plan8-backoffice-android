@@ -10,9 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;

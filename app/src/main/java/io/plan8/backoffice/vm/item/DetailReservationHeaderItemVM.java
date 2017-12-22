@@ -5,6 +5,8 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
+import java.text.DecimalFormat;
+
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
@@ -137,7 +139,8 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getProductPrice(){
         if (reservation != null && reservation.getProducts() != null && reservation.getProducts().size() != 0){
-            return reservation.getProducts().get(0).getPrice() + "원";
+            DecimalFormat formatter = new DecimalFormat("#,###");
+            return formatter.format(reservation.getProducts().get(0).getPrice()) + "원";
         }
         return "가격 정보 없음";
     }

@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
-import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
-import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.model.BaseModel;

@@ -18,8 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -112,23 +110,23 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        MentionsEditText mentionsEditText = findViewById(R.id.mentionEditText);
-        mentionsEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e("wtf", "wtf1");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e("wtf", "wtf2");
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                Log.e("wtf", "wtf3");
-            }
-        });
+//        AppCompatEditText mentionsEditText = findViewById(R.id.mentionEditText);
+//        mentionsEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                Log.e("wtf", "wtf1");
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                Log.e("wtf", "wtf2");
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                Log.e("wtf", "wtf3");
+//            }
+//        });
 
         refreshReservation();
         initHandler();

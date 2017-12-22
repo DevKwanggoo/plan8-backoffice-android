@@ -15,7 +15,6 @@ import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
-import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.DateUtil;

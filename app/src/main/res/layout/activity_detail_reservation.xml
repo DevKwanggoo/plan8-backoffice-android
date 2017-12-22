@@ -67,9 +67,9 @@
                     android:adapter="@{vm.adapter}"
                     android:clipToPadding="false"
                     android:layoutManager="@{vm.verticalLayoutManager}"
-                    commonViewAdapter:recyclerViewScrollTo="@{vm.data}"
                     android:overScrollMode="never"
-                    android:paddingBottom="15dp" />
+                    android:paddingBottom="15dp"
+                    commonViewAdapter:recyclerViewScrollTo="@{vm.data}" />
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
 
@@ -125,7 +125,7 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/border_edittext">
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/mentionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -140,8 +140,8 @@
                         android:textColor="#3c4858"
                         android:textColorHint="#acb4bf"
                         android:textSize="14dp"
-                        commonViewAdapter:selection="@{vm.textLength}" />
-                    <!--detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}"-->
+                        commonViewAdapter:selection="@{vm.textLength}"
+                        detailReservationViewAdapter:onTextChange="@{vm.textChangeListener}" />
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>

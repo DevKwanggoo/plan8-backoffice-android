@@ -4,14 +4,8 @@ plugins {
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 
-repositories {
-    maven { url 'https://maven.google.com' }
-}
-
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
-
     defaultConfig {
         applicationId "io.plan8.backoffice"
 
@@ -30,7 +24,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -47,40 +40,46 @@ android {
             manifestPlaceholders = [appName: "백오피스(개발용)"]
         }
     }
+
     dataBinding {
         enabled = true
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.1.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'gun0912.ted:tedpermission:2.0.0'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.prolificinteractive:material-calendarview:1.4.3'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.makeramen:roundedimageview:2.3.0'
-    compile 'com.afollestad.material-dialogs:core:0.9.1.0'
-    compile 'com.google.firebase:firebase-core:11.4.2'
-    compile 'com.google.firebase:firebase-crash:11.4.2'
-    compile 'com.linkedin.android.spyglass:spyglass:1.4.0'
-    compile 'com.github.chrisbanes:PhotoView:2.0.0'
-    compile 'com.onesignal:OneSignal:[3.6.5, 3.99.99]'
-    compile 'com.google.firebase:firebase-messaging:11.4.2'
-    compile 'com.twitter:twitter-text:1.6.1'
-    testCompile 'junit:junit:4.12'
-    compile 'cn.bingoogolapple:bga-badgeview:1.1.3'
+    implementation 'com.android.support:appcompat-v7:26.1.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'gun0912.ted:tedpermission:2.0.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.1.0'
+    implementation 'com.google.firebase:firebase-core:11.4.2'
+    implementation 'com.google.firebase:firebase-crash:11.4.2'
+    implementation 'com.linkedin.android.spyglass:spyglass:1.4.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.onesignal:OneSignal:[3.6.5, 3.99.99]'
+    implementation 'com.google.firebase:firebase-messaging:11.4.2'
+    implementation 'com.twitter:twitter-text:1.6.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'cn.bingoogolapple:bga-badgeview:1.1.3'
 }
-
-apply plugin: 'com.google.gms.google-services'

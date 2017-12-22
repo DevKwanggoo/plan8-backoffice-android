@@ -7,25 +7,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.twitter.Extractor;
+
 import java.util.List;
 
-import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
-import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
-import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.listener.OnTextChangeListener;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Action;
@@ -39,9 +38,6 @@ import io.plan8.backoffice.vm.item.DetailReservationActionReplaceItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationHeaderItemVM;
 import io.plan8.backoffice.vm.item.DetailReservationMoreButtonItemVM;
 import io.plan8.backoffice.vm.item.MentionItemVM;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by chokwanghwan on 2017. 11. 28..

@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
-import io.plan8.backoffice.activity.PreviewActivity;
 import io.plan8.backoffice.model.api.Attachment;
 
 /**
