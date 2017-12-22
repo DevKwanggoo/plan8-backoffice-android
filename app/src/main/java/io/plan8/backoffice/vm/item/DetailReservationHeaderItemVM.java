@@ -80,7 +80,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
             return "";
         }
 
-        return "" + reservation.getProducts().get(0).getName() + " (" + ViewUtil.getInstance().getCommaFormat(reservation.getValue()) + "원)";
+        return "" + reservation.getProducts().get(0).getName();
     }
 
     @Bindable
@@ -120,5 +120,25 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
             return "";
         }
         return reservation.getTeam().getName();
+    }
+
+    @Bindable
+    public boolean getStateFlag(){
+        if (reservation != null && reservation.getStatus() != null) {
+            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED) || reservation.getStatus().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return true;
+    }
+
+    @Bindable
+    public String getProductPrice(){
+        if (reservation != null && reservation.getProducts() != null && reservation.getProducts().size() != 0){
+            return reservation.getProducts().get(0).getPrice() + "원";
+        }
+        return "가격 정보 없음";
     }
 }

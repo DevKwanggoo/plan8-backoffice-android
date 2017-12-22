@@ -110,4 +110,8 @@ public abstract class BindingRecyclerViewAdapter<T> extends RecyclerView.Adapter
     public long getItemId(int position) {
         return data.get(position).hashCode();
     }
+
+    public void removedItem() {
+        notifyItemRangeRemoved(0, data.size());
+    }
 }

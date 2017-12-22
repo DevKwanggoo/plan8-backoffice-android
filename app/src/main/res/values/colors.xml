@@ -12,7 +12,7 @@
     <color name="blueColor">#FF3F89DE</color>
     <color name="darkColor">#000000</color>
 
-    <color name="reservationComplte">#2979ff</color>
+    <color name="reservationComplte">#44ce00</color>
     <color name="reservationIncomplte">#d8dfe4</color>
     <color name="reservationCanceled">#ff2936</color>
 

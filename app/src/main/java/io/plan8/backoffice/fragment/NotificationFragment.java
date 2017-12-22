@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentNotificationBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
 import io.plan8.backoffice.model.api.Notification;
+import io.plan8.backoffice.util.WrapContentLinearLayoutManager;
 import io.plan8.backoffice.vm.NotificationFragmentVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +61,6 @@ public class NotificationFragment extends BaseFragment {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
                 List<Notification> result = response.body();
-
                 if (null != result) {
                     if (notifications.size() + result.size() > notifications.size()) {
                         notifications.addAll(result);
@@ -83,6 +84,8 @@ public class NotificationFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.notificationRecycler.setLayoutManager(new WrapContentLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
         final EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
@@ -94,6 +97,7 @@ public class NotificationFragment extends BaseFragment {
         binding.notificationSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                vm.removedItem();
                 notifications.clear();
                 endlessRecyclerOnScrollListener.initPrevItemCount();
                 refreshNotificationList();

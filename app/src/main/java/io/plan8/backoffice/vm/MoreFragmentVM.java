@@ -4,18 +4,25 @@ import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
+import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.SharedPreferenceManager;
+import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.model.BaseModel;
@@ -85,12 +92,24 @@ public class MoreFragmentVM extends FragmentVM {
     }
 
     public void logout(View view) {
-        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
-        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
-        getFragment().getActivity().startActivity(loginIntent);
-        getFragment().getActivity().finish();
-        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-        new PushManager().clearTag();
+        new MaterialDialog.Builder(getFragment().getContext())
+                .title("정말로 로그아웃을 하시겠습니까?")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .positiveText("확인")
+                .negativeText("취소")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
+                        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
+                        getFragment().getActivity().startActivity(loginIntent);
+                        getFragment().getActivity().finish();
+                        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+                        new PushManager().clearTag();
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Bindable

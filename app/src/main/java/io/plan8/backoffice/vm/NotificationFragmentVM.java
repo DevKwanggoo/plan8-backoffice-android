@@ -22,6 +22,7 @@ import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.fragment.NotificationFragment;
 import io.plan8.backoffice.model.api.Notification;
+import io.plan8.backoffice.util.WrapContentLinearLayoutManager;
 import io.plan8.backoffice.vm.item.NotificationItemVM;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +58,7 @@ public class NotificationFragmentVM extends FragmentVM {
     }
 
     public RecyclerView.LayoutManager getLayoutManager() {
-        return new LinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false);
+        return new WrapContentLinearLayoutManager(getFragment().getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
     public RecyclerView.Adapter getAdapter() {
@@ -132,5 +133,9 @@ public class NotificationFragmentVM extends FragmentVM {
     public void setCompletedLoading(boolean compltedLoading) {
         this.completedLoading = compltedLoading;
         notifyPropertyChanged(BR.completedLoading);
+    }
+
+    public void removedItem(){
+        adapter.removedItem();
     }
 }
