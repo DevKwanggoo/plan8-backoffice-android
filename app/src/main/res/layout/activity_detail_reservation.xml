@@ -125,7 +125,7 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/border_edittext">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <com.linkedin.android.spyglass.ui.MentionsEditText
                         android:id="@+id/mentionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

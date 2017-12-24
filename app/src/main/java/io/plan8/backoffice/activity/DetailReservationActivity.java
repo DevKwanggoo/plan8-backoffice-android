@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -29,11 +28,16 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.linkedin.android.spyglass.suggestions.SuggestionsResult;
 import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsResultListener;
+import com.linkedin.android.spyglass.suggestions.interfaces.SuggestionsVisibilityManager;
+import com.linkedin.android.spyglass.tokenization.QueryToken;
+import com.linkedin.android.spyglass.tokenization.impl.WordTokenizer;
 import com.linkedin.android.spyglass.tokenization.impl.WordTokenizerConfig;
+import com.linkedin.android.spyglass.tokenization.interfaces.QueryTokenReceiver;
 import com.linkedin.android.spyglass.ui.MentionsEditText;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +47,6 @@ import io.plan8.backoffice.BR;
 import io.plan8.backoffice.BuildConfig;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityDetailReservationBinding;
 import io.plan8.backoffice.model.BaseModel;
@@ -81,10 +84,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private boolean isAlreadyReplaceMention;
     private boolean editFlag = false;
     private boolean isAlreadyRequestActionData = false;
+    private String currentMentionKeword;
 
     private static final WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig
             .Builder()
             .setWordBreakChars(" ")
+
 //            .setMaxNumKeywords(1)
             .build();
 
@@ -135,7 +140,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
                 List<Member> result = response.body();
                 if (null != result) {
-                    List<User> userList = new ArrayList<>();
                     for (Member m : result) {
                         if (null != m
                                 && null != m.getUser()
@@ -145,32 +149,38 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                         }
                     }
 
-//                    userLoader = new User.UserLoader(userList);
-//                    mentionsEditText = findViewById(R.id.mentionEditText);
-//                    mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
-//                    mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
-//                        @Override
-//                        public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-//                            List<String> buckets = Arrays.asList(BUCKET);
-//                            List<User> suggestions = userLoader.getSuggestions(queryToken);
-//                            SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
-//                            // Have suggestions, now call the listener (which is this activity)
-//                            onReceiveSuggestionsResult(result, BUCKET);
-//                            return buckets;
-//                        }
-//                    });
-//
-//                    mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
-//                        @Override
-//                        public void displaySuggestions(boolean display) {
-//
-//                        }
-//
-//                        @Override
-//                        public boolean isDisplayingSuggestions() {
-//                            return false;
-//                        }
-//                    });
+                    userLoader = new User.UserLoader(workerList);
+                    mentionsEditText = findViewById(R.id.mentionEditText);
+                    mentionsEditText.setTokenizer(new WordTokenizer(tokenizerConfig));
+                    mentionsEditText.setQueryTokenReceiver(new QueryTokenReceiver() {
+                        @Override
+                        public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+                            currentMentionKeword = queryToken.getKeywords();
+                            List<String> buckets;
+                            if (currentMentionKeword.startsWith("@")) {
+                                buckets = Arrays.asList(BUCKET);
+                            } else {
+                                buckets = new ArrayList<>();
+                            }
+                            List<User> suggestions = userLoader.getSuggestions(queryToken);
+                            SuggestionsResult result = new SuggestionsResult(queryToken, suggestions);
+                            onReceiveSuggestionsResult(result, BUCKET);
+
+                            return buckets;
+                        }
+                    });
+
+                    mentionsEditText.setSuggestionsVisibilityManager(new SuggestionsVisibilityManager() {
+                        @Override
+                        public void displaySuggestions(boolean display) {
+
+                        }
+
+                        @Override
+                        public boolean isDisplayingSuggestions() {
+                            return false;
+                        }
+                    });
                 }
             }
 
@@ -184,9 +194,11 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     @Override
     public void onReceiveSuggestionsResult(@NonNull SuggestionsResult result, @NonNull String bucket) {
         if (isAlreadyReplaceMention) {
+            isAlreadyReplaceMention = false;
             return;
         }
         List<User> userList = (List<User>) result.getSuggestions();
+        Log.e("ohoho", "please");
         int count = 0;
         if (null != userList) {
             count = userList.size();
@@ -468,7 +480,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     public void replaceToMention(User user) {
         isAlreadyReplaceMention = true;
         vm.replaceToMention(user);
-        isAlreadyReplaceMention = false;
     }
 
     public void refreshReservation() {
@@ -590,6 +601,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAction(String text) {
+        vm.setCurrentText("");
         setCompletedLoading(false);
         Action comment = new Action(reservation, text);
         Call<Action> createActionCall = RestfulAdapter.getInstance().getNeedTokenApiService().addAction(comment);
@@ -606,7 +618,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     vm.addData(result);
                     vm.scrollTo();
                 }
-                vm.setCurrentText("");
                 setCompletedLoading(true);
             }
 
@@ -618,6 +629,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     public void sendAttachment(Attachment attachment) {
+        vm.setCurrentText("");
         setCompletedLoading(false);
         Action attachmentAction = new Action(reservation, attachment);
         Call<Action> createActionCall = RestfulAdapter.getInstance().getNeedTokenApiService().addAction(attachmentAction);
@@ -634,7 +646,6 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                     vm.addData(result);
                     vm.scrollTo();
                 }
-                vm.setCurrentText("");
                 setCompletedLoading(true);
             }
 
@@ -665,5 +676,13 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     public List<User> getWorkerList() {
         return workerList;
+    }
+
+    public String getCurrentMentionKeword() {
+        return currentMentionKeword;
+    }
+
+    public void setCurrentMentionKeword(String currentMentionKeword) {
+        this.currentMentionKeword = currentMentionKeword;
     }
 }

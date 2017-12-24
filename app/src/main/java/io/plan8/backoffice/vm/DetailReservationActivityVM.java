@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.twitter.Extractor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
@@ -47,7 +45,6 @@ import io.plan8.backoffice.vm.item.MentionItemVM;
 public class DetailReservationActivityVM extends ActivityVM implements View.OnClickListener {
     private BindingRecyclerViewAdapter<BaseModel> adapter;
     private BindingRecyclerViewAdapter<User> mentionAdapter;
-    private List<User> userList;
     private Plan8BottomSheetDialog plan8BottomSheetDialog;
     private Plan8BottomSheetDialog fileUploadBottomSheet;
     private boolean isActiveSendBtn;
@@ -219,7 +216,6 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     }
 
     public void setAutoCompleteMentionData(List<User> userList) {
-        this.userList = userList;
         if (null != userList) {
             mentionAdapter.setData(userList);
         }
@@ -250,48 +246,10 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                         setActiveSendBtn(false);
                     }
 
-
-                    List<Extractor.Entity> mentions = mentionExtractor.extractMentionedScreennamesWithIndices(currentText);
-                    Extractor.Entity targetMention = null;
-                    //TODO : twitter text 영어만 추출 가능함............. 원래 멘션 라이브러리 가져와서 1단어만 인식하게 변경하는 작업이 필요할듯.
-                    for (Extractor.Entity m : mentions) {
-                        if (null != m) {
-                            if (currentTextIndex >= m.getStart()
-                                    && currentTextIndex <= m.getEnd()) {
-                                targetMention = m;
-                            }
-                        }
-                        //TODO : 만약, currentTextIndex가 start와 end 사이에 있으면 start부터 currentTextIndex까지 뽑아서 추천 mentionList를 만든다
-                        //TODO : activity로
-                        //TODO : mentionList를 클릭하면 start position 전까지 + @username +  substring endPosition까지 합쳐서 다시 set Text
-
-                        //TODO : 비교할때 다 대문자로 바꿔서 비교해야하며 기준은 contains()!!
-                    }
-
-                    if (null != targetMention && getActivity() instanceof DetailReservationActivity) {
-//                        Log.e("koko", "(" + targetMention.getStart() + "," + targetMention.getEnd() + ") " + targetMention.getValue());
-//                        Log.e("kokoWtf", ""+currentText.subSequence(targetMention.getStart(), currentTextIndex));
-                        String targetText = "" + currentText.substring(targetMention.getStart() + 1, currentTextIndex);
-                        Log.e("tqtq", "targetText  :  " + targetText);
-                        List<User> targetList = new ArrayList<>();
-                        for (User u : ((DetailReservationActivity) getActivity()).getWorkerList()) {
-                            if (null != u
-                                    && null != u.getName()
-                                    && null != u.getUsername()) {
-                                Log.e("test", "test");
-                                if (u.getName().contains(targetText) || u.getUsername().contains(targetText)) {
-                                    targetList.add(u);
-                                }
-                            }
-                        }
-
-                        setAutoCompleteMentionData(targetList);
-                    }
-
                     if (currentText.length() <= 0
                             || !currentText.contains("@")
                             || editText.getText().toString().substring(editText.getText().length() - 1).equals(" ")) {
-//                        setEmptyMentionList(true);
+                        setEmptyMentionList(true);
                     }
                 }
             };
@@ -319,16 +277,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
         notifyPropertyChanged(BR.currentText);
     }
 
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
     public void replaceToMention(User user) {
-        setUserList(null);
         setEmptyMentionList(true);
 
         int index = 0;
@@ -338,20 +287,8 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                 break;
             }
         }
-        Log.e("hoho1", "" + currentText + "  ::  " + index);
 
-//        int testIndex = 0;
-//        if (index == '@') {
-//            testIndex = index;
-//        } else {
-//            testIndex =
-//        }
-        Log.e("hoho3", "" + currentText.substring(0, index));
-        Log.e("hoho3", "" + "@" + user.getUsername());
-        Log.e("hoho3", "" + currentText.substring(index + 1, currentText.length()));
-        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " " + currentText.substring(index + 1, currentText.length()));
-        Log.e("hoho2", "" + currentText + "  ::  " + index + "  ::  " + currentText.length());
-//        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " ");
+        setCurrentText(currentText.substring(0, index) + "@" + user.getUsername() + " " + currentText.substring(index + ((DetailReservationActivity) getActivity()).getCurrentMentionKeword().length() + 1, currentText.length()));
         setSelection();
     }
 

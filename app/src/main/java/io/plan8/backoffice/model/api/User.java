@@ -3,6 +3,7 @@ package io.plan8.backoffice.model.api;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -256,6 +257,9 @@ public class User implements BaseModel, Mentionable {
         @Override
         public List<User> getSuggestions(QueryToken queryToken) {
             String[] namePrefixes = queryToken.getKeywords().toLowerCase().split(" ");
+            for (int i = 0; i < namePrefixes.length; i++) {
+                Log.e("mentionTest", "namePrifiex[" + i + "] = " + namePrefixes[i]);
+            }
             List<User> suggestions = new ArrayList<>();
             if (teamList != null) {
                 for (User suggestion : teamList) {
