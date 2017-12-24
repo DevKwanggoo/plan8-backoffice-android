@@ -112,7 +112,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-        binding.testBtn.setOnClickListener(new View.OnClickListener() {
+        binding.detailReservationTestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferenceManager.getInstance().clearUserToken(getApplicationContext());

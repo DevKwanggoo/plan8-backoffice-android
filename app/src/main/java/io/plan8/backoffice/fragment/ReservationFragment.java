@@ -58,6 +58,13 @@ public class ReservationFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.reservationFragmentTestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferenceManager.getInstance().clearUserToken(getContext());
+            }
+        });
+
         endlessRecyclerOnScrollListener = new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {

@@ -200,10 +200,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/testBtn"
+            android:id="@+id/detailReservationTestBtn"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#000000"
-            android:visibility="gone" />
+            android:background="#000000" />
     </RelativeLayout>
 </layout>

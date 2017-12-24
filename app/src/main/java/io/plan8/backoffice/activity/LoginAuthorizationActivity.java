@@ -57,6 +57,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private EditText authoEditText;
     private boolean userFlag = false;
     private boolean serverTimeFlag = false;
+    private ArrayList<View> focusLineList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,9 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             }
         });
 
-        final ArrayList<View> focusLineList = new ArrayList<>();
+        if (null == focusLineList) {
+            focusLineList = new ArrayList<>();
+        }
         focusLineList.add(binding.firstLine);
         focusLineList.add(binding.secondLine);
         focusLineList.add(binding.thirdLine);
@@ -203,12 +206,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                             focusLineList.get(i).setVisibility(View.GONE);
                         }
                     }
-                    firstInput.setText("");
-                    secondInput.setText("");
-                    thirdInput.setText("");
-                    fourthInput.setText("");
-                    fifthInput.setText("");
-                    sixthInput.setText("");
+                    clearInput();
                 }
             }
         };
@@ -223,6 +221,15 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         }
     }
 
+    private void clearInput() {
+        firstInput.setText("");
+        secondInput.setText("");
+        thirdInput.setText("");
+        fourthInput.setText("");
+        fifthInput.setText("");
+        sixthInput.setText("");
+    }
+
     //TODO : 문자 가이드 생기면 가이드대로 정규식 만들어야함.
     private void registerSMSReceiver() {
         final String action = "android.provider.Telephony.SMS_RECEIVED";
@@ -233,7 +240,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(action)) {
+                if (null != intent.getAction()
+                        && intent.getAction().equals(action)) {
                     //Bundel 널 체크
                     Bundle bundle = intent.getExtras();
                     if (bundle == null) {
@@ -279,6 +287,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         Log.e("message", smsMessages[i].getMessageBody());
                     }
                 }
+
             }
         };
         registerReceiver(broadcastReceiver, intentFilter);
@@ -339,17 +348,21 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                         }
                     });
                 } else {
-                    Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
+                    pleaseCheckAuthNumber();
                 }
             }
 
             @Override
             public void onFailure(Call<Auth> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
+                pleaseCheckAuthNumber();
             }
         });
+    }
+
+    private void pleaseCheckAuthNumber() {
+        Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
+        onBackPressed();
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -389,6 +402,10 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             progressBar.setVisibility(View.GONE);
             onBackPressed();
         }
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
