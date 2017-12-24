@@ -392,13 +392,15 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     }
 
     public void nextStep(boolean isOnSuccess) {
-        if (isOnSuccess && userFlag && serverTimeFlag) {
-            progressBar.setVisibility(View.GONE);
-            startActivity(MainActivity.buildIntent(this));
-            finish();
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        if (isOnSuccess) {
+            if (userFlag && serverTimeFlag) {
+                progressBar.setVisibility(View.GONE);
+                startActivity(MainActivity.buildIntent(this));
+                finish();
+                overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+            }
         } else {
-            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.1111", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             onBackPressed();
         }

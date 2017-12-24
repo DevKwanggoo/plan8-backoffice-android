@@ -2,6 +2,8 @@ package io.plan8.backoffice.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -36,12 +38,24 @@ public class ConnectivityInterceptor implements Interceptor {
         Request request = chain.request().newBuilder().build();
         Response response = chain.proceed(request);
         if (response.code() == 401) {
-//            401은 인증 실패, 403은 인가 실패라고 볼 수 있다.
-            Toast.makeText(context, "로그인 정보가 만료되었습니다. 다시 로그인 해 주세요.", Toast.LENGTH_SHORT).show();
-            ApplicationManager.getInstance().logout();
+            Handler mHandler = new Handler(Looper.getMainLooper());
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "로그인 정보가 만료되었습니다. 다시 로그인 해 주세요.", Toast.LENGTH_SHORT).show();
+                    ApplicationManager.getInstance().logout();
+                }
+            }, 0);
             throw new IOException();
         } else if (response.code() == 403) {
-            Toast.makeText(context, "요청하신 페이지의 접근권한이 없습니다.", Toast.LENGTH_SHORT).show();
+            Handler mHandler = new Handler(Looper.getMainLooper());
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "요청하신 페이지의 접근권한이 없습니다.", Toast.LENGTH_SHORT).show();
+                    ApplicationManager.getInstance().logout();
+                }
+            }, 0);
             throw new IOException();
         }
         return response;
