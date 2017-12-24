@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,17 +25,21 @@ public class DetailReservationViewAdapter {
     @BindingAdapter("detailReservationViewAdapter:onTextChange")
     public static void onTextChange(final EditText view, final OnTextChangeListener listener) {
         view.addTextChangedListener(new TextWatcher() {
+            int latestSize = 0;
+
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int index, int eventCode, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i1, int i2, int i3) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int index, int eventCode, int i2) {
-                boolean isBackPress = false;
-                if (eventCode == 1) {
-                    isBackPress = true;
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                boolean isBackpress = false;
+                if (latestSize > charSequence.length()) {
+                    isBackpress = true;
                 }
-                listener.onChange(view, charSequence, index, isBackPress);
+                Log.e("tqtq", "" + view.getSelectionStart());
+                latestSize = charSequence.length();
+                listener.onChange(view, charSequence, view.getSelectionStart(), isBackpress);
             }
 
             @Override

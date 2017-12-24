@@ -198,11 +198,5 @@
                 android:indeterminateTintMode="src_in"
                 commonViewAdapter:fadeout="@{vm.completedLoading}" />
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/detailReservationTestBtn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="#000000" />
     </RelativeLayout>
 </layout>

@@ -242,17 +242,20 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                         mentionExtractor = new Extractor();
                     }
                     currentText = editText.getText().toString();
+                    currentTextIndex = charIndex;
+
+                    if (currentText.length() > 0) {
+                        setActiveSendBtn(true);
+                    } else {
+                        setActiveSendBtn(false);
+                    }
+
 
                     List<Extractor.Entity> mentions = mentionExtractor.extractMentionedScreennamesWithIndices(currentText);
                     Extractor.Entity targetMention = null;
+                    //TODO : twitter text 영어만 추출 가능함............. 원래 멘션 라이브러리 가져와서 1단어만 인식하게 변경하는 작업이 필요할듯.
                     for (Extractor.Entity m : mentions) {
-//                        if (null != m
-//                                && m.getStart() >) {
-//
-//                        }
                         if (null != m) {
-                            Log.e("wtf", "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")");
-                            Log.e("wtftext", "" + currentText.charAt(currentTextIndex + 1) + "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")" + currentText.charAt(m.getStart()) + "  ::  " + currentText.charAt(m.getEnd() - 1));
                             if (currentTextIndex >= m.getStart()
                                     && currentTextIndex <= m.getEnd()) {
                                 targetMention = m;
@@ -266,30 +269,23 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                     }
 
                     if (null != targetMention && getActivity() instanceof DetailReservationActivity) {
-                        Log.e("koko", "(" + targetMention.getStart() + "," + targetMention.getEnd() + ") " + targetMention.getValue());
-                        Log.e("kokoWtf", ""+currentText.subSequence(targetMention.getStart(), currentTextIndex));
-                        String targetText = ""+currentText.subSequence(targetMention.getStart(), currentTextIndex);
+//                        Log.e("koko", "(" + targetMention.getStart() + "," + targetMention.getEnd() + ") " + targetMention.getValue());
+//                        Log.e("kokoWtf", ""+currentText.subSequence(targetMention.getStart(), currentTextIndex));
+                        String targetText = "" + currentText.substring(targetMention.getStart() + 1, currentTextIndex);
+                        Log.e("tqtq", "targetText  :  " + targetText);
                         List<User> targetList = new ArrayList<>();
                         for (User u : ((DetailReservationActivity) getActivity()).getWorkerList()) {
                             if (null != u
-                                    && u.getName().contains(targetText)
-                                    && u.getUsername().contains(targetText)) {
-                                targetList.add(u);
+                                    && null != u.getName()
+                                    && null != u.getUsername()) {
+                                Log.e("test", "test");
+                                if (u.getName().contains(targetText) || u.getUsername().contains(targetText)) {
+                                    targetList.add(u);
+                                }
                             }
                         }
 
                         setAutoCompleteMentionData(targetList);
-                    }
-
-                    if (isBackpress) {
-                        currentTextIndex = charIndex - 1;
-                    } else {
-                        currentTextIndex = charIndex;
-                    }
-                    if (currentText.length() > 0) {
-                        setActiveSendBtn(true);
-                    } else {
-                        setActiveSendBtn(false);
                     }
 
                     if (currentText.length() <= 0
