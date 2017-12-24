@@ -287,40 +287,39 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     private void authStep(String authNumber) {
         ViewUtil.getInstance().hideKeyboard(authoEditText);
         progressBar.setVisibility(View.VISIBLE);
-        unregisterReceiver(broadcastReceiver);
 
         if (authNumber == null || authNumber.equals("")) {
             authNumber = authoEditText.getText().toString();
         }
 
-        Call<Auth> authCall = RestfulAdapter.getInstance().getServiceApi().getAuthIfo(getIntent().getStringExtra("code"), authNumber);
+        Call<Auth> authCall = RestfulAdapter.getInstance().getApiService().getAuthIfo(getIntent().getStringExtra("code"), authNumber);
         authCall.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(Call<Auth> call, Response<Auth> response) {
-                if (response.body() != null) {
-                    SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), response.body().getToken());
+                Auth auth = response.body();
+                if (auth != null) {
+                    SharedPreferenceManager.getInstance().setUserToken(getApplicationContext(), auth.getToken());
 
-                    Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()));
+                    Call<User> meCall = RestfulAdapter.getInstance().getNeedTokenApiService().getMe();
                     meCall.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (response.body() != null) {
                                 ApplicationManager.getInstance().setUser(response.body());
                                 userFlag = true;
-                                //TODO : 푸시 매니저에
-                                nextActivity();
+                                nextStep(true);
                             } else {
-                                isApiError();
+                                nextStep(false);
                             }
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            isApiError();
+                            nextStep(false);
                         }
                     });
 
-                    Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+                    Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getNeedTokenApiService().getServerTime(DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
                     getServerTime.enqueue(new Callback<ServerTime>() {
                         @Override
                         public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
@@ -328,21 +327,20 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                             if (serverTime != null && serverTime.getOffset() != null) {
                                 ApplicationManager.getInstance().setServerTimeOffset(serverTime.getOffset());
                                 serverTimeFlag = true;
-                                nextActivity();
+                                nextStep(true);
                             } else {
-                                isApiError();
+                                nextStep(false);
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ServerTime> call, Throwable t) {
-                            isApiError();
+                            nextStep(false);
                         }
                     });
                 } else {
                     Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
-                    onBackPressed();
                 }
             }
 
@@ -350,18 +348,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
             public void onFailure(Call<Auth> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "인증번호를 확인 해주세요.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
-                onBackPressed();
             }
         });
-    }
-
-    private void nextActivity() {
-        if (userFlag && serverTimeFlag) {
-            progressBar.setVisibility(View.GONE);
-            startActivity(MainActivity.buildIntent(this));
-            finish();
-            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
-        }
     }
 
     @Override
@@ -375,7 +363,7 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
     @Override
     public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
         if (v.getId() == authoEditText.getId() && i == EditorInfo.IME_ACTION_DONE) {
-            nextActivity();
+            nextStep(true);
         }
         return false;
     }
@@ -390,9 +378,17 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
         }
     }
 
-    public void isApiError() {
-        Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-        progressBar.setVisibility(View.GONE);
-        onBackPressed();
+    public void nextStep(boolean isOnSuccess) {
+        if (isOnSuccess && userFlag && serverTimeFlag) {
+            progressBar.setVisibility(View.GONE);
+            startActivity(MainActivity.buildIntent(this));
+            finish();
+            overridePendingTransition(R.anim.pull_in_right_activity, R.anim.push_out_left_activity);
+        } else {
+            Toast.makeText(getApplicationContext(), "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            onBackPressed();
+        }
+        unregisterReceiver(broadcastReceiver);
     }
 }

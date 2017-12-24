@@ -1,9 +1,9 @@
 package io.plan8.backoffice.vm;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.databinding.ActivityLoginBinding;
 
 /**
@@ -13,7 +13,7 @@ import io.plan8.backoffice.databinding.ActivityLoginBinding;
 public class LoginActivityVM extends ActivityVM {
     private ActivityLoginBinding binding;
 
-    public LoginActivityVM(Activity activity, Bundle savedInstanceState, ActivityLoginBinding binding) {
+    public LoginActivityVM(BaseActivity activity, Bundle savedInstanceState, ActivityLoginBinding binding) {
         super(activity, savedInstanceState);
         this.binding = binding;
     }

@@ -20,7 +20,6 @@ import java.util.List;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentMoreBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
@@ -134,7 +133,7 @@ public class MoreFragment extends BaseFragment {
 
     public void refreshMoreFragmentData() {
         setCompletedLoading(false);
-        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), ApplicationManager.getInstance().getUser().getId());
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getNeedTokenApiService().getUserMembers(ApplicationManager.getInstance().getUser().getId());
         getUserMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
@@ -149,7 +148,7 @@ public class MoreFragment extends BaseFragment {
             }
         });
 
-        Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()));
+        Call<User> meCall = RestfulAdapter.getInstance().getNeedTokenApiService().getMe();
         meCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -179,7 +178,7 @@ public class MoreFragment extends BaseFragment {
         File files = new File(absolutePath);
         RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(uri)), files);
         MultipartBody.Part multipart = MultipartBody.Part.createFormData("files", files.getName(), requestFile);
-        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), multipart);
+        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getNeedTokenApiService().postUpload(multipart);
         uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
             public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
@@ -187,7 +186,7 @@ public class MoreFragment extends BaseFragment {
                 if (attachments != null) {
                     HashMap<String, String> putMeImage = new HashMap<String, String>();
                     putMeImage.put("avatar", attachments.get(0).getUrl());
-                    Call<User> putMe = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getActivity()), putMeImage);
+                    Call<User> putMe = RestfulAdapter.getInstance().getNeedTokenApiService().putMe(putMeImage);
                     putMe.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {

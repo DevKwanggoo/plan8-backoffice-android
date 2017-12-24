@@ -1,10 +1,10 @@
 package io.plan8.backoffice.vm;
 
-import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.model.api.Attachment;
 
 /**
@@ -14,7 +14,7 @@ import io.plan8.backoffice.model.api.Attachment;
 public class PreviewActivityVM extends ActivityVM {
     private Attachment attachment;
 
-    public PreviewActivityVM(Activity activity, Bundle savedInstanceState, Attachment attachment) {
+    public PreviewActivityVM(BaseActivity activity, Bundle savedInstanceState, Attachment attachment) {
         super(activity, savedInstanceState);
         this.attachment = attachment;
     }

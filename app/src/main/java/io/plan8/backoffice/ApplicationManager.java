@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import io.plan8.backoffice.activity.BaseActivity;
+import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.activity.MainActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.model.api.Member;
@@ -37,6 +39,7 @@ public class ApplicationManager {
     private MainActivity mainActivity;
     private String serverTimeOffset;
     private int notificationCount = 0;
+    private BaseActivity currentActivity;
 
     public static ApplicationManager getInstance() {
         if (null == instance) {
@@ -105,7 +108,7 @@ public class ApplicationManager {
     }
 
     public void refreshNotificationCount() {
-        Call<ResponseBody> notificationCountCall = RestfulAdapter.getInstance().getServiceApi().getNotificationCount("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), false);
+        Call<ResponseBody> notificationCountCall = RestfulAdapter.getInstance().getNeedTokenApiService().getNotificationCount(false);
         notificationCountCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -118,7 +121,7 @@ public class ApplicationManager {
 
                         Log.e("notification count : ", count);
 
-                        if (null == count || count.equals("") || Integer.parseInt(count) == 0){
+                        if (null == count || count.equals("") || Integer.parseInt(count) == 0) {
                             setNotificationCount(0);
                             refreshAppBadgeCount(0);
                         } else {
@@ -152,5 +155,26 @@ public class ApplicationManager {
         badgeIntent.putExtra("badge_count_pakage_name", context.getPackageName());
         badgeIntent.putExtra("badge_count_class_name", "io.plan8.backoffice.activity.SplashActivity");
         context.sendBroadcast(badgeIntent);
+    }
+
+    public void logout() {
+        if (null == currentActivity) {
+            return;
+        }
+        SharedPreferenceManager.getInstance().clearUserToken(currentActivity);
+        Intent loginIntent = new Intent(currentActivity, LoginActivity.class);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        currentActivity.startActivity(loginIntent);
+        currentActivity.finish();
+        currentActivity.overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
+        new PushManager().clearTag();
+    }
+
+    public BaseActivity getCurrentActivity() {
+        return currentActivity;
+    }
+
+    public void setCurrentActivity(BaseActivity currentActivity) {
+        this.currentActivity = currentActivity;
     }
 }

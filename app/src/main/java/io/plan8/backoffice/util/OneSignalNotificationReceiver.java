@@ -1,5 +1,7 @@
 package io.plan8.backoffice.util;
 
+import android.util.Log;
+
 import com.onesignal.OSNotification;
 import com.onesignal.OneSignal;
 
@@ -12,6 +14,7 @@ import io.plan8.backoffice.ApplicationManager;
 public class OneSignalNotificationReceiver implements OneSignal.NotificationReceivedHandler {
     @Override
     public void notificationReceived(OSNotification notification) {
+        Log.e("notificationRecieved", "notificationRecieved");
         ApplicationManager.getInstance().refreshNotificationCount();
         //refresh notification fragment
         if (null != ApplicationManager.getInstance().getMainActivity()

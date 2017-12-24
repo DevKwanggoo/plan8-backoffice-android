@@ -1,6 +1,5 @@
 package io.plan8.backoffice.vm.item;
 
-import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.View;
 import java.text.DecimalFormat;
 
 import io.plan8.backoffice.Constants;
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
@@ -21,7 +21,7 @@ import io.plan8.backoffice.vm.ActivityVM;
 public class DetailReservationHeaderItemVM extends ActivityVM {
     private Reservation reservation;
 
-    public DetailReservationHeaderItemVM(Activity activity, Bundle savedInstanceState, Reservation reservation) {
+    public DetailReservationHeaderItemVM(BaseActivity activity, Bundle savedInstanceState, Reservation reservation) {
         super(activity, savedInstanceState);
         this.reservation = reservation;
     }
@@ -77,17 +77,16 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getProductName() {
         if (null == reservation
-                || null == reservation.getProducts()
-                || null == reservation.getProducts().get(0)) {
+                || null == reservation.getProduct()) {
             return "";
         }
 
-        return "" + reservation.getProducts().get(0).getName();
+        return "" + reservation.getProduct().getName();
     }
 
     @Bindable
     public String getCustomerRequest() {
-        if (reservation != null && reservation.getAddtionalRequest() != null){
+        if (reservation != null && reservation.getAddtionalRequest() != null) {
             return reservation.getAddtionalRequest();
         }
         return "추가 요청 사항 없음";
@@ -108,10 +107,9 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
 
     public void editReservationStatus(View view) {
         if (reservation != null && reservation.getStatus() != null) {
-            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
-                if (getActivity() instanceof DetailReservationActivity) {
-                    ((DetailReservationActivity) getActivity()).showBottomSheet();
-                }
+            if (!reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED)
+                    && getActivity() instanceof DetailReservationActivity) {
+                ((DetailReservationActivity) getActivity()).showBottomSheet();
             }
         }
     }
@@ -125,7 +123,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     }
 
     @Bindable
-    public boolean getStateFlag(){
+    public boolean getStateFlag() {
         if (reservation != null && reservation.getStatus() != null) {
             if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED) || reservation.getStatus().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
                 return false;
@@ -137,10 +135,11 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     }
 
     @Bindable
-    public String getProductPrice(){
-        if (reservation != null && reservation.getProducts() != null && reservation.getProducts().size() != 0){
+    public String getProductPrice() {
+        if (reservation != null
+                && reservation.getProduct() != null) {
             DecimalFormat formatter = new DecimalFormat("#,###");
-            return formatter.format(reservation.getProducts().get(0).getPrice()) + "원";
+            return formatter.format(reservation.getProduct().getPrice()) + "원";
         }
         return "가격 정보 없음";
     }

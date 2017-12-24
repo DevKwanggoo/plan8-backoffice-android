@@ -21,7 +21,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -43,62 +42,59 @@ public interface ApiService {
     Call<Auth> getAuthIfo(@Field("code") String code, @Field("pinCode") String pinCode);
 
     @GET("1/users/me")
-    Call<User> getMe(@Header("authorization") String auth);
+    Call<User> getMe();
 
     @Multipart
     @POST("1/upload")
-    Call<List<Attachment>> postUpload(@Header("authorization") String auth, @Part MultipartBody.Part files);
+    Call<List<Attachment>> postUpload(@Part MultipartBody.Part files);
 
     @FormUrlEncoded
     @PUT("1/users/me")
-    Call<User> putMe(@Header("authorization") String auth, @FieldMap HashMap<String, String> putMeMap);
+    Call<User> putMe(@FieldMap HashMap<String, String> putMeMap);
 
     @GET("1/reservations")
-    Call<List<Reservation>> getReservations(@Header("authorization") String auth,
-                                            @Query("after") String after,
+    Call<List<Reservation>> getReservations(@Query("after") String after,
                                             @Query("before") String before,
                                             @Query("worker") int userId,
                                             @Query("take") int take,
                                             @Query("skip") int skip);
 
     @GET("1/reservations/{id}")
-    Call<Reservation> getReservation(@Header("authorization") String auth, @Path("id") int reservationId);
+    Call<Reservation> getReservation(@Path("id") int reservationId);
 
     @FormUrlEncoded
     @PUT("1/reservations/{id}")
-    Call<Reservation> putReservation(@Header("authorization") String auth, @Path("id") int reservationId, @FieldMap HashMap<String, String> putReservationMap);
+    Call<Reservation> putReservation(@Path("id") int reservationId, @FieldMap HashMap<String, String> putReservationMap);
 
     @GET("1/members")
-    Call<List<Member>> getUserMembers(@Header("authorization") String auth, @Query("user") int userId);
+    Call<List<Member>> getUserMembers(@Query("user") int userId);
 
     @GET("1/members")
-    Call<List<Member>> getMembers(@Header("authorization") String auth, @Query("team") int teamId);
+    Call<List<Member>> getMembers(@Query("team") int teamId);
 
     @POST("1/actions")
-    Call<Action> addAction(@Header("authorization") String auth, @Body Action action);
+    Call<Action> addAction(@Body Action action);
 
     @GET("1/actions")
-    Call<List<Action>> getActions(@Header("authorization") String auth,
-                                  @Query("reservation") int reservationId,
+    Call<List<Action>> getActions(@Query("reservation") int reservationId,
                                   @Query("take") int take,
                                   @Query("skip") int skip);
 
     @GET("1/users/me/notifications")
-    Call<List<Notification>> getNotifications(@Header("authorization") String auth,
-                                              @Query("take") int take,
+    Call<List<Notification>> getNotifications(@Query("take") int take,
                                               @Query("skip") int skip);
 
     @GET("1/users/me/notifications/count")
-    Call<ResponseBody> getNotificationCount(@Header("authorization") String auth, @Query("read") boolean read);
+    Call<ResponseBody> getNotificationCount(@Query("read") boolean read);
 
     @FormUrlEncoded
     @PUT("1/notifications/{id}")
-    Call<Notification> readNotification(@Header("authorization") String auth, @Path("id") int notificationId, @FieldMap Map<String, Boolean> readMap);
+    Call<Notification> readNotification(@Path("id") int notificationId, @FieldMap Map<String, Boolean> readMap);
 
     @FormUrlEncoded
     @PUT("1/users/me/notifications")
-    Call<List<Notification>> readAllNotifications(@Header("authorization") String auth, @Field("read") boolean read);
+    Call<List<Notification>> readAllNotifications(@Field("read") boolean read);
 
     @GET("1/server-time-offset")
-    Call<ServerTime> getServerTime(@Header("authorization") String auth, @Query("now") String now);
+    Call<ServerTime> getServerTime(@Query("now") String now);
 }

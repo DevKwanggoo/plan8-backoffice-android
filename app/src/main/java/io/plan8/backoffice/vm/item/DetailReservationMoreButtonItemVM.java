@@ -1,10 +1,10 @@
 package io.plan8.backoffice.vm.item;
 
-import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.item.DetailReservationMoreButtonItem;
 import io.plan8.backoffice.vm.ActivityVM;
@@ -16,7 +16,7 @@ import io.plan8.backoffice.vm.ActivityVM;
 public class DetailReservationMoreButtonItemVM extends ActivityVM {
     private DetailReservationMoreButtonItem detailReservationMoreButtonItem;
 
-    public DetailReservationMoreButtonItemVM(Activity activity, Bundle savedInstanceState, DetailReservationMoreButtonItem detailReservationMoreButtonItem) {
+    public DetailReservationMoreButtonItemVM(BaseActivity activity, Bundle savedInstanceState, DetailReservationMoreButtonItem detailReservationMoreButtonItem) {
         super(activity, savedInstanceState);
         this.detailReservationMoreButtonItem = detailReservationMoreButtonItem;
     }

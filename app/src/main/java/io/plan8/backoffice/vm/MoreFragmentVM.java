@@ -1,12 +1,10 @@
 package io.plan8.backoffice.vm;
 
-import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -18,16 +16,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
-import io.plan8.backoffice.activity.LoginActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.BaseModel;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.model.item.LabelItem;
-import io.plan8.backoffice.util.PushManager;
 import io.plan8.backoffice.vm.item.EmptySpaceItemVM;
 import io.plan8.backoffice.vm.item.LabelItemVM;
 import io.plan8.backoffice.vm.item.MoreProfileItemVM;
@@ -43,7 +40,7 @@ public class MoreFragmentVM extends FragmentVM {
     private boolean completedLoading;
     private boolean swipeFlag = true;
 
-    public MoreFragmentVM(Fragment fragment, @Nullable final Bundle savedInstanceState) {
+    public MoreFragmentVM(BaseFragment fragment, @Nullable final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
 
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
@@ -89,7 +86,7 @@ public class MoreFragmentVM extends FragmentVM {
         if (null != adapter) adapter.setData(data);
     }
 
-    public void logout(View view) {
+    public void logout(final View view) {
         new MaterialDialog.Builder(getFragment().getContext())
                 .title("정말로 로그아웃을 하시겠습니까?")
                 .inputType(InputType.TYPE_CLASS_TEXT)
@@ -98,12 +95,7 @@ public class MoreFragmentVM extends FragmentVM {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SharedPreferenceManager.getInstance().clearUserToken(getFragment().getContext());
-                        Intent loginIntent = new Intent(getFragment().getActivity(), LoginActivity.class);
-                        getFragment().getActivity().startActivity(loginIntent);
-                        getFragment().getActivity().finish();
-                        getFragment().getActivity().overridePendingTransition(R.anim.pull_in_left_activity, R.anim.push_out_right_activity);
-                        new PushManager().clearTag();
+                        ApplicationManager.getInstance().logout();
                         dialog.dismiss();
                     }
                 })

@@ -1,11 +1,11 @@
 package io.plan8.backoffice.vm;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.util.NetworkUtil;
 
 /**
@@ -13,7 +13,7 @@ import io.plan8.backoffice.util.NetworkUtil;
  */
 
 public class NetworkExceptionActivityVM extends ActivityVM {
-    public NetworkExceptionActivityVM(Activity activity, Bundle savedInstanceState) {
+    public NetworkExceptionActivityVM(BaseActivity activity, Bundle savedInstanceState) {
         super(activity, savedInstanceState);
     }
 

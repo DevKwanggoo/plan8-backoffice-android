@@ -3,7 +3,6 @@ package io.plan8.backoffice.vm;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +12,7 @@ import java.util.List;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.item.ReservationItemVM;
@@ -30,7 +30,7 @@ public class ReservationFragmentVM extends FragmentVM {
     private boolean swipeFlag = true;
     private boolean completedLoading;
 
-    public ReservationFragmentVM(final Fragment fragment, final Bundle savedInstanceState) {
+    public ReservationFragmentVM(final BaseFragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
         selectedDate = DateUtil.getInstance().getCurrentDate();
         adapter = new BindingRecyclerViewAdapter<Reservation>() {

@@ -2,8 +2,8 @@ package io.plan8.backoffice.vm.item;
 
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.item.LabelItem;
 import io.plan8.backoffice.vm.FragmentVM;
 
@@ -13,7 +13,7 @@ import io.plan8.backoffice.vm.FragmentVM;
 
 public class LabelItemVM extends FragmentVM {
     private LabelItem labelItem;
-    public LabelItemVM(Fragment fragment, Bundle savedInstanceState, LabelItem labelItem) {
+    public LabelItemVM(BaseFragment fragment, Bundle savedInstanceState, LabelItem labelItem) {
         super(fragment, savedInstanceState);
         this.labelItem = labelItem;
     }

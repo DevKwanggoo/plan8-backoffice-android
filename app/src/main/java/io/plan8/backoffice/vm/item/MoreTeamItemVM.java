@@ -2,9 +2,9 @@ package io.plan8.backoffice.vm.item;
 
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import io.plan8.backoffice.Constants;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.api.Member;
 import io.plan8.backoffice.vm.FragmentVM;
 
@@ -15,7 +15,7 @@ import io.plan8.backoffice.vm.FragmentVM;
 public class MoreTeamItemVM extends FragmentVM {
     private Member member;
 
-    public MoreTeamItemVM(Fragment fragment, Bundle savedInstanceState, Member member) {
+    public MoreTeamItemVM(BaseFragment fragment, Bundle savedInstanceState, Member member) {
         super(fragment, savedInstanceState);
         this.member = member;
     }

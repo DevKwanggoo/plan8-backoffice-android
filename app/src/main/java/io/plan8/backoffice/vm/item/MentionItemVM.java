@@ -1,10 +1,10 @@
 package io.plan8.backoffice.vm.item;
 
-import android.app.Activity;
 import android.databinding.Bindable;
 import android.os.Bundle;
 import android.view.View;
 
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.ActivityVM;
@@ -16,7 +16,7 @@ import io.plan8.backoffice.vm.ActivityVM;
 public class MentionItemVM extends ActivityVM {
     private User user;
 
-    public MentionItemVM(Activity activity, Bundle savedInstanceState, User user) {
+    public MentionItemVM(BaseActivity activity, Bundle savedInstanceState, User user) {
         super(activity, savedInstanceState);
         this.user = user;
     }

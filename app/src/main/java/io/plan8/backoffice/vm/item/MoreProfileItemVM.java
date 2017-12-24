@@ -6,7 +6,6 @@ import android.databinding.Bindable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.view.View;
@@ -24,9 +23,9 @@ import java.util.regex.Pattern;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.fragment.MoreFragment;
 import io.plan8.backoffice.model.api.User;
 import io.plan8.backoffice.vm.FragmentVM;
@@ -45,7 +44,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
     private Pattern usernamePattern;
     private Matcher matcher;
 
-    public MoreProfileItemVM(Fragment fragment, Bundle savedInstanceState, User user) {
+    public MoreProfileItemVM(BaseFragment fragment, Bundle savedInstanceState, User user) {
         super(fragment, savedInstanceState);
         this.user = user;
         initBottomSheet();
@@ -112,7 +111,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                 ((MoreFragment) getFragment()).setCompletedLoading(false);
                                 HashMap<String, String> putMap = new HashMap<String, String>();
                                 putMap.put("name", input.toString());
-                                Call<User> putMeCall = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putMap);
+                                Call<User> putMeCall = RestfulAdapter.getInstance().getNeedTokenApiService().putMe(putMap);
                                 putMeCall.enqueue(new Callback<User>() {
                                     @Override
                                     public void onResponse(Call<User> call, Response<User> response) {
@@ -151,7 +150,7 @@ public class MoreProfileItemVM extends FragmentVM implements View.OnClickListene
                                     ((MoreFragment) getFragment()).setCompletedLoading(false);
                                     HashMap<String, String> putUserMap = new HashMap<String, String>();
                                     putUserMap.put("username", input.toString());
-                                    Call<User> putUser = RestfulAdapter.getInstance().getServiceApi().putMe("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), putUserMap);
+                                    Call<User> putUser = RestfulAdapter.getInstance().getNeedTokenApiService().putMe(putUserMap);
                                     putUser.enqueue(new Callback<User>() {
                                         @Override
                                         public void onResponse(Call<User> call, Response<User> response) {

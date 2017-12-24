@@ -48,6 +48,7 @@
                     android:layout_marginRight="15dp"
                     android:text="모두읽기"
                     android:textColor="@color/white"
+                    android:visibility="@{vm.empty ? View.GONE : View.VISIBLE}"
                     android:textSize="16dp" />
             </RelativeLayout>
         </RelativeLayout>

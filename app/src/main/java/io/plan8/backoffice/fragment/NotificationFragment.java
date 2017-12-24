@@ -19,7 +19,6 @@ import java.util.List;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.FragmentNotificationBinding;
 import io.plan8.backoffice.listener.EndlessRecyclerOnScrollListener;
@@ -56,7 +55,7 @@ public class NotificationFragment extends BaseFragment {
             notifications = new ArrayList<>();
         }
 
-        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getServiceApi().getNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()), Constants.PAGINATION_NOTIFICATION_COUNT, notifications.size());
+        Call<List<Notification>> getNotifications = RestfulAdapter.getInstance().getNeedTokenApiService().getNotifications(Constants.PAGINATION_NOTIFICATION_COUNT, notifications.size());
         getNotifications.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {

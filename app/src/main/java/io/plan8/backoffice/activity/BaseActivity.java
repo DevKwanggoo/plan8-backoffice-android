@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import io.plan8.backoffice.ApplicationManager;
+
 /**
  * Created by SSozi on 2017. 11. 28..
  */
@@ -31,12 +33,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        ApplicationManager.getInstance().setCurrentActivity(this);
         Log.d("lifeCycle", "onResume :: " + getClass().getSimpleName() + "  ::  " + hashCode());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ApplicationManager.getInstance().setCurrentActivity(null);
         Log.d("lifeCycle", "onPause :: " + getClass().getSimpleName() + "  ::  " + hashCode());
     }
 

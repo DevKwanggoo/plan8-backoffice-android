@@ -26,7 +26,6 @@ import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.RestfulAdapter;
 import io.plan8.backoffice.databinding.ActivityMainBinding;
 import io.plan8.backoffice.fragment.MoreFragment;
@@ -67,7 +66,7 @@ public class MainActivity extends BaseActivity {
         if (null != ApplicationManager.getInstance().getUser()) {
             userId = ApplicationManager.getInstance().getUser().getId();
         }
-        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getServiceApi().getUserMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), userId);
+        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getNeedTokenApiService().getUserMembers(userId);
         getUserMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {

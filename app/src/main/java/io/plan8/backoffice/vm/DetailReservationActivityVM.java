@@ -1,6 +1,5 @@
 package io.plan8.backoffice.vm;
 
-import android.app.Activity;
 import android.databinding.Bindable;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -17,11 +16,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.twitter.Extractor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.dialog.Plan8BottomSheetDialog;
@@ -57,7 +58,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
     private boolean loadingFlag = false;
     private boolean completedLoading;
 
-    public DetailReservationActivityVM(Activity activity, final Bundle savedInstanceState) {
+    public DetailReservationActivityVM(BaseActivity activity, final Bundle savedInstanceState) {
         super(activity, savedInstanceState);
         adapter = new BindingRecyclerViewAdapter<BaseModel>() {
             @Override
@@ -243,6 +244,7 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
                     currentText = editText.getText().toString();
 
                     List<Extractor.Entity> mentions = mentionExtractor.extractMentionedScreennamesWithIndices(currentText);
+                    Extractor.Entity targetMention = null;
                     for (Extractor.Entity m : mentions) {
 //                        if (null != m
 //                                && m.getStart() >) {
@@ -250,13 +252,33 @@ public class DetailReservationActivityVM extends ActivityVM implements View.OnCl
 //                        }
                         if (null != m) {
                             Log.e("wtf", "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")");
-                            Log.e("wtftext", "" + currentText.charAt(currentTextIndex+1) + "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")" + currentText.charAt(m.getStart()) + "  ::  " + currentText.charAt(m.getEnd() - 1));
+                            Log.e("wtftext", "" + currentText.charAt(currentTextIndex + 1) + "(" + currentTextIndex + ")  " + m.getValue() + " (" + m.getStart() + "," + m.getEnd() + ")" + currentText.charAt(m.getStart()) + "  ::  " + currentText.charAt(m.getEnd() - 1));
+                            if (currentTextIndex >= m.getStart()
+                                    && currentTextIndex <= m.getEnd()) {
+                                targetMention = m;
+                            }
                         }
                         //TODO : 만약, currentTextIndex가 start와 end 사이에 있으면 start부터 currentTextIndex까지 뽑아서 추천 mentionList를 만든다
                         //TODO : activity로
                         //TODO : mentionList를 클릭하면 start position 전까지 + @username +  substring endPosition까지 합쳐서 다시 set Text
 
                         //TODO : 비교할때 다 대문자로 바꿔서 비교해야하며 기준은 contains()!!
+                    }
+
+                    if (null != targetMention && getActivity() instanceof DetailReservationActivity) {
+                        Log.e("koko", "(" + targetMention.getStart() + "," + targetMention.getEnd() + ") " + targetMention.getValue());
+                        Log.e("kokoWtf", ""+currentText.subSequence(targetMention.getStart(), currentTextIndex));
+                        String targetText = ""+currentText.subSequence(targetMention.getStart(), currentTextIndex);
+                        List<User> targetList = new ArrayList<>();
+                        for (User u : ((DetailReservationActivity) getActivity()).getWorkerList()) {
+                            if (null != u
+                                    && u.getName().contains(targetText)
+                                    && u.getUsername().contains(targetText)) {
+                                targetList.add(u);
+                            }
+                        }
+
+                        setAutoCompleteMentionData(targetList);
                     }
 
                     if (isBackpress) {

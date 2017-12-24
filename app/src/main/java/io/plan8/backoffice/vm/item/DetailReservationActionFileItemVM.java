@@ -1,6 +1,5 @@
 package io.plan8.backoffice.vm.item;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.net.Uri;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import io.plan8.backoffice.R;
+import io.plan8.backoffice.activity.BaseActivity;
 import io.plan8.backoffice.activity.PreviewActivity;
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.util.DateUtil;
@@ -21,7 +21,7 @@ import io.plan8.backoffice.vm.ActivityVM;
 public class DetailReservationActionFileItemVM extends ActivityVM {
     private Action action;
 
-    public DetailReservationActionFileItemVM(Activity activity, Bundle savedInstanceState, final Action action) {
+    public DetailReservationActionFileItemVM(BaseActivity activity, Bundle savedInstanceState, final Action action) {
         super(activity, savedInstanceState);
         this.action = action;
     }

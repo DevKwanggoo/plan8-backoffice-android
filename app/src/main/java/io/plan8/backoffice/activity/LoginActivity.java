@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements TextView.OnEditorActi
         final String phoneNumber = binding.loginPhoneNumber.getText().toString();
 
         if (!phoneNumber.equals("") && phoneNumber.length() > 9) {
-            Call<Login> pincodeCall = RestfulAdapter.getInstance().getServiceApi().getPinCode(phoneNumber);
+            Call<Login> pincodeCall = RestfulAdapter.getInstance().getApiService().getPinCode(phoneNumber);
             pincodeCall.enqueue(new Callback<Login>() {
                 @Override
                 public void onResponse(Call<Login> call, Response<Login> response) {

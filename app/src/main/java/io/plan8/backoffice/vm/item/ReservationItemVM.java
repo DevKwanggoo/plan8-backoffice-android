@@ -2,12 +2,12 @@ package io.plan8.backoffice.vm.item;
 
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.R;
 import io.plan8.backoffice.activity.DetailReservationActivity;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.api.Reservation;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.vm.FragmentVM;
@@ -19,7 +19,7 @@ import io.plan8.backoffice.vm.FragmentVM;
 public class ReservationItemVM extends FragmentVM {
     private Reservation reservation;
 
-    public ReservationItemVM(Fragment fragment, Bundle savedInstanceState, Reservation reservation) {
+    public ReservationItemVM(BaseFragment fragment, Bundle savedInstanceState, Reservation reservation) {
         super(fragment, savedInstanceState);
         this.reservation = reservation;
     }
@@ -68,11 +68,10 @@ public class ReservationItemVM extends FragmentVM {
     @Bindable
     public String getProductName() {
         if (null == reservation
-                || null == reservation.getProducts()
-                || null == reservation.getProducts().get(0)) {
+                || null == reservation.getProduct()) {
             return "";
         }
-        return "" + reservation.getProducts().get(0).getName();
+        return "" + reservation.getProduct().getName();
     }
 
     @Bindable

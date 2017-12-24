@@ -1,8 +1,8 @@
 package io.plan8.backoffice.vm.item;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.vm.FragmentVM;
 
 /**
@@ -10,7 +10,7 @@ import io.plan8.backoffice.vm.FragmentVM;
  */
 
 public class EmptySpaceItemVM extends FragmentVM {
-    public EmptySpaceItemVM(Fragment fragment, Bundle savedInstanceState) {
+    public EmptySpaceItemVM(BaseFragment fragment, Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
     }
 }

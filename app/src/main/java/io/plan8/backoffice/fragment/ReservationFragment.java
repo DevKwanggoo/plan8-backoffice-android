@@ -119,8 +119,7 @@ public class ReservationFragment extends BaseFragment {
             userId = ApplicationManager.getInstance().getUser().getId();
         }
 
-        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getServiceApi().getReservations("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getContext()),
-                currentDate,
+        Call<List<Reservation>> getReservations = RestfulAdapter.getInstance().getNeedTokenApiService().getReservations(currentDate,
                 currentDate,
                 userId,
                 Constants.PAGINATION_RESERVATION_COUNT,

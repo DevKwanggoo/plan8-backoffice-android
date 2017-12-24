@@ -3,8 +3,6 @@ package io.plan8.backoffice.model.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import io.plan8.backoffice.model.BaseModel;
 
 /**
@@ -51,12 +49,12 @@ public class Reservation implements BaseModel {
     @SerializedName("address")
     @Expose()
     Address address;
-    @SerializedName("products")
+    @SerializedName("product")
     @Expose()
-    List<Product> products;
-    @SerializedName("workers")
+    Product product;
+    @SerializedName("worker")
     @Expose()
-    List<Member> workers;
+    Member worker;
     @SerializedName("user")
     @Expose()
     User user;
@@ -158,20 +156,20 @@ public class Reservation implements BaseModel {
         this.address = address;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public List<Member> getWorkers() {
-        return workers;
+    public Member getWorker() {
+        return worker;
     }
 
-    public void setWorkers(List<Member> workers) {
-        this.workers = workers;
+    public void setWorker(Member worker) {
+        this.worker = worker;
     }
 
     public User getUser() {

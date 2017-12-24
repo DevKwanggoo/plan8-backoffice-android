@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     private static final String BUCKET = "user";
     private List<Action> actions;
     private List<BaseModel> detailReservations;
+    private List<User> workerList;
     private Uri photoURI;
     private String nougatAbsoluteUri;
     private Handler handler = null;
@@ -110,23 +112,12 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-//        AppCompatEditText mentionsEditText = findViewById(R.id.mentionEditText);
-//        mentionsEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.e("wtf", "wtf1");
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.e("wtf", "wtf2");
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                Log.e("wtf", "wtf3");
-//            }
-//        });
+        binding.testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferenceManager.getInstance().clearUserToken(getApplicationContext());
+            }
+        });
 
         refreshReservation();
         initHandler();
@@ -142,7 +133,10 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     }
 
     private void getMembers(int teamId) {
-        Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getServiceApi().getMembers("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), teamId);
+        if (null == workerList) {
+            workerList = new ArrayList<>();
+        }
+        Call<List<Member>> currentTeamMembersCall = RestfulAdapter.getInstance().getNeedTokenApiService().getMembers(teamId);
         currentTeamMembersCall.enqueue(new Callback<List<Member>>() {
             @Override
             public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
@@ -154,7 +148,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
                                 && null != m.getUser()
                                 && null != ApplicationManager.getInstance().getUser()
                                 && m.getUser().getId() != ApplicationManager.getInstance().getUser().getId()) {
-                            userList.add(m.getUser());
+                            workerList.add(m.getUser());
                         }
                     }
 
@@ -310,7 +304,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
         MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
 
-        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
+        Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getNeedTokenApiService().postUpload(body);
         uploadCall.enqueue(new Callback<List<Attachment>>() {
             @Override
             public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
@@ -374,7 +368,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
 
-            Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getServiceApi().postUpload("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), body);
+            Call<List<Attachment>> uploadCall = RestfulAdapter.getInstance().getNeedTokenApiService().postUpload(body);
             uploadCall.enqueue(new Callback<List<Attachment>>() {
                 @Override
                 public void onResponse(Call<List<Attachment>> call, Response<List<Attachment>> response) {
@@ -489,7 +483,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
             detailReservations = new ArrayList<>();
         }
         setCompletedLoading(false);
-        Call<Reservation> reservationCall = RestfulAdapter.getInstance().getServiceApi().getReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId);
+        Call<Reservation> reservationCall = RestfulAdapter.getInstance().getNeedTokenApiService().getReservation(reservationId);
         reservationCall.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
@@ -524,8 +518,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         if (null == actions) {
             actions = new ArrayList<>();
         }
-        Call<List<Action>> actionsCall = RestfulAdapter.getInstance().getServiceApi().getActions("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()),
-                reservationId,
+        Call<List<Action>> actionsCall = RestfulAdapter.getInstance().getNeedTokenApiService().getActions(reservationId,
                 Constants.PAGINATION_ACTION_COUNT,
                 actions.size());
         actionsCall.enqueue(new Callback<List<Action>>() {
@@ -584,7 +577,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
         HashMap<String, String> statusMap = new HashMap<>();
         setCompletedLoading(false);
         statusMap.put("status", status);
-        Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getServiceApi().putReservation("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), reservationId, statusMap);
+        Call<Reservation> putReservationStatus = RestfulAdapter.getInstance().getNeedTokenApiService().putReservation(reservationId, statusMap);
         putReservationStatus.enqueue(new Callback<Reservation>() {
             @Override
             public void onResponse(Call<Reservation> call, Response<Reservation> response) {
@@ -606,7 +599,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     public void sendAction(String text) {
         setCompletedLoading(false);
         Action comment = new Action(reservation, text);
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), comment);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getNeedTokenApiService().addAction(comment);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -634,7 +627,7 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
     public void sendAttachment(Attachment attachment) {
         setCompletedLoading(false);
         Action attachmentAction = new Action(reservation, attachment);
-        Call<Action> createActionCall = RestfulAdapter.getInstance().getServiceApi().addAction("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()), attachmentAction);
+        Call<Action> createActionCall = RestfulAdapter.getInstance().getNeedTokenApiService().addAction(attachmentAction);
         createActionCall.enqueue(new Callback<Action>() {
             @Override
             public void onResponse(Call<Action> call, Response<Action> response) {
@@ -675,5 +668,9 @@ public class DetailReservationActivity extends BaseActivity implements Suggestio
 
     public void setCompletedLoading(boolean completedLoading) {
         vm.setCompltedLoading(completedLoading);
+    }
+
+    public List<User> getWorkerList() {
+        return workerList;
     }
 }

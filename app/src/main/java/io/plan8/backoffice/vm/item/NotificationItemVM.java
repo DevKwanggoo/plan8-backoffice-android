@@ -3,7 +3,6 @@ package io.plan8.backoffice.vm.item;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -13,9 +12,9 @@ import java.util.Map;
 
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.activity.DetailReservationActivity;
 import io.plan8.backoffice.adapter.RestfulAdapter;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.DateUtil;
 import io.plan8.backoffice.util.ViewUtil;
@@ -31,7 +30,7 @@ import retrofit2.Response;
 public class NotificationItemVM extends FragmentVM {
     private Notification notification;
 
-    public NotificationItemVM(Fragment fragment, Bundle savedInstanceState, Notification notification) {
+    public NotificationItemVM(BaseFragment fragment, Bundle savedInstanceState, Notification notification) {
         super(fragment, savedInstanceState);
         this.notification = notification;
     }
@@ -58,7 +57,6 @@ public class NotificationItemVM extends FragmentVM {
         if (null == notification || null == notification.getAction() || null == notification.getAction().getCreator()) {
             return "";
         }
-
         return notification.getAction().getCreator().getAvatar();
     }
 
@@ -93,7 +91,7 @@ public class NotificationItemVM extends FragmentVM {
         if (!notification.isRead()) {
             Map<String, Boolean> readMap = new HashMap<String, Boolean>();
             readMap.put("read", true);
-            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getServiceApi().readNotification("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), notification.getId(), readMap);
+            Call<Notification> readNotificationCall = RestfulAdapter.getInstance().getNeedTokenApiService().readNotification(notification.getId(), readMap);
             readNotificationCall.enqueue(new Callback<Notification>() {
                 @Override
                 public void onResponse(Call<Notification> call, Response<Notification> response) {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ import io.plan8.backoffice.model.api.Attachment;
 import io.plan8.backoffice.util.FileDownloader;
 import io.plan8.backoffice.vm.PreviewActivityVM;
 
-public class PreviewActivity extends AppCompatActivity {
+public class PreviewActivity extends BaseActivity {
     private ActivityPreviewBinding binding;
     private PreviewActivityVM vm;
     private Attachment attachment;

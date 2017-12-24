@@ -15,9 +15,9 @@ import java.util.List;
 import io.plan8.backoffice.ApplicationManager;
 import io.plan8.backoffice.BR;
 import io.plan8.backoffice.R;
-import io.plan8.backoffice.SharedPreferenceManager;
 import io.plan8.backoffice.adapter.BindingRecyclerViewAdapter;
 import io.plan8.backoffice.adapter.RestfulAdapter;
+import io.plan8.backoffice.fragment.BaseFragment;
 import io.plan8.backoffice.fragment.NotificationFragment;
 import io.plan8.backoffice.model.api.Notification;
 import io.plan8.backoffice.util.WrapContentLinearLayoutManager;
@@ -37,7 +37,7 @@ public class NotificationFragmentVM extends FragmentVM {
     private boolean swipeFlag = true;
     private boolean completedLoading;
 
-    public NotificationFragmentVM(Fragment fragment, final Bundle savedInstanceState) {
+    public NotificationFragmentVM(BaseFragment fragment, final Bundle savedInstanceState) {
         super(fragment, savedInstanceState);
         notifications = new ArrayList<>();
         adapter = new BindingRecyclerViewAdapter<Notification>() {
@@ -93,7 +93,7 @@ public class NotificationFragmentVM extends FragmentVM {
     }
 
     public void readAllNotifications(View view) {
-        Call<List<Notification>> readAllNotificationsCall = RestfulAdapter.getInstance().getServiceApi().readAllNotifications("Bearer " + SharedPreferenceManager.getInstance().getUserToken(getFragment().getContext()), true);
+        Call<List<Notification>> readAllNotificationsCall = RestfulAdapter.getInstance().getNeedTokenApiService().readAllNotifications(true);
         readAllNotificationsCall.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {

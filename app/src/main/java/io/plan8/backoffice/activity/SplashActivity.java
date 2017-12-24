@@ -43,16 +43,9 @@ public class SplashActivity extends BaseActivity {
         binding.setVariable(BR.vm, vm);
         binding.executePendingBindings();
 
-//        if (BuildConfig.DEBUG) {
-//            hasTokenStep();
-//        } else {
-
         if (!SharedPreferenceManager.getInstance().getUserToken(getApplicationContext()).equals("")) {
-            String token = SharedPreferenceManager.getInstance().getUserToken(getApplicationContext());
-
-            if (RestfulAdapter.getInstance().getServiceApi() != null) {
-
-                Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getServiceApi().getServerTime("Bearer " + token, DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
+            if (RestfulAdapter.getInstance().getNeedTokenApiService() != null) {
+                Call<ServerTime> getServerTime = RestfulAdapter.getInstance().getNeedTokenApiService().getServerTime(DateUtil.getInstance().getMilisecondsToTZFormat(DateUtil.getInstance().getCurrentDateLongFormat()));
                 getServerTime.enqueue(new Callback<ServerTime>() {
                     @Override
                     public void onResponse(Call<ServerTime> call, Response<ServerTime> response) {
@@ -73,7 +66,7 @@ public class SplashActivity extends BaseActivity {
                     }
                 });
 
-                Call<User> meCall = RestfulAdapter.getInstance().getServiceApi().getMe("Bearer " + token);
+                Call<User> meCall = RestfulAdapter.getInstance().getNeedTokenApiService().getMe();
                 meCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
@@ -96,6 +89,7 @@ public class SplashActivity extends BaseActivity {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                         finish();
+                                        dialog.dismiss();
                                     }
                                 })
                                 .build();
