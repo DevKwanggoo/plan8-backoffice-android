@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "469384765898",
+    "firebase_url": "https://plan8-backoffice-production.firebaseio.com",
+    "project_id": "plan8-backoffice-production",
+    "storage_bucket": "plan8-backoffice-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469384765898:android:377a4dd2d5c5dda9",
+        "android_client_info": {
+          "package_name": "io.plan8.backoffice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469384765898-ial0q8c3pbbr7uagn9aqsbocsou90jgb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.plan8.backoffice",
+            "certificate_hash": "6e44b1fe786b7d76539133cc78a5fc0eda5d96c6"
+          }
+        },
+        {
+          "client_id": "469384765898-io1pca9ijggn9n60e326ni3b9ikube06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiWHDG_SpjlEdLcjN2A3lnZJplIGxXO1Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469384765898-io1pca9ijggn9n60e326ni3b9ikube06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

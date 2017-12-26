@@ -10,9 +10,9 @@ android {
         applicationId "io.plan8.backoffice"
 
         //production
-//        manifestPlaceholders = [manifestApplicationId          : "${applicationId}",
-//                                onesignal_app_id               : "0b35d39c-6dd0-4e5c-94d3-fd9770cab122",
-//                                onesignal_google_project_number: "53462702224"]
+//        manifestPlaceholders = [onesignal_app_id               : "3457cd5b-a228-40b0-ac8b-0a56f54c22ab",
+//                                // Project number pulled from dashboard, local value is ignored.
+//                                onesignal_google_project_number: "REMOTE"]
 
         //inhouse
         manifestPlaceholders = [onesignal_app_id               : "758f6bdb-aa6f-4d98-93ad-49215de66ecc",
@@ -84,3 +84,5 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-badgeview:1.1.3'
     implementation 'com.linkedin.android.spyglass:spyglass:1.4.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
