@@ -133,20 +133,22 @@ public class MoreFragment extends BaseFragment {
 
     public void refreshMoreFragmentData() {
         setCompletedLoading(false);
-        Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getNeedTokenApiService().getUserMembers(ApplicationManager.getInstance().getUser().getId());
-        getUserMembersCall.enqueue(new Callback<List<Member>>() {
-            @Override
-            public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
-                List<Member> members = response.body();
-                ApplicationManager.getInstance().setMembers(members);
-                completeRefreshData(GET_MEMBERS);
-            }
+        if (null != ApplicationManager.getInstance().getUser()) {
+            Call<List<Member>> getUserMembersCall = RestfulAdapter.getInstance().getNeedTokenApiService().getUserMembers(ApplicationManager.getInstance().getUser().getId());
+            getUserMembersCall.enqueue(new Callback<List<Member>>() {
+                @Override
+                public void onResponse(Call<List<Member>> call, Response<List<Member>> response) {
+                    List<Member> members = response.body();
+                    ApplicationManager.getInstance().setMembers(members);
+                    completeRefreshData(GET_MEMBERS);
+                }
 
-            @Override
-            public void onFailure(Call<List<Member>> call, Throwable t) {
-                completeRefreshData(GET_MEMBERS);
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Member>> call, Throwable t) {
+                    completeRefreshData(GET_MEMBERS);
+                }
+            });
+        }
 
         Call<User> meCall = RestfulAdapter.getInstance().getNeedTokenApiService().getMe();
         meCall.enqueue(new Callback<User>() {

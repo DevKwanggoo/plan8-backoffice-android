@@ -7,7 +7,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,7 +36,6 @@ public class DetailReservationViewAdapter {
                 if (latestSize > charSequence.length()) {
                     isBackpress = true;
                 }
-                Log.e("tqtq", "" + view.getSelectionStart());
                 latestSize = charSequence.length();
                 listener.onChange(view, charSequence, view.getSelectionStart(), isBackpress);
             }
