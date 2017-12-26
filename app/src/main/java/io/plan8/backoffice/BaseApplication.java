@@ -19,9 +19,7 @@ public class BaseApplication extends MultiDexApplication {
         super.onCreate();
         ApplicationManager.getInstance().setContext(getApplicationContext());
         RestfulAdapter.getInstance().setContext(getApplicationContext());
-        if (!BuildConfig.DEBUG) {
-            FirebaseApp.initializeApp(getApplicationContext());
-        }
+        FirebaseApp.initializeApp(getApplicationContext());
 
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)

@@ -30,8 +30,9 @@ import retrofit2.Response;
  */
 
 public class ApplicationManager {
-    private static final String BASE_SERVER_URL = "https://api-sandbox.plan8.io";
-    //    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
+    private static final String BASE_SERVER_URL_PRODUCTION = "https://api-sandbox.plan8.io";
+    private static final String BASE_SERVER_URL_DEBUG = "https://api-sandbox.plan8.io";
+//    private static final String BASE_SERVER_URL = "http://192.168.1.207:3000";
     private Context context;
     private static volatile ApplicationManager instance = null;
     private User user;
@@ -67,7 +68,12 @@ public class ApplicationManager {
     }
 
     public String getServerUrl() {
-        return BASE_SERVER_URL;
+//        if (BuildConfig.DEBUG) {
+//            return BASE_SERVER_URL_DEBUG;
+//        } else {
+//            return BASE_SERVER_URL_PRODUCTION;
+//        }
+        return BASE_SERVER_URL_PRODUCTION;
     }
 
     public User getUser() {
