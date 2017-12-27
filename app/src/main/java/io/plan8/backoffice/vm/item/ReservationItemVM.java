@@ -27,7 +27,7 @@ public class ReservationItemVM extends FragmentVM {
     @Bindable
     public String getReservationTime() {
         if (null == reservation) {
-            return "";
+            return "날짜 없음";
         }
         return DateUtil.getInstance().getReservationTime(reservation.getStart());
     }
@@ -47,6 +47,8 @@ public class ReservationItemVM extends FragmentVM {
             if (null != reservation.getTeam()
                     && null != reservation.getTeam()) {
                 teamName = reservation.getTeam().getName();
+            } else {
+                teamName = "팀 이름 없음";
             }
         }
         if (teamName.equals("")) {
@@ -69,7 +71,7 @@ public class ReservationItemVM extends FragmentVM {
     public String getProductName() {
         if (null == reservation
                 || null == reservation.getProduct()) {
-            return "";
+            return "상품명 없음";
         }
         return "" + reservation.getProduct().getName();
     }

@@ -78,7 +78,7 @@ public class ViewUtil {
 
         if (action.getType() != null && action.getCreator() != null) {
             if (null != action.getCreator().getName()){
-                creatorName = action.getCreator().getName();
+                creatorName = action.getCreator().getName().trim();
             } else {
                 creatorName = "(알 수 없음)";
             }

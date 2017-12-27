@@ -37,7 +37,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getCustomerPhoneNumber() {
         if (null == reservation) {
-            return "";
+            return "고객 전화번호 없음";
         }
         return reservation.getPhoneNumber();
     }
@@ -45,7 +45,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getCustomerAddress() {
         if (null == reservation || null == reservation.getAddress()) {
-            return "";
+            return "고객 주소 없음";
         }
         return reservation.getAddress().getName();
     }
@@ -53,7 +53,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getReservationDate() {
         if (null == reservation) {
-            return "";
+            return "날짜 없음";
         }
         return DateUtil.getInstance().getReservationDate(reservation.getStart());
     }
@@ -61,7 +61,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getReservationTime() {
         if (null == reservation) {
-            return "";
+            return "예약시간 없음";
         }
         return DateUtil.getInstance().getReservationTime(reservation.getStart());
     }
@@ -69,7 +69,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getReservationEndTime() {
         if (null == reservation) {
-            return "";
+            return "종료시간 없음";
         }
         return DateUtil.getInstance().getReservationTime(reservation.getEnd());
     }
@@ -78,7 +78,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     public String getProductName() {
         if (null == reservation
                 || null == reservation.getProduct()) {
-            return "";
+            return "상품이름 없음";
         }
 
         return "" + reservation.getProduct().getName();
@@ -117,7 +117,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public String getCustomerTeamName() {
         if (null == reservation || null == reservation.getTeam()) {
-            return "";
+            return "팀 이름 없음";
         }
         return reservation.getTeam().getName();
     }
@@ -125,7 +125,7 @@ public class DetailReservationHeaderItemVM extends ActivityVM {
     @Bindable
     public boolean getStateFlag() {
         if (reservation != null && reservation.getStatus() != null) {
-            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED) || reservation.getStatus().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
+            if (reservation.getStatus().equals(Constants.RESERVATION_STATUS_CANCELED)) {
                 return false;
             } else {
                 return true;
