@@ -219,7 +219,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/selectable_item_background"
-                    android:clickable="true"
+                    android:clickable="@{vm.stateFlag ? true : false}"
                     android:onClick="@{vm::editReservationStatus}"
                     android:orientation="vertical">
 
