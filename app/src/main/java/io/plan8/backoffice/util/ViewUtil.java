@@ -7,6 +7,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.Objects;
+
 import io.plan8.backoffice.Constants;
 import io.plan8.backoffice.model.api.Action;
 import io.plan8.backoffice.model.api.Reservation;
@@ -77,43 +79,40 @@ public class ViewUtil {
         }
 
         if (action.getType() != null && action.getCreator() != null) {
-            if (null != action.getCreator().getName()){
+            if (null != action.getCreator().getName()) {
                 creatorName = action.getCreator().getName();
             } else {
                 creatorName = "(알 수 없음)";
             }
+            String customerName = "고객명 없음";
+            if (action.getReservation() != null && action.getReservation().getUser() != null && action.getReservation().getUser().getName() != null) {
+                customerName = action.getReservation().getUser().getName();
+            }
 
             if (action.getType().equals("comment")) {
-                return creatorName + "님이 댓글을 달았습니다.";
+                return creatorName + "님이 댓글을 달았습니다." + action.getText();
             } else if (action.getType().equals("statusChanged")) {
                 String status = "알 수 없음";
-                String customerName = "고객명 없음";
 
-                if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_COMPLETE)){
+                if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_COMPLETE)) {
                     status = "완료 처리 하였";
                 } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_CANCELED)) {
                     status = "취소 하였";
-                } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_INCOMPLETE)){
+                } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_INCOMPLETE)) {
                     status = "대기 상태로 변경하였";
-                }
-
-                if (action.getReservation() != null && action.getReservation().getUser() != null && action.getReservation().getUser().getName() != null){
-                    customerName = action.getReservation().getUser().getName();
                 }
 
                 return creatorName + "님이 "
                         + customerName + " 고객님의 " + DateUtil.getInstance().getReservationDate(action.getReservation().getStart()) + " 예약을 "
-                        + status +"습니다.";
+                        + status + "습니다.";
             } else if (action.getType().equals("phoneNumberChanged")) {
-                return creatorName + "님이 고객 전화번호를 변경하였습니다.";
+                return creatorName + "님이 " + customerName + " 고객님의 전화번호를 변경하였습니다.";
             } else if (action.getType().equals("emailChanged")) {
-                return creatorName + "님이 고객 이메일을 변경하였습니다.";
+                return creatorName + "님이 " + customerName + " 고객님의 이메일을 변경하였습니다.";
             } else if (action.getType().equals("totalPriceChanged")) {
-                return creatorName + "님이 상품 가격을 변경하였습니다.";
+                return creatorName + "님이" + customerName + " 고객님의 " + DateUtil.getInstance().getReservationDate(action.getReservation().getStart()) + " 예약의 상품 가격을 변경하였습니다.";
             } else if (action.getType().equals("additionalRequestsChanged")) {
-                return creatorName + "님이 추가 요청 사항을 수정하였습니다.";
-            } else if (action.getType().equals("action")) {
-                return creatorName + "님이 action을 수정하였습니다.";
+                return creatorName + "님이" + customerName + " 고객님의 " + DateUtil.getInstance().getReservationDate(action.getReservation().getStart()) + " 예약의 추가 요청 사항을 수정하였습니다.";
             } else {
                 return "알림 내용 없음";
             }
@@ -132,5 +131,44 @@ public class ViewUtil {
 
     public String getCommaFormat(int num) {
         return String.format("%,d", num);
+    }
+
+    public String getActivityItemText(Action action){
+        String creator = "(알 수 없음)";
+        String afterData = "(알 수 없음)";
+
+        if (action != null){
+            if (action.getCreator() != null && action.getCreator().getName() != null && !action.getCreator().getName().equals("")) {
+                creator = action.getCreator().getName();
+            }
+
+            if (action.getData() != null && action.getData().getAfter() != null){
+                afterData = action.getData().getAfter();
+            }
+
+            if (action.getType() != null){
+                if (action.getType().equals("statusChanged")){
+                    String status = "";
+                    if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_COMPLETE)){
+                        status = "완료 처리 하였";
+                    } else if (action.getData().getAfter().equals(Constants.RESERVATION_STATUS_INCOMPLETE)){
+                        status = "대기 상태로 변경하였";
+                    } else {
+                        status = "취소 하였";
+                    }
+                    return creator + "님이 예약을" + status + "습니다.";
+                } else if (action.getType().equals("phoneNumberChanged")){
+                    return creator + "님이 고객님의 전화번호를 "+ afterData + "로 변경하였습니다.";
+                } else if (action.getType().equals("emailChanged")){
+                    return creator + "님이 고객님의 이메일을 "+ afterData + "로 변경하였습니다.";
+                } else if (action.getType().equals("totalPriceChanged")){
+                    return creator + "님이 상품 가격을 "+ afterData + "원 으로 변경하였습니다.";
+                } else if (action.getType().equals("additionalRequestsChanged")){
+                    return creator + "님이 추가 요청 사항을 수정하였습니다.";
+                }
+            }
+        }
+
+        return "내용 없음";
     }
 }

@@ -53,7 +53,7 @@ public class DetailReservationViewAdapter {
         }
 
         String result = "";
-        String text = ViewUtil.getInstance().getActionItemText(action);
+        String text = ViewUtil.getInstance().getActivityItemText(action);
         String addedTime = DateUtil.getInstance().getChatTime(action.getAdded());
 
         result = text + " " + addedTime;
