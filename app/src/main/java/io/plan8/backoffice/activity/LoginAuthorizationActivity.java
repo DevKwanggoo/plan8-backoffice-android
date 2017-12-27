@@ -277,8 +277,8 @@ public class LoginAuthorizationActivity extends BaseActivity implements TextView
                                 + smsMessages[i].getTimestampMillis());
 
                         String noSpaceStr = (smsMessages[i].getMessageBody());
-                        noSpaceStr.replaceAll(" ", "");
-                        String authoNumber = noSpaceStr.split("인증번호:")[1];
+                        noSpaceStr.replaceAll("\\p{Z}", "");
+                        String authoNumber = (noSpaceStr.split("인증번호:")[1]).split("\\(3분간유효합니다\\)")[0];
 
                         if (authoNumber != null && !authoNumber.equals("") && authoNumber.length() == 6) {
                             authStep(authoNumber);
