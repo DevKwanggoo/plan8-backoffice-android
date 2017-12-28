@@ -4,7 +4,25 @@ plugins {
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("app/keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        production {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     android.variantFilter { variant ->
         if ((variant.buildType.name.equals('release') && variant.getFlavors().get(0).name.equals('develop'))
                 || (variant.buildType.name.equals('debug') && variant.getFlavors().get(0).name.equals('production'))) {
@@ -21,7 +39,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -29,22 +46,21 @@ android {
             buildConfigField 'boolean', 'IS_RELEASE', 'true'
             manifestPlaceholders = [appName: "백오피스"]
         }
-
         debug {
             minifyEnabled false
             buildConfigField 'boolean', 'IS_RELEASE', 'false'
             manifestPlaceholders = [appName: "백오피스(개발용)"]
         }
     }
-
     productFlavors {
         production {
             flavorDimensions "tier"
             manifestPlaceholders = [onesignal_app_id               : "3457cd5b-a228-40b0-ac8b-0a56f54c22ab",
                                     // Project number pulled from dashboard, local value is ignored.
                                     onesignal_google_project_number: "REMOTE"]
+//
+            signingConfig signingConfigs.production
         }
-
         develop {
             flavorDimensions "tier"
             manifestPlaceholders = [onesignal_app_id               : "758f6bdb-aa6f-4d98-93ad-49215de66ecc",
@@ -52,21 +68,19 @@ android {
                                     onesignal_google_project_number: "REMOTE"]
         }
     }
-
     dataBinding {
         enabled = true
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
